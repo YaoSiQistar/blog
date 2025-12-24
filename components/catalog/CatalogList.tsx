@@ -2,7 +2,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-import { motion } from "motion/react";
+import { motion, type HTMLMotionProps } from "motion/react";
 
 import { staggerContainer } from "@/lib/motion/variants";
 import { useReducedMotion } from "@/lib/motion/reduced";
@@ -19,7 +19,7 @@ export default function CatalogList({
   stagger = true,
   className,
   ...props
-}: CatalogListProps) {
+}: CatalogListProps & HTMLMotionProps<"section">) {
   const reducedMotion = useReducedMotion();
   const flags = useMotionFlags();
   const reduced = reducedMotion || flags.reduced;

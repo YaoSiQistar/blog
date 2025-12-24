@@ -3,7 +3,7 @@ import * as React from "react";
 import AnimatedLink from "@/components/motion/AnimatedLink";
 import SheenHover from "@/components/motion/SheenHover";
 import { cn } from "@/lib/utils";
-import { motion } from "motion/react";
+import { motion, type HTMLMotionProps } from "motion/react";
 import { postCoverId, postMetaId, postTitleId } from "@/lib/motion/ids";
 import { staggerItem } from "@/lib/motion/variants";
 import { motionTokens } from "@/lib/motion/tokens";
@@ -38,7 +38,7 @@ export function CatalogItem({
   index = 0,
   className,
   ...props
-}: CatalogItemProps & React.ComponentPropsWithoutRef<"article">) {
+}: CatalogItemProps & HTMLMotionProps<"article">) {
   const metaTransition = {
     delay: isReduced ? 0 : 0.12,
     duration: motionTokens.durations.fast,

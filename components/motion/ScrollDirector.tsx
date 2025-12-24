@@ -1,25 +1,26 @@
 "use client";
 
 import * as React from "react";
-import { MotionValue, motionValue, useScroll, useTransform } from "motion/react";
+import { MotionValue, motionValue, useScroll, useTransform, type UseScrollOptions } from "motion/react";
 
 import { motionTokens } from "@/lib/motion/tokens";
 import { useReducedMotion } from "@/lib/motion/reduced";
 import { useMotionFlags } from "@/lib/flags";
 
 export interface ScrollDirectorState {
-  y: ReturnType<typeof useTransform>;
-  opacity: ReturnType<typeof useTransform>;
+  y: MotionValue<number>;
+  opacity: MotionValue<number>;
   blur: MotionValue<number>;
-  blurFilter: ReturnType<typeof useTransform>;
-  scale: ReturnType<typeof useTransform>;
-  progress: ReturnType<typeof useTransform>;
-  lineScale: ReturnType<typeof useTransform>;
+  blurFilter: MotionValue<string>;
+  scale: MotionValue<number>;
+  progress: MotionValue<number>;
+  lineScale: MotionValue<number>;
 }
 
 interface ScrollDirectorProps {
   range?: [number, number];
-  scrollTarget?: React.RefObject<HTMLElement>;
+  scrollTarget?: React.RefObject<HTMLElement | null>;
+  offset?: [string, string] | [string, string][];
   config?: {
     y?: [number, number];
     opacity?: [number, number];
@@ -36,6 +37,7 @@ const createConstantMotionValue = <T,>(value: T) =>
 export default function ScrollDirector({
   range = [0, 0.25],
   scrollTarget,
+  offset = ["start start", "end start"],
   config,
   children,
 }: ScrollDirectorProps) {
@@ -43,7 +45,19 @@ export default function ScrollDirector({
   const flags = useMotionFlags();
   const reduced = isReduced || flags.reduced;
 
-  const { scrollYProgress } = useScroll({ target: scrollTarget });
+  const scrollOptions = React.useMemo<UseScrollOptions>(
+    () => {
+      const opts: UseScrollOptions = {};
+      if (scrollTarget) opts.target = scrollTarget;
+      if (offset) {
+        opts.offset = offset as UseScrollOptions["offset"];
+      }
+      return opts;
+    },
+    [offset, scrollTarget]
+  );
+
+  const { scrollYProgress } = useScroll(scrollOptions);
   const progress = useTransform(scrollYProgress, range, [0, 1], { clamp: true });
   const yRange = config?.y ?? [24, 0];
   const opacityRange = config?.opacity ?? [0.4, 1];

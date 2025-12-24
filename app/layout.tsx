@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Inter, JetBrains_Mono, Noto_Serif_SC } from "next/font/google";
 
 import AppShell from "@/components/shell/AppShell";
@@ -42,7 +43,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${serif.variable} ${mono.variable} bg-background text-foreground antialiased`}
       >
-        <AppShell>{children}</AppShell>
+        <Suspense fallback={<div className="min-h-screen" />}>
+          <AppShell>{children}</AppShell>
+        </Suspense>
       </body>
     </html>
   );

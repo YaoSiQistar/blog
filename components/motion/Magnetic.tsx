@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion, useMotionValue, useSpring } from "motion/react";
+import { motion, useMotionValue, useSpring ,type HTMLMotionProps} from "motion/react";
 
 import { motionTokens } from "@/lib/motion/tokens";
 import { useReducedMotion } from "@/lib/motion/reduced";
@@ -16,7 +16,7 @@ export default function Magnetic({
   children,
   className,
   ...props
-}: MagneticProps) {
+}: MagneticProps & HTMLMotionProps<"div">) {
   const isReduced = useReducedMotion();
   const flags = useMotionFlags();
   const reduced = isReduced || flags.reduced;

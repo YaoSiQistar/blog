@@ -1,4 +1,4 @@
-const toCssEasing = (value: [number, number, number, number]) =>
+const toCssEasing = (value: readonly [number, number, number, number]) =>
   `cubic-bezier(${value.join(",")})`;
 
 export const motionTokens = {
