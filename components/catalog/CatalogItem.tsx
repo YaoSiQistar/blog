@@ -107,7 +107,7 @@ export function CatalogItem({
             initial={isReduced ? false : { opacity: 0, y: 6 }}
             animate={isReduced ? false : { opacity: 1, y: 0 }}
             transition={metaTransition}
-            className="text-[0.65rem] uppercase tracking-[0.3em] text-muted-foreground/80"
+            className="text-[0.65rem] uppercase tracking-[0.3em] text-muted-foreground/80 transition-colors group-hover:text-foreground/80"
           >
             <div>{date}</div>
             <div className="mt-1">{readingTime}</div>
@@ -116,7 +116,7 @@ export function CatalogItem({
             initial={isReduced ? false : { opacity: 0, y: 6 }}
             animate={isReduced ? false : { opacity: 1, y: 0 }}
             transition={metaTransition}
-            className="text-[0.6rem] uppercase tracking-[0.25em] text-muted-foreground/70"
+            className="text-[0.6rem] uppercase tracking-[0.25em] text-muted-foreground/70 transition-colors group-hover:text-foreground/70"
           >
             {tags.length > 0 ? tags.join(" / ") : category}
           </motion.div>
@@ -124,7 +124,7 @@ export function CatalogItem({
             initial={isReduced ? false : { scaleX: 0 }}
             animate={isReduced ? false : { scaleX: 1 }}
             transition={lineTransition}
-            className="mt-2 h-px w-24 origin-left bg-border/70 lg:origin-right"
+            className="mt-2 h-px w-24 origin-left bg-border/70 transition-colors group-hover:bg-primary/60 lg:origin-right"
           />
         </div>
       </motion.article>

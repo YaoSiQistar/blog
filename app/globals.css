@@ -288,4 +288,10 @@
     border-radius: var(--radius);
     box-shadow: var(--shadow-soft);
   }
+
+  [data-guide-highlight] {
+    box-shadow: inset 0 0 0 2px var(--accent);
+    background-color: rgba(255, 255, 255, 0.15);
+    transition: box-shadow 0.32s ease, background-color 0.32s ease;
+  }
 }
