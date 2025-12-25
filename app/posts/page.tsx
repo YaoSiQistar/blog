@@ -3,7 +3,7 @@ import { RuleLine } from "@/components/editorial/RuleLine";
 import PostsPagination from "@/components/pagination/Pagination";
 import EditorialWorkbench from "@/components/posts/EditorialWorkbench";
 import GuideDrawer from "@/components/posts/GuideDrawer";
-import { GuideRail } from "@/components/guide/GuideRail";
+import { KintsugRail } from "@/components/Kintsug/KintsugiRail";
 import MuseumGuidePanel from "@/components/posts/MuseumGuidePanel";
 import PostsLayout from "@/components/posts/PostsLayout";
 import PostsPageHeader from "@/components/posts/PostsPageHeader";
@@ -11,22 +11,23 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getAllCategories, getAllTags, getPostsPaged } from "@/lib/content";
 import { normalizeSearchParams } from "@/lib/content/searchParams";
-import { buildGuideModel } from "@/lib/posts/guide";
-import type { GuideNode } from "@/lib/guide-rail/types";
+import { buildGuideModel } from "@/lib/posts/Guide";
+import type { KintsugNode } from "@/lib/Kintsug-rail/types";
 
 interface PostsPageProps {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
 export default async function PostsPage({ searchParams }: PostsPageProps) {
-  const params = normalizeSearchParams(searchParams, { pageSize: 8 });
+  const resolvedParams = await searchParams;
+  const params = normalizeSearchParams(resolvedParams, { pageSize: 8 });
   const [paged, categories, tags] = await Promise.all([
     getPostsPaged(params),
     getAllCategories(),
     getAllTags(),
   ]);
 
-  const guideModel = buildGuideModel(params, paged.total, paged.totalPages);
+  const GuideModel = buildGuideModel(params, paged.total, paged.totalPages);
   const catalogItems = paged.items.map((post) => ({
     title: post.title,
     slug: post.slug,
@@ -49,13 +50,13 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
     return qs.length > 0 ? `/posts?${qs}` : "/posts";
   };
 
-  const guideNodes: GuideNode[] = [
+  const kintsugNodes: KintsugNode[] = [
     {
       id: "posts-header",
       label: "Header",
       kind: "section",
       target: { type: "scroll", selector: "#posts-header" },
-      meta: { subtitle: guideModel.filterSummarySentence },
+      meta: { subtitle: GuideModel.filterSummarySentence },
     },
     {
       id: "posts-workbench",
@@ -69,14 +70,14 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
       label: "Catalog",
       kind: "section",
       target: { type: "scroll", selector: "#posts-catalog" },
-      meta: { subtitle: `${guideModel.resultsCount} works` },
+      meta: { subtitle: `${GuideModel.resultsCount} works` },
     },
     {
       id: "posts-pagination",
       label: "Pages",
       kind: "section",
       target: { type: "scroll", selector: "#posts-pagination" },
-      meta: { subtitle: `Page ${guideModel.page} / ${guideModel.totalPages}` },
+      meta: { subtitle: `Page ${GuideModel.page} / ${GuideModel.totalPages}` },
     },
   ];
 
@@ -84,8 +85,8 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
     <PostsLayout
       contentId="posts-content"
       left={
-        <GuideRail
-          nodes={guideNodes}
+        <KintsugRail
+          nodes={kintsugNodes}
           mode="index"
           containerSelector="#posts-content"
           variant="rail"
@@ -98,9 +99,9 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
         <PostsPageHeader
           title="The Archive Catalog"
           description="A curated wall of editorial notes, arranged like a museum inventory of ink and motion."
-          summary={guideModel.filterSummarySentence}
-          resultsCount={guideModel.resultsCount}
-          totalPages={guideModel.totalPages}
+          summary={GuideModel.filterSummarySentence}
+          resultsCount={GuideModel.resultsCount}
+          totalPages={GuideModel.totalPages}
         />
       </section>
 
@@ -136,14 +137,14 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
       <section id="posts-pagination">
         <div className="flex items-center justify-between pt-6 text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
           <span>
-            Page {guideModel.page} of {guideModel.totalPages}
+            Page {GuideModel.page} of {GuideModel.totalPages}
           </span>
-          <span>{guideModel.resultsCount} works</span>
+          <span>{GuideModel.resultsCount} works</span>
         </div>
 
         <PostsPagination
-          currentPage={guideModel.page}
-          totalPages={guideModel.totalPages}
+          currentPage={GuideModel.page}
+          totalPages={GuideModel.totalPages}
           createHref={buildHref}
         />
       </section>

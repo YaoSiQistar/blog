@@ -4,7 +4,7 @@ import HomeHeroUltra from "@/components/home/HomeHeroUltra";
 import HomeLatestUltra from "@/components/home/HomeLatestUltra";
 import HomeGalleries from "@/components/home/HomeGalleries";
 import HomeFooterNote from "@/components/home/HomeFooterNote";
-import { GuideRail } from "@/components/guide/GuideRail";
+import { KintsugRail } from "@/components/Kintsug/KintsugiRail";
 import { getAllCategories, getAllTags, getPostsPaged } from "@/lib/content";
 
 export default async function Home() {
@@ -25,7 +25,7 @@ export default async function Home() {
     cover: item.cover,
   }));
 
-  const heroGuideNodes = [
+  const herokintsugNodes = [
     {
       id: "module-hero",
       label: "Hero",
@@ -61,7 +61,7 @@ export default async function Home() {
       <PaperAtmosphere />
       <InkReveal />
       <div className="mx-auto max-w-screen-2xl px-4 py-10 lg:px-6 lg:pl-[280px]">
-        <div id="home-content" className="space-y-[var(--section-y)]">
+        <div id="home-content" className="space-y-(--section-y)">
           <HomeHeroUltra />
           <HomeLatestUltra items={listItems} />
           <HomeGalleries categories={categories} tags={tags} />
@@ -70,8 +70,8 @@ export default async function Home() {
       </div>
       <div className="pointer-events-none fixed left-6 top-0 hidden h-full lg:flex lg:items-center">
         <div className="pointer-events-auto">
-          <GuideRail nodes={heroGuideNodes} mode="hero" containerSelector="#home-content" />
-        </div>
+          <KintsugRail nodes={herokintsugNodes} mode="hero" containerSelector="#home-content" />
+        </div>  
       </div>
     </main>
   );

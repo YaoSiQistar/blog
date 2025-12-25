@@ -9,14 +9,15 @@ import { staggerItem } from "@/lib/motion/variants";
 import { motionTokens } from "@/lib/motion/tokens";
 
 export interface CatalogPost {
-  title: string;
+  title: React.ReactNode;
   slug: string;
-  excerpt: string;
+  excerpt: React.ReactNode;
   category: string;
   date: string;
   readingTime: string;
   tags?: string[];
   cover?: string;
+  supplemental?: React.ReactNode;
 }
 
 interface CatalogItemProps extends CatalogPost {
@@ -34,6 +35,7 @@ export function CatalogItem({
   readingTime,
   tags = [],
   cover,
+  supplemental,
   isReduced = false,
   index = 0,
   className,
@@ -99,6 +101,7 @@ export function CatalogItem({
           >
             {excerpt}
           </motion.p>
+          {supplemental ? <div className="pt-2">{supplemental}</div> : null}
         </div>
 
         <div className="flex flex-col items-start gap-3 lg:items-end lg:text-right">

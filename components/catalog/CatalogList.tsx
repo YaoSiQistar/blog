@@ -12,11 +12,13 @@ import { CatalogItem, CatalogPost } from "./CatalogItem";
 interface CatalogListProps extends React.HTMLAttributes<HTMLElement> {
   items: CatalogPost[];
   stagger?: boolean;
+  startIndex?: number;
 }
 
 export default function CatalogList({
   items,
   stagger = true,
+  startIndex = 0,
   className,
   ...props
 }: CatalogListProps & HTMLMotionProps<"section">) {
@@ -36,7 +38,7 @@ export default function CatalogList({
         <CatalogItem
           key={`${item.slug}-${item.date}`}
           {...item}
-          index={index}
+          index={startIndex + index}
           isReduced={reduced || !stagger}
         />
       ))}

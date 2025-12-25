@@ -4,6 +4,7 @@ import { Inter, JetBrains_Mono, Noto_Serif_SC } from "next/font/google";
 
 import AppShell from "@/components/shell/AppShell";
 import "./globals.css";
+import "../styles/prose.css";
 
 const inter = Inter({
   subsets: ["latin"],

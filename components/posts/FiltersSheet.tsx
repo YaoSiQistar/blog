@@ -11,10 +11,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { parsePostsQuery, updatePostsQuery } from "./query";
 
-type GuideItem = { slug: string; count: number };
+type KintsugItem = { slug: string; count: number };
 
 type FiltersSheetProps = {
-  tags: GuideItem[];
+  tags: KintsugItem[];
 };
 
 export default function FiltersSheet({ tags }: FiltersSheetProps) {

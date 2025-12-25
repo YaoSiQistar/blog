@@ -1,0 +1,131 @@
+.prose {
+  max-width: 72ch;
+  margin: 0 auto;
+  line-height: 1.85;
+  letter-spacing: -0.01em;
+  position: relative;
+  color: var(--foreground);
+}
+
+.prose p {
+  margin-bottom: 1.25rem;
+}
+
+.prose h2,
+.prose h3 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+  scroll-margin-top: 7rem;
+}
+
+.prose h2 {
+  font-size: 2.5rem;
+}
+
+.prose h3 {
+  font-size: 2rem;
+}
+
+.prose h2 a.heading-anchor,
+.prose h3 a.heading-anchor {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  margin-left: 0.35rem;
+}
+
+.prose h2:hover a.heading-anchor,
+.prose h3:hover a.heading-anchor {
+  opacity: 1;
+}
+
+.prose blockquote {
+  margin: 2rem 0;
+  padding: 1.25rem 1.5rem;
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  background: rgba(13, 59, 102, 0.05);
+  color: var(--muted-foreground);
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.prose table th,
+.prose table td {
+  border: 1px solid var(--border);
+  padding: 0.65rem;
+}
+
+.prose table tr:nth-child(even) {
+  background: rgba(13, 59, 102, 0.02);
+}
+
+.prose figure {
+  margin: 2.5rem auto;
+}
+
+.prose figcaption {
+  margin-top: 0.35rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--muted-foreground);
+}
+
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 3rem 0;
+}
+
+.prose code {
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid var(--border);
+  border-radius: 0.35rem;
+  padding: 0 0.35rem;
+  font-family: var(--font-mono);
+}
+
+.prose pre {
+  margin: 2rem 0;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--card);
+  font-size: 0.9rem;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.25rem;
+}
+
+.prose a {
+  text-decoration: none;
+}
+
+.animated-link {
+  position: relative;
+}
+
+.animated-link::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.animated-link:hover::after,
+.animated-link:focus-visible::after {
+  transform: scaleX(1);
+}

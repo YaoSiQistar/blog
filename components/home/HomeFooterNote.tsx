@@ -14,7 +14,7 @@ export default function HomeFooterNote() {
   const reduced = prefersReduced || flags.reduced;
 
   return (
-    <section id="footer" data-section="footer" className="py-[var(--section-y)]">
+    <section id="footer" data-section="footer" className="py-(--section-y)">
       <Container variant="wide">
         <motion.div
           variants={fadeUp(reduced)}
@@ -25,9 +25,12 @@ export default function HomeFooterNote() {
         >
           <Kicker label="Curator note" caption="Footer" />
           <p className="mt-4 text-sm text-muted-foreground">
-            Each entry is preserved as Markdown inside the Git archive. Motion
-            exists only to guide the reader between rooms, never to distract from
-            the text itself.
+            Thank you for visiting my personal blog. Here, I share my thoughts,
+            experiences, and insights on various topics that interest me. I hope
+            you find the content engaging and thought-provoking. Feel free to
+            explore, comment, and connect with me. Your feedback and interaction
+            are highly appreciated as they help me grow and improve this space.
+            Happy reading!
           </p>
         </motion.div>
       </Container>

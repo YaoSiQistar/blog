@@ -1,16 +1,16 @@
 "use client";
 
-import type { GuideNode } from "@/lib/guide-rail/types";
+import type { KintsugNode } from "@/lib/Kintsug-rail/types";
 import { cn } from "@/lib/utils";
-import { guideRailTokens } from "./tokens";
+import { KintsugRailTokens } from "./tokens";
 
-type GuideListProps = {
-  nodes: GuideNode[];
+type KintsugListProps = {
+  nodes: KintsugNode[];
   activeId?: string;
-  goTo: (node: GuideNode) => void;
+  goTo: (node: KintsugNode) => void;
 };
 
-export function GuideList({ nodes, activeId, goTo }: GuideListProps) {
+export function KintsugList({ nodes, activeId, goTo }: KintsugListProps) {
   if (!nodes.length) return null;
 
   return (
@@ -51,7 +51,7 @@ export function GuideList({ nodes, activeId, goTo }: GuideListProps) {
                   <span
                     className={cn(
                       "block",
-                      isActive ? guideRailTokens.typography.activeLabel : guideRailTokens.typography.label,
+                      isActive ? KintsugRailTokens.typography.activeLabel : KintsugRailTokens.typography.label,
                       isActive ? "text-foreground" : "text-muted-foreground/90"
                     )}
                   >

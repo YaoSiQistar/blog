@@ -5,48 +5,28 @@ import type { RefObject } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { useReducedMotion } from "@/lib/motion/reduced";
-import type {
-  GuideMapMode,
-  GuideNode,
-  GuideNodePosition,
-} from "@/lib/guide-rail/types";
+import type { KintsugNode, KintsugNodePosition } from "@/lib/Kintsug-rail/types";
 
 const clamp = (value: number, min = 0, max = 1) => Math.min(Math.max(value, min), max);
 
-const safeNumber = (value: number | null | undefined, fallback: number) =>
-  typeof value === "number" && !Number.isNaN(value) ? value : fallback;
-
-const buildEvenMapping = (
-  nodes: GuideNode[],
-  height: number,
-  minSpacing = 10
-): GuideNodePosition[] => {
-  if (nodes.length === 0) return [];
-  const step = Math.max(height / Math.max(nodes.length - 1, 1), minSpacing);
-  return nodes.map((node, index) => ({
-    id: node.id,
-    y: Math.min(step * index, height),
-  }));
-};
-
-type UseGuideActiveOptions = {
+type UseKintsugActiveOptions = {
   rootMargin?: string;
   threshold?: number | number[];
 };
 
-type UseGuideMapOptions = {
-  mode?: GuideMapMode;
+type UseKintsugMapOptions = {
   railRef?: RefObject<HTMLElement>;
   minSpacing?: number;
+  containerSelector?: string;
 };
 
-type GuideRailFlags = {
+type KintsugRailFlags = {
   debug: boolean;
   forcedReduced: boolean;
   cinema: boolean;
 };
 
-export function useGuideProgress(containerSelector?: string) {
+export function useKintsugProgress(containerSelector?: string) {
   const [progress, setProgress] = useState(0);
 
   const compute = useCallback(() => {
@@ -61,10 +41,19 @@ export function useGuideProgress(containerSelector?: string) {
 
     const scrollTop = window.scrollY;
     const viewport = window.innerHeight;
-    const start = containerSelector
-      ? scrollTop + container.getBoundingClientRect().top
-      : 0;
-    const span = Math.max(container.scrollHeight - viewport, 1);
+
+    if (!containerSelector) {
+      const span = Math.max(container.scrollHeight - viewport, 1);
+      setProgress(clamp(scrollTop / span));
+      return;
+    }
+
+    const rect = (container as HTMLElement).getBoundingClientRect();
+    const containerTop = scrollTop + rect.top;
+    const containerHeight = (container as HTMLElement).scrollHeight || rect.height;
+    const start = containerTop - viewport * 0.15;
+    const end = containerTop + containerHeight - viewport * 0.55;
+    const span = Math.max(end - start, 1);
     const relative = clamp((scrollTop - start) / span);
     setProgress(relative);
   }, [containerSelector]);
@@ -95,13 +84,19 @@ export function useGuideProgress(containerSelector?: string) {
   return progress;
 }
 
-export function useGuideActive(nodes: GuideNode[], options?: UseGuideActiveOptions) {
+export function useKintsugActive(nodes: KintsugNode[], options?: UseKintsugActiveOptions) {
   const [activeId, setActiveId] = useState<string | undefined>();
 
   useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
+    if (typeof window === "undefined") return;
+    if (!nodes.length) {
+      const frame = window.requestAnimationFrame(() => setActiveId(undefined));
+      return () => window.cancelAnimationFrame(frame);
     }
+  }, [nodes.length]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
 
     const scrollTargets = nodes.filter(
       (node) => node.target.type === "scroll" && node.target.selector
@@ -117,16 +112,18 @@ export function useGuideActive(nodes: GuideNode[], options?: UseGuideActiveOptio
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
 
-        if (!visible.length) return;
+        if (!visible.length) {
+          return;
+        }
 
-        const id = (visible[0].target as HTMLElement).dataset.guideId;
+        const id = (visible[0].target as HTMLElement).dataset.kintsugId;
         if (id) {
           setActiveId(id);
         }
       },
       {
-        rootMargin: options?.rootMargin ?? "-20% 0px -60% 0px",
-        threshold: options?.threshold ?? [0.25, 0.5, 0.75],
+        rootMargin: options?.rootMargin ?? "-30% 0px -60% 0px",
+        threshold: options?.threshold ?? 0,
       }
     );
 
@@ -135,7 +132,7 @@ export function useGuideActive(nodes: GuideNode[], options?: UseGuideActiveOptio
     scrollTargets.forEach((node) => {
       const element = document.querySelector(node.target.selector!) as HTMLElement;
       if (!element) return;
-      element.dataset.guideId = node.id;
+      element.dataset.kintsugId = node.id;
       observer.observe(element);
       observed.push(element);
     });
@@ -143,8 +140,8 @@ export function useGuideActive(nodes: GuideNode[], options?: UseGuideActiveOptio
     return () => {
       observer.disconnect();
       observed.forEach((element) => {
-        if (element.dataset.guideId) {
-          delete element.dataset.guideId;
+        if (element.dataset.kintsugId) {
+          delete element.dataset.kintsugId;
         }
       });
     };
@@ -153,28 +150,33 @@ export function useGuideActive(nodes: GuideNode[], options?: UseGuideActiveOptio
   return activeId;
 }
 
-export function useGuideMap(nodes: GuideNode[], options?: UseGuideMapOptions) {
-  const [mappedNodes, setMappedNodes] = useState<GuideNodePosition[]>([]);
+export function useKintsugMap(nodes: KintsugNode[], options?: UseKintsugMapOptions) {
+  const { railRef, minSpacing: optionMinSpacing, containerSelector } = options ?? {};
+  const [mappedNodes, setMappedNodes] = useState<KintsugNodePosition[]>([]);
   const [railHeight, setRailHeight] = useState(0);
-  const minSpacing = options?.minSpacing ?? 10;
-  const mode = options?.mode ?? "dom";
-  const measuredRailHeight = options?.railRef?.current?.clientHeight;
+  const minSpacing = optionMinSpacing ?? 12;
 
   const buildMapping = useCallback(() => {
     if (typeof window === "undefined") return;
 
-    const axisHeight = safeNumber(measuredRailHeight, window.innerHeight * 0.65);
-    const height = Math.max(axisHeight, 160);
+    const axisElement = railRef?.current;
+    const axisHeight = axisElement?.clientHeight ?? window.innerHeight * 0.6;
+    const height = Math.max(axisHeight, 180);
     setRailHeight(height);
 
-    if (mode === "even" || nodes.length === 0) {
-      setMappedNodes(buildEvenMapping(nodes, height, minSpacing));
+    if (!nodes.length) {
+      setMappedNodes([]);
       return;
     }
 
     const anchor = new Map<string, number>();
     let minTop = Number.POSITIVE_INFINITY;
     let maxTop = Number.NEGATIVE_INFINITY;
+
+    const container =
+      containerSelector && typeof document !== "undefined"
+        ? document.querySelector(containerSelector)
+        : document.querySelector("article");
 
     nodes.forEach((node) => {
       if (node.target.type !== "scroll" || !node.target.selector) return;
@@ -187,30 +189,32 @@ export function useGuideMap(nodes: GuideNode[], options?: UseGuideMapOptions) {
     });
 
     if (!anchor.size) {
-      setMappedNodes(buildEvenMapping(nodes, height, minSpacing));
+      const fallbackStep = Math.max(height / Math.max(nodes.length - 1, 1), minSpacing);
+      setMappedNodes(nodes.map((node, index) => ({ id: node.id, y: Math.min(fallbackStep * index, height) })));
       return;
     }
 
-    const span = Math.max(maxTop - minTop, 1);
+    const containerTop = container ? window.scrollY + (container as HTMLElement).getBoundingClientRect().top : minTop;
+    const containerHeight = container ? (container as HTMLElement).scrollHeight : Math.max(maxTop - minTop, 1);
+    const span = Math.max(containerHeight, 1);
     const fallbackStep = Math.max(height / Math.max(nodes.length - 1, 1), minSpacing);
 
-    const entries = nodes.map((node, index) => {
-      const targetTop = anchor.get(node.id);
-      if (typeof targetTop === "number") {
-        const normalized = ((targetTop - minTop) / span) * height;
-        return { id: node.id, y: clamp(normalized, 0, height) };
-      }
-
-      return { id: node.id, y: Math.min(fallbackStep * index, height) };
-    });
-
-    setMappedNodes(entries);
-  }, [mode, minSpacing, nodes, measuredRailHeight]);
+    setMappedNodes(
+      nodes.map((node, index) => {
+        const targetTop = anchor.get(node.id);
+        if (typeof targetTop === "number") {
+          const normalized = ((targetTop - containerTop) / span) * height;
+          return { id: node.id, y: clamp(normalized, 0, height) };
+        }
+        return { id: node.id, y: Math.min(fallbackStep * index, height) };
+      })
+    );
+  }, [nodes, minSpacing, railRef, containerSelector]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    let frame: number | null = null;
 
+    let frame: number | null = null;
     const handle = () => {
       if (frame) cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
@@ -231,27 +235,27 @@ export function useGuideMap(nodes: GuideNode[], options?: UseGuideMapOptions) {
   return { mappedNodes, railHeight };
 }
 
-export function useGuideNavigate() {
+export function useKintsugNavigate() {
   const router = useRouter();
 
   const highlightTarget = useCallback((target?: HTMLElement) => {
     if (!target || typeof window === "undefined") return;
 
-    if (target.dataset.guideHighlightTimer) {
-      window.clearTimeout(Number(target.dataset.guideHighlightTimer));
+    if (target.dataset.kintsugHighlightTimer) {
+      window.clearTimeout(Number(target.dataset.kintsugHighlightTimer));
     }
 
-    target.dataset.guideHighlight = "true";
+    target.dataset.kintsugHighlight = "true";
     const timer = window.setTimeout(() => {
-      delete target.dataset.guideHighlight;
-      delete target.dataset.guideHighlightTimer;
+      delete target.dataset.kintsugHighlight;
+      delete target.dataset.kintsugHighlightTimer;
     }, 320);
 
-    target.dataset.guideHighlightTimer = String(timer);
+    target.dataset.kintsugHighlightTimer = String(timer);
   }, []);
 
   const goTo = useCallback(
-    (node: GuideNode) => {
+    (node: KintsugNode) => {
       if (node.target.type === "scroll" && node.target.selector) {
         const element = document.querySelector(node.target.selector);
         if (!element) return;
@@ -275,7 +279,7 @@ export function useGuideNavigate() {
   return { goTo };
 }
 
-export function useGuideRailFlags(): GuideRailFlags {
+export function useKintsugRailFlags(): KintsugRailFlags {
   const searchParams = useSearchParams();
   const debug = searchParams.get("debug") === "1";
   const forcedReduced = searchParams.get("reduced") === "1";
@@ -292,7 +296,7 @@ export function useGuideRailFlags(): GuideRailFlags {
 }
 
 export function useReducedMotionGate() {
-  const { debug, forcedReduced, cinema } = useGuideRailFlags();
+  const { debug, forcedReduced, cinema } = useKintsugRailFlags();
   const prefersReduced = useReducedMotion();
 
   return useMemo(

@@ -11,8 +11,13 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "Design", href: "/design" },
-  { label: "Motion", href: "/motion" },
+  { label: "Posts", href: "/posts" },
+  { label: "Categories", href: "/categories" },
+  { label: "tags", href: "/tags" },
+  { label: "Search", href: "/search" },
+  { label: "About", href: "/about" },
+  { label: "Me", href: "/me" },
+  { label: "Login", href: "/login" }
 ];
 
 type HeaderVariant = "default" | "hero";
@@ -68,7 +73,7 @@ export default function Header({ variant = "default" }: HeaderProps) {
           underlineThickness={1}
           underlineOffset={-4}
         >
-          Editorial Journal
+          My Blog
         </AnimatedLink>
 
         <nav className="flex items-center gap-6 text-xs uppercase tracking-[0.25em]">

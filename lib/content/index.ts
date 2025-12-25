@@ -121,6 +121,11 @@ export async function getAllPostsIndex(options: { includeDrafts?: boolean } = {}
   return filterDrafts(index, options.includeDrafts);
 }
 
+export async function getAllPosts(options: { includeDrafts?: boolean } = {}): Promise<Post[]> {
+  const { posts } = await getContentCache();
+  return filterDrafts(posts, options.includeDrafts);
+}
+
 export async function getPostBySlug(
   slug: string,
   options: { includeDrafts?: boolean } = {}

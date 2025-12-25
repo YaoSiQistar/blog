@@ -43,7 +43,7 @@ export function buildGuideModel(
 
   return {
     currentCategory: params.category,
-    selectedTags: params.tags,
+    selectedTags: params.tags,  
     q: params.q,
     sort: params.sort,
     page: params.page,

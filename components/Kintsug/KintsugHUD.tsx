@@ -1,22 +1,22 @@
 "use client";
 
-import type { GuideNodePosition, GuideRailMode } from "@/lib/guide-rail/types";
+import type { KintsugNodePosition, KintsugRailMode } from "@/lib/Kintsug-rail/types";
 
-type GuideHUDProps = {
-  mode: GuideRailMode;
+type KintsugHUDProps = {
+  mode: KintsugRailMode;
   activeId?: string;
   progress: number;
   railHeight: number;
-  mappedNodes: GuideNodePosition[];
+  mappedNodes: KintsugNodePosition[];
 };
 
-export function GuideHUD({ mode, activeId, progress, railHeight, mappedNodes }: GuideHUDProps) {
+export function KintsugHUD({ mode, activeId, progress, railHeight, mappedNodes }: KintsugHUDProps) {
   const percent = Math.round(progress * 100);
   const nodesPreview = mappedNodes.slice(0, 4).map((node) => `${node.id}@${Math.round(node.y)}`);
 
   return (
     <div className="outline-none pointer-events-none select-none rounded-lg border border-border-subtle bg-card/60 p-3 text-[0.65rem] text-muted-foreground shadow-soft backdrop-blur-sm">
-      <div className="font-mono text-[0.7rem] uppercase tracking-[0.4em] text-muted-foreground">Guide HUD</div>
+      <div className="font-mono text-[0.7rem] uppercase tracking-[0.4em] text-muted-foreground">Kintsug HUD</div>
       <div className="space-y-1 pt-2">
         <div className="flex justify-between text-xs text-foreground/70">
           <span>Mode</span>
