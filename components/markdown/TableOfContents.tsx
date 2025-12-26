@@ -46,30 +46,25 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
   }, [headings]);
 
   const renderList = () => (
-    <div className="space-y-2">
+    <div className="space-y-3">
       <div className="text-[0.6rem] font-semibold uppercase tracking-[0.32em] text-muted-foreground">
         On this page
       </div>
       <ul className="space-y-1 text-sm">
         {headings.map((heading) => {
           const isActive = heading.id === activeId;
-          const indent = heading.depth === 3 ? "pl-4" : "pl-1";
+          const indent =
+            heading.depth === 4 ? "pl-6" : heading.depth === 3 ? "pl-4" : "pl-1";
           return (
-            <li
-              key={heading.id}
-              className={cn(
-                "border-l pl-3 transition-colors",
-                isActive ? "border-primary" : "border-border/60"
-              )}
-            >
+            <li key={heading.id}>
               <AnimatedLink
                 href={`#${heading.id}`}
                 className={cn(
-                  "block w-full py-1 text-[0.85rem] leading-snug",
+                  "block w-full rounded-full px-3 py-1 text-[0.85rem] leading-snug transition",
                   indent,
                   isActive
-                    ? "text-foreground font-semibold"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "bg-card text-foreground shadow-[inset_0_0_0_1px_rgba(13,59,102,0.25)]"
+                    : "text-muted-foreground hover:text-foreground hover:bg-card/60"
                 )}
               >
                 {heading.text}
@@ -83,7 +78,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
   return (
     <>
-      <div className="hidden space-y-4 rounded-[var(--radius)] border border-border/70 bg-card/60 p-4 lg:block lg:sticky lg:top-[6.75rem]">
+      <div className="hidden space-y-4 rounded-(--radius) border border-border/70 bg-card/60 p-4 lg:block lg:sticky lg:top-[6.75rem] lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:pr-2">
         {renderList()}
       </div>
 

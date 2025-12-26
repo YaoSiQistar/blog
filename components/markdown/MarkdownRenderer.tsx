@@ -1,16 +1,50 @@
-import { renderMarkdown } from "@/lib/markdown/render";
+import { renderMarkdown } from "@/lib/markdown/engine";
+import type { MarkdownRenderOptions, ReferenceEntry } from "@/lib/markdown/types";
+import type { MarkdownFeatureOverrides, MarkdownPresetName } from "@/lib/markdown/features";
+import { resolveMarkdownFeatures } from "@/lib/markdown/features";
+import type { PostIndexItem } from "@/lib/content/types";
+import { MarkdownProvider } from "./MarkdownContext";
+import { cn } from "@/lib/utils";
 
 type MarkdownRendererProps = {
   markdown: string;
+  id?: string;
+  className?: string;
+  features?: MarkdownPresetName | MarkdownFeatureOverrides;
+  references?: ReferenceEntry[];
+  postIndex?: PostIndexItem[];
+  paragraphAnchors?: boolean;
 };
 
-export async function MarkdownRenderer({ markdown }: MarkdownRendererProps) {
-  const html = await renderMarkdown(markdown);
+export async function MarkdownRenderer({
+  markdown,
+  id = "article",
+  className,
+  features = "blog",
+  references = [],
+  postIndex = [],
+  paragraphAnchors,
+}: MarkdownRendererProps) {
+  const resolvedFeatures = resolveMarkdownFeatures(
+    typeof features === "string" ? features : "blog",
+    typeof features === "string" ? undefined : features
+  );
+  const content = await renderMarkdown(markdown, {
+    features,
+    references,
+    postIndex,
+    paragraphAnchors,
+  } as MarkdownRenderOptions);
+
   return (
-    <article
-      id="article"
-      className="prose max-w-none prose:prose-a:font-medium prose:prose-a:text-primary prose:prose-a:transition prose:prose-a:border-b prose:prose-a:border-transparent prose:prose-a:hover:border-primary prose:prose-img:rounded-2xl prose:prose-img:border prose:prose-img:border-border prose:prose-img:bg-card/60 prose:prose-blockquote:border-l-2 prose:prose-blockquote:border-border prose:prose-blockquote:bg-card/60 prose:prose-ol:list-outside prose:prose-ul:list-disc"
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
+    <MarkdownProvider value={{ features: resolvedFeatures, references, postIndex }}>
+      <article
+        id={id}
+        className={cn("prose-ultra max-w-none", className)}
+        data-markdown
+      >
+        {content}
+      </article>
+    </MarkdownProvider>
   );
 }

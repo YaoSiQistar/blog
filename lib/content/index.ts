@@ -1,5 +1,6 @@
 import matter from "gray-matter";
 
+import { getEngagementScoresForSlugs } from "@/lib/engagement/queries";
 import { getContentSignature, getPostFilePaths, getSlugFromFilename, readFile } from "./fs";
 import { parseFrontmatter, slugRegex } from "./schema";
 import type {
@@ -40,6 +41,15 @@ const createExcerpt = (content: string, maxLength = 160) => {
 
 const sortByDateDesc = <T extends { dateTimestamp: number }>(items: T[]) =>
   [...items].sort((a, b) => b.dateTimestamp - a.dateTimestamp);
+
+const sortByHot = async <T extends { slug: string; dateTimestamp: number }>(items: T[]) => {
+  const scores = await getEngagementScoresForSlugs(items.map((item) => item.slug));
+  return [...items].sort((a, b) => {
+    const diff = (scores[b.slug] ?? 0) - (scores[a.slug] ?? 0);
+    if (diff !== 0) return diff;
+    return b.dateTimestamp - a.dateTimestamp;
+  });
+};
 
 const toIndexItem = (post: Post): PostIndexItem => {
   const { content, ...rest } = post;
@@ -169,8 +179,7 @@ export async function getPostsPaged(params: PostsQueryParams): Promise<PostsPage
     });
   }
 
-  const sorted =
-    sort === "hot" ? sortByDateDesc(filtered) : sortByDateDesc(filtered);
+  const sorted = sort === "hot" ? await sortByHot(filtered) : sortByDateDesc(filtered);
   const total = sorted.length;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const safePage = Math.min(Math.max(page, 1), totalPages);
@@ -214,4 +223,29 @@ export async function getAllTags(): Promise<{ slug: string; count: number }[]> {
   return Array.from(counts.entries())
     .map(([slug, count]) => ({ slug, count }))
     .sort((a, b) => b.count - a.count);
+}
+
+export async function getHotTags(): Promise<{ slug: string; count: number }[]> {
+  const index = await getAllPostsIndex();
+  const scores = await getEngagementScoresForSlugs(index.map((post) => post.slug));
+  const counts = new Map<string, { count: number; score: number }>();
+
+  for (const post of index) {
+    const postScore = scores[post.slug] ?? 0;
+    for (const tag of post.tags) {
+      const entry = counts.get(tag) ?? { count: 0, score: 0 };
+      entry.count += 1;
+      entry.score += postScore;
+      counts.set(tag, entry);
+    }
+  }
+
+  return Array.from(counts.entries())
+    .map(([slug, data]) => ({ slug, count: data.count, score: data.score }))
+    .sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      if (b.count !== a.count) return b.count - a.count;
+      return a.slug.localeCompare(b.slug);
+    })
+    .map(({ slug, count }) => ({ slug, count }));
 }

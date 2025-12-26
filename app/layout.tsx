@@ -3,6 +3,9 @@ import { Suspense } from "react";
 import { Inter, JetBrains_Mono, Noto_Serif_SC } from "next/font/google";
 
 import AppShell from "@/components/shell/AppShell";
+import { siteConfig } from "@/lib/seo/site";
+import { buildOpenGraph, buildTwitter } from "@/lib/seo/og";
+import "katex/dist/katex.min.css";
 import "./globals.css";
 import "../styles/prose.css";
 
@@ -25,9 +28,30 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Editorial Journal",
-  description:
-    "Warm paper editorial blog built with Next.js, Tailwind, and Supabase engagement.",
+  metadataBase: new URL(siteConfig.siteUrl),
+  title: {
+    default: siteConfig.defaultTitle,
+    template: `%s | ${siteConfig.siteName}`,
+  },
+  description: siteConfig.defaultDescription,
+  icons: {
+    icon: "/favicon.ico",
+  },
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: buildOpenGraph({
+    title: siteConfig.defaultTitle,
+    description: siteConfig.defaultDescription,
+    pathname: "/",
+    image: siteConfig.defaultOg,
+    type: "website",
+  }),
+  twitter: buildTwitter({
+    title: siteConfig.defaultTitle,
+    description: siteConfig.defaultDescription,
+    image: siteConfig.defaultOg,
+  }),
 };
 
 export default function RootLayout({

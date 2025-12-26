@@ -6,6 +6,13 @@ import HomeGalleries from "@/components/home/HomeGalleries";
 import HomeFooterNote from "@/components/home/HomeFooterNote";
 import { KintsugRail } from "@/components/Kintsug/KintsugiRail";
 import { getAllCategories, getAllTags, getPostsPaged } from "@/lib/content";
+import { buildPageMetadata } from "@/lib/seo/og";
+
+export const metadata = buildPageMetadata({
+  title: "Home",
+  description: "A warm paper editorial journal with cinematic motion notes.",
+  pathname: "/",
+});
 
 export default async function Home() {
   const [latest, categories, tags] = await Promise.all([

@@ -53,7 +53,7 @@ const AnimatedLink = React.forwardRef<HTMLAnchorElement, AnimatedLinkProps>(
             whileFocus={{ scaleX: 1 }}
             transition={{
               duration: motionTokens.durations.fast,
-              ease: motionTokens.easing.easeInOut,
+              ease: motionTokens.easing.easeOut,
             }}
           />
         )}

@@ -31,7 +31,9 @@ export default function PostsLayout({
             {children}
           </div>
           <aside className="hidden lg:block">
-            <div className="sticky top-24">{right}</div>
+            <div className="sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto pr-1">
+              {right}
+            </div>
           </aside>
         </div>
       </div>

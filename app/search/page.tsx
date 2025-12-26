@@ -11,9 +11,36 @@ import PostsPagination from "@/components/pagination/Pagination";
 import { getAllCategories, getAllTags, getAllPosts } from "@/lib/content";
 import { parseSearchParams, buildSearchHref } from "@/lib/search/query";
 import { searchPosts } from "@/lib/search/searchPosts";
+import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/seo/og";
 
 interface SearchPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
+
+const getParam = (params: Record<string, string | string[] | undefined>, key: string) => {
+  const value = params[key];
+  return Array.isArray(value) ? value[0] : value;
+};
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}): Promise<Metadata> {
+  const resolved = await searchParams;
+  const query = getParam(resolved, "q");
+  const title = query ? `Search: ${query}` : "Search";
+  const description = query
+    ? `Search results for "${query}".`
+    : "Search the archive by title, content, or tags.";
+  const pathname = query ? `/search?q=${encodeURIComponent(query)}` : "/search";
+
+  return buildPageMetadata({
+    title,
+    description,
+    pathname,
+  });
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {

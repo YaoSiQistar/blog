@@ -12,9 +12,9 @@ const heroPathD =
   "M60 0 C54 80, 68 140, 58 220 S64 360, 52 440 S66 600, 58 720 S70 880, 60 1000";
 
 type KintsugAxisProps = {
-  nodes: KintsugNode[];
+  nodes: readonly KintsugNode[];
   activeId?: string;
-  mappedNodes: KintsugNodePosition[];
+  mappedNodes: readonly KintsugNodePosition[];
   railHeight: number;
   goTo: (node: KintsugNode) => void;
   progress: number;

@@ -4,6 +4,7 @@ date: "2025-12-12"
 slug: "quiet-transitions"
 category: "motion"
 tags: ["motion", "transition", "ux"]
+references: "refs/quiet-transitions.json"
 draft: false
 featured: false
 pinned: false

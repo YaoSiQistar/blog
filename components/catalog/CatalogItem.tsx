@@ -40,7 +40,7 @@ export function CatalogItem({
   index = 0,
   className,
   ...props
-}: CatalogItemProps & HTMLMotionProps<"article">) {
+}: CatalogItemProps & Omit<HTMLMotionProps<"article">, "title">) {
   const metaTransition = {
     delay: isReduced ? 0 : 0.12,
     duration: motionTokens.durations.fast,
@@ -86,10 +86,12 @@ export function CatalogItem({
           </motion.h3>
 
           {cover ? (
-            <motion.div
+            <motion.img
               layoutId={postCoverId(slug)}
-              className="h-24 w-full rounded-lg border border-border bg-cover bg-center"
-              style={{ backgroundImage: `url(${cover})` }}
+              src={cover}
+              alt=""
+              loading="lazy"
+              className="w-full h-auto rounded-lg border border-border"
             />
           ) : null}
 

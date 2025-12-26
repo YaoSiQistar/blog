@@ -1,0 +1,35 @@
+[
+  {
+    "id": "doe2020",
+    "author": "Doe, J.",
+    "year": "2020",
+    "title": "Editorial Systems for the Web",
+    "source": "Journal of Digital Publishing",
+    "url": "https://example.com/doe2020"
+  },
+  {
+    "id": "chen2022",
+    "author": "Chen, L.",
+    "year": "2022",
+    "title": "Designing Warm Paper Interfaces",
+    "source": "Proceedings of Interface Matters",
+    "url": "https://example.com/chen2022"
+  },
+  {
+    "id": "smith2023",
+    "author": "Smith, A.",
+    "year": "2023",
+    "title": "Motion Narratives in Editorial Products",
+    "source": "Motion Quarterly",
+    "url": "https://example.com/smith2023"
+  },
+  {
+    "id": "liu2024",
+    "author": "Liu, R.",
+    "year": "2024",
+    "title": "Readable Code as Design",
+    "source": "Software Craft Review",
+    "url": "https://example.com/liu2024",
+    "note": "A survey on typography, rhythm, and syntax highlighting for long-form code."
+  }
+]

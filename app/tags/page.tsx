@@ -4,7 +4,14 @@ import { RuleLine } from "@/components/editorial/RuleLine";
 import Kicker from "@/components/editorial/Kicker";
 import KintsugiTopicRail from "@/components/tags/KintsugiTopicRail";
 import TagsSections, { TagSection } from "@/components/tags/TagsSections";
-import { getAllTags } from "@/lib/content";
+import { getAllTags, getHotTags } from "@/lib/content";
+import { buildPageMetadata } from "@/lib/seo/og";
+
+export const metadata = buildPageMetadata({
+  title: "Tags",
+  description: "Browse the topic wall and discover recurring editorial threads.",
+  pathname: "/tags",
+});
 
 interface TagsPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -18,8 +25,8 @@ export default async function TagsPage({ searchParams }: TagsPageProps) {
     resolvedSearchParams?.debug === "1" ||
     resolvedSearchParams?.debug === "true";
   const tags = await getAllTags();
-
   const useAlphabet = tags.length >= 40;
+  const hotTags = useAlphabet ? [] : await getHotTags();
   let sections: TagSection[] = [];
 
   if (useAlphabet) {
@@ -51,7 +58,8 @@ export default async function TagsPage({ searchParams }: TagsPageProps) {
       };
     });
   } else {
-    const popular = tags.slice(0, 12);
+    const popularSource = hotTags.length > 0 ? hotTags : tags;
+    const popular = popularSource.slice(0, 12);
     sections = [
       {
         id: "sec-popular",

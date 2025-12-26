@@ -8,6 +8,13 @@ import MuseumMapLayout from "@/components/categories/MuseumMapLayout";
 import { getAllPostsIndex } from "@/lib/content";
 import { buildCategoryMap } from "@/lib/categories/mapModel";
 import type { CategoryNode } from "@/lib/categories/mapModel";
+import { buildPageMetadata } from "@/lib/seo/og";
+
+export const metadata = buildPageMetadata({
+  title: "Categories",
+  description: "Explore the archive by curated galleries and editorial rooms.",
+  pathname: "/categories",
+});
 
 interface CategoriesPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;

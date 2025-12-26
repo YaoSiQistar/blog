@@ -3,14 +3,14 @@ const toCssEasing = (value: readonly [number, number, number, number]) =>
 
 export const motionTokens = {
   durations: {
-    fast: 0.16,
-    normal: 0.22,
-    slow: 0.32,
+    fast: 0.18,
+    normal: 0.26,
+    slow: 0.34,
     cinema: 0.9,
   },
   easing: {
     easeOut: [0.22, 1, 0.36, 1] as const,
-    easeInOut: [0.65, 0, 0.35, 1] as const,
+    anticipate: [0.18, 1.12, 0.24, 1] as const,
   },
   limits: {
     enterY: 12,

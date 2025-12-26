@@ -13,6 +13,15 @@ import { getAllCategories, getAllTags, getPostsPaged } from "@/lib/content";
 import { normalizeSearchParams } from "@/lib/content/searchParams";
 import { buildGuideModel } from "@/lib/posts/Guide";
 import type { KintsugNode } from "@/lib/Kintsug-rail/types";
+import { buildPageMetadata } from "@/lib/seo/og";
+
+export const metadata = buildPageMetadata({
+  title: "Archive",
+  description: "Browse the editorial archive with filters for tags and galleries.",
+  pathname: "/posts",
+});
+
+export const revalidate = 60;
 
 interface PostsPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;

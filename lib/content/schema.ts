@@ -20,6 +20,7 @@ const frontmatterSchema = z
       .default([]),
     excerpt: z.string().optional(),
     cover: z.string().optional(),
+    references: z.string().optional(),
     draft: z.boolean().optional().default(false),
     featured: z.boolean().optional().default(false),
     pinned: z.boolean().optional().default(false),

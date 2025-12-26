@@ -61,10 +61,12 @@ export default function PostHero({
       <p className="mt-6 text-base text-muted-foreground">{excerpt}</p>
       {/* 条件渲染封面图片，如果提供了封面图片URL则显示 */}
       {cover ? (
-        <motion.div
-          layoutId={postCoverId(slug)} // 基于文章slug生成唯一的布局ID
-          className="mt-6 h-56 w-full rounded-[var(--radius)] border border-border bg-cover bg-center"
-          style={{ backgroundImage: `url(${cover})` }} // 使用内联样式设置背景图片
+        <motion.img
+          layoutId={postCoverId(slug)}
+          src={cover}
+          alt=""
+          loading="lazy"
+          className="mt-6 w-full h-auto rounded-[var(--radius)] border border-border"
         />
       ) : null} {/* 如果没有提供封面图片，则不渲染任何内容 */}
     </motion.div>

@@ -5,9 +5,12 @@ import { useEffect, useState } from "react";
 type CopyButtonProps = {
   value: string;
   label?: string;
+  className?: string;
 };
 
-export function CopyButton({ value, label = "Copy" }: CopyButtonProps) {
+export function CopyButton(props?: CopyButtonProps | null) {
+  const safeProps = props ?? { value: "" };
+  const { value = "", label = "Copy", className } = safeProps;
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -29,7 +32,7 @@ export function CopyButton({ value, label = "Copy" }: CopyButtonProps) {
     <button
       type="button"
       onClick={handleCopy}
-      className="rounded-full border border-border px-3 py-1 text-xs font-semibold uppercase tracking-[0.4em] text-muted-foreground transition hover:border-foreground hover:text-foreground"
+      className={`rounded-full border border-border/70 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.45em] text-muted-foreground transition hover:border-foreground hover:text-foreground ${className ?? ""}`}
     >
       {copied ? "Copied" : label}
     </button>

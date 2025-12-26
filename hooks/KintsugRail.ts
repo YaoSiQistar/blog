@@ -84,7 +84,7 @@ export function useKintsugProgress(containerSelector?: string) {
   return progress;
 }
 
-export function useKintsugActive(nodes: KintsugNode[], options?: UseKintsugActiveOptions) {
+export function useKintsugActive(nodes: readonly KintsugNode[], options?: UseKintsugActiveOptions) {
   const [activeId, setActiveId] = useState<string | undefined>();
 
   useEffect(() => {
@@ -150,11 +150,13 @@ export function useKintsugActive(nodes: KintsugNode[], options?: UseKintsugActiv
   return activeId;
 }
 
-export function useKintsugMap(nodes: KintsugNode[], options?: UseKintsugMapOptions) {
+export function useKintsugMap(nodes: readonly KintsugNode[], options?: UseKintsugMapOptions) {
   const { railRef, minSpacing: optionMinSpacing, containerSelector } = options ?? {};
   const [mappedNodes, setMappedNodes] = useState<KintsugNodePosition[]>([]);
   const [railHeight, setRailHeight] = useState(0);
   const minSpacing = optionMinSpacing ?? 12;
+  const resolveSpacing = (height: number, count: number) =>
+    Math.min(minSpacing, height / Math.max(count - 1, 1));
 
   const buildMapping = useCallback(() => {
     if (typeof window === "undefined") return;
@@ -189,26 +191,49 @@ export function useKintsugMap(nodes: KintsugNode[], options?: UseKintsugMapOptio
     });
 
     if (!anchor.size) {
-      const fallbackStep = Math.max(height / Math.max(nodes.length - 1, 1), minSpacing);
-      setMappedNodes(nodes.map((node, index) => ({ id: node.id, y: Math.min(fallbackStep * index, height) })));
+      const spacing = resolveSpacing(height, nodes.length);
+      setMappedNodes(
+        nodes.map((node, index) => ({
+          id: node.id,
+          y: Math.min(spacing * index, height),
+        }))
+      );
       return;
     }
 
     const containerTop = container ? window.scrollY + (container as HTMLElement).getBoundingClientRect().top : minTop;
     const containerHeight = container ? (container as HTMLElement).scrollHeight : Math.max(maxTop - minTop, 1);
     const span = Math.max(containerHeight, 1);
-    const fallbackStep = Math.max(height / Math.max(nodes.length - 1, 1), minSpacing);
+    const spacing = resolveSpacing(height, nodes.length);
 
-    setMappedNodes(
-      nodes.map((node, index) => {
-        const targetTop = anchor.get(node.id);
-        if (typeof targetTop === "number") {
-          const normalized = ((targetTop - containerTop) / span) * height;
-          return { id: node.id, y: clamp(normalized, 0, height) };
-        }
-        return { id: node.id, y: Math.min(fallbackStep * index, height) };
-      })
-    );
+    const rawPositions = nodes.map((node, index) => {
+      const targetTop = anchor.get(node.id);
+      if (typeof targetTop === "number") {
+        const normalized = ((targetTop - containerTop) / span) * height;
+        return { id: node.id, y: clamp(normalized, 0, height) };
+      }
+      return { id: node.id, y: Math.min(spacing * index, height) };
+    });
+
+    const sorted = [...rawPositions].sort((a, b) => a.y - b.y);
+    for (let i = 1; i < sorted.length; i += 1) {
+      sorted[i].y = Math.max(sorted[i].y, sorted[i - 1].y + spacing);
+    }
+    if (sorted.length > 1 && sorted[sorted.length - 1].y > height) {
+      sorted[sorted.length - 1].y = height;
+      for (let i = sorted.length - 2; i >= 0; i -= 1) {
+        sorted[i].y = Math.min(sorted[i].y, sorted[i + 1].y - spacing);
+      }
+      if (sorted[0].y < 0) {
+        const shift = -sorted[0].y;
+        sorted.forEach((node) => {
+          node.y = Math.min(node.y + shift, height);
+        });
+      }
+    }
+
+    const adjusted = new Map(sorted.map((node) => [node.id, node.y]));
+    setMappedNodes(rawPositions.map((node) => ({ id: node.id, y: adjusted.get(node.id) ?? node.y })));
   }, [nodes, minSpacing, railRef, containerSelector]);
 
   useEffect(() => {

@@ -37,10 +37,10 @@ export function ReadingProgress({ targetId = "article" }: ReadingProgressProps) 
   }, [targetId]);
 
   return (
-    <div className="sticky top-[5.5rem] z-30 overflow-hidden bg-background/70 px-6 py-2 backdrop-blur-sm">
+    <div className="sticky top-22 z-30 overflow-hidden bg-background/70 px-6 py-2 backdrop-blur-sm">
       <div className="h-1 w-full rounded-full bg-muted">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-primary to-accent"
+          className="h-full rounded-full bg-linear-to-r from-primary to-accent"
           style={{ width: `${Math.round(progress * 100)}%` }}
         />
       </div>

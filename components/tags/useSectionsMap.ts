@@ -13,7 +13,7 @@ export type SectionPosition = {
 type UseSectionsMapOptions = {
   containerSelector: string;
   sectionSelector: string;
-  railRef: RefObject<HTMLElement>;
+  railRef: RefObject<HTMLElement | null>;
   minSpacing?: number;
 };
 

@@ -8,6 +8,7 @@ export interface PostFrontmatter {
   tags: string[];
   excerpt?: string;
   cover?: string;
+  references?: string;
   draft: boolean;
   featured: boolean;
   pinned: boolean;

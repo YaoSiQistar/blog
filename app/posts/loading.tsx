@@ -26,7 +26,7 @@ function CatalogSkeleton() {
 
 export default function Loading() {
   return (
-    <div className="space-y-[var(--section-y)] py-[var(--section-y)]">
+    <div className="space-y-(--section-y) py-[var(--section-y)]">
       <div className="mx-auto max-w-screen-2xl px-4 lg:px-6">
         <div className="grid gap-10 lg:grid-cols-[240px_minmax(0,1fr)_300px]">
           <aside className="hidden lg:block">

@@ -60,7 +60,7 @@ export const maskReveal = (isReduced = false): Variants =>
         clipPath: "inset(0 0 0 0)",
         transition: {
           duration: durations.normal,
-          ease: easing.easeInOut,
+          ease: easing.easeOut,
         },
       },
     },
@@ -116,7 +116,7 @@ export const lineDraw = (isReduced = false): Variants =>
         opacity: 1,
         transition: {
           duration: durations.slow,
-          ease: easing.easeInOut,
+          ease: easing.easeOut,
         },
       },
     },
@@ -157,14 +157,14 @@ export const shared = (isReduced = false): Variants =>
         opacity: 1,
         transition: {
           duration: durations.slow,
-          ease: easing.easeInOut,
+          ease: easing.easeOut,
         },
       },
       exit: {
         opacity: 0,
         transition: {
           duration: durations.fast,
-          ease: easing.easeInOut,
+          ease: easing.easeOut,
         },
       },
     },
@@ -185,7 +185,7 @@ export const pageTransition = (isReduced = false): Variants =>
         filter: "blur(0px)",
         transition: {
           duration: durations.normal,
-          ease: easing.easeInOut,
+          ease: easing.easeOut,
         },
       },
       exit: {
