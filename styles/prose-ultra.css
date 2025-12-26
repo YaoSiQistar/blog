@@ -72,6 +72,7 @@
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
+.prose-ultra h1:hover .markdown-anchor,
 .prose-ultra h2:hover .markdown-anchor,
 .prose-ultra h3:hover .markdown-anchor,
 .prose-ultra h4:hover .markdown-anchor,

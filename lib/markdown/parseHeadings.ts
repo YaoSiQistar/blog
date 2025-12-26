@@ -13,7 +13,7 @@ export function parseHeadings(markdown: string): HeadingNode[] {
 
   (tree.children as Heading[]).forEach((node) => {
     if (!node || node.type !== "heading") return;
-    if (typeof node.depth !== "number" || node.depth < 2 || node.depth > 4) return;
+    if (typeof node.depth !== "number" || node.depth < 1 || node.depth > 4) return;
     const text = toString(node).trim();
     if (!text) return;
     const id = slugifyText(text, slugger);

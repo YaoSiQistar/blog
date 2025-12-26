@@ -6,7 +6,7 @@ import remarkMath from "remark-math";
 import remarkRehype from "remark-rehype";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeShiki from "@shikijs/rehype";
+import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
 import rehypeKatex from "rehype-katex";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeReact from "rehype-react";
@@ -18,6 +18,8 @@ import type { Element, Root } from "hast";
 import type { Parent } from "unist";
 import type { ShikiTransformer } from "shiki";
 import { transformerMetaHighlight, transformerNotationDiff } from "@shikijs/transformers";
+import { createHighlighter } from "shiki";
+import type { Highlighter } from "shiki";
 
 import type { MarkdownRenderOptions } from "./types";
 import { resolveMarkdownFeatures } from "./features";
@@ -33,7 +35,66 @@ import { rehypeNormalizeProperties } from "./plugins/rehype-normalize";
 import { markdownComponents } from "@/components/markdown/MarkdownComponents";
 
 const shouldUse = (value: boolean | undefined) => value === true;
-const shikiCache = new Map<string, Root>();
+
+const SHIKI_CACHE_LIMIT = 400;
+const SHIKI_THEMES = {
+  light: "github-light",
+  dark: "github-dark",
+} as const;
+const SHIKI_LANGS = [
+  "typescript",
+  "tsx",
+  "javascript",
+  "jsx",
+  "json",
+  "bash",
+  "css",
+  "html",
+  "markdown",
+  "yaml",
+  "diff",
+  "sql",
+] as const;
+
+class LruCache<K, V> {
+  private store = new Map<K, V>();
+  constructor(private maxSize: number) {}
+
+  get(key: K) {
+    const value = this.store.get(key);
+    if (!value) return undefined;
+    this.store.delete(key);
+    this.store.set(key, value);
+    return value;
+  }
+
+  set(key: K, value: V) {
+    if (this.store.has(key)) {
+      this.store.delete(key);
+    }
+    this.store.set(key, value);
+    if (this.store.size > this.maxSize) {
+      const oldest = this.store.keys().next().value;
+      if (oldest !== undefined) this.store.delete(oldest);
+    }
+    return this;
+  }
+}
+
+const shikiCache = new LruCache<string, Root>(SHIKI_CACHE_LIMIT);
+let highlighterPromise: Promise<Highlighter> | null = null;
+
+const ensureHighlighter = () => {
+  if (!highlighterPromise) {
+    highlighterPromise = createHighlighter({
+      themes: [SHIKI_THEMES.light, SHIKI_THEMES.dark],
+      langs: [...SHIKI_LANGS],
+    });
+  }
+  return highlighterPromise;
+};
+
+void ensureHighlighter();
 
 const createMetaParser = (options: MarkdownFeatures["code"]) => {
   return (metaString: string) => {
@@ -230,10 +291,11 @@ export async function renderMarkdown(markdown: string, options: MarkdownRenderOp
   }
 
   if (features.code.highlight) {
-    processor.use(rehypeShiki, {
+    const highlighter = await ensureHighlighter();
+    processor.use(rehypeShikiFromHighlighter, highlighter, {
       themes: {
-        light: "github-light",
-        dark: "github-dark",
+        light: SHIKI_THEMES.light,
+        dark: SHIKI_THEMES.dark,
       },
       defaultColor: "light",
       addLanguageClass: true,

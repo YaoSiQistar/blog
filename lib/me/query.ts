@@ -24,7 +24,7 @@ const getParam = (input: ParamsInput, key: string): string | null => {
   if (typeof (input as URLSearchParams).get === "function") {
     return (input as URLSearchParams).get(key);
   }
-  const raw = input[key];
+  const raw = (input as Record<string, string | string[] | undefined>)[key];
   return Array.isArray(raw) ? raw[0] ?? null : raw ?? null;
 };
 
