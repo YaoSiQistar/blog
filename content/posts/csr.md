@@ -4,7 +4,7 @@ date: "2025-12-26"
 slug: "csr"
 category: "frontend"
 tags: ["csr", "incremental-static-regeneration", "nextjs", "ssg", "ssr", "cdn"]
-excerpt: "CSR 不是“把页面提前渲染一下”，而是一整套围绕 **浏览器里的 JavaScript 渲染 + 路由/状态管理 + 数据获取** 的架构。"
+excerpt: "CSR 不是“把页面提前渲染一下”，而是一整套围绕 浏览器里的 JavaScript 渲染 + 路由/状态管理 + 数据获取 的架构。"
 draft: false
 featured: false
 pinned: false

@@ -1,4 +1,4 @@
-import Container from "@/components/shell/Container";
+﻿import Container from "@/components/shell/Container";
 import PaperAtmosphere from "@/components/atmosphere/PaperAtmosphere";
 import PlaqueFlipCard from "@/components/auth/PlaqueFlipCard";
 import KintsugiGate from "@/components/auth/KintsugiGate";
@@ -63,3 +63,4 @@ export default function AuthFlipPage({
     </main>
   );
 }
+

@@ -2,7 +2,7 @@
   {
     "slug": "csr",
     "title": "CSR（Client-Side Rendering）彻底讲透：架构、策略与实战避坑",
-    "excerpt": "CSR 不是“把页面提前渲染一下”，而是一整套围绕 **浏览器里的 JavaScript 渲染 + 路由/状态管理 + 数据获取** 的架构。",
+    "excerpt": "CSR 不是“把页面提前渲染一下”，而是一整套围绕 浏览器里的 JavaScript 渲染 + 路由/状态管理 + 数据获取 的架构。",
     "headings": [
       "2.1 网络与解析阶段",
       "2.2 应用启动阶段（Bootstrap）",
@@ -42,7 +42,7 @@
     "readingTime": "2 min"
   },
   {
-    "slug": "有意义",
+    "slug": "isr",
     "title": "ISR（Incremental Static Regeneration）彻底讲透：架构、策略与实战避坑",
     "excerpt": "把 ISR 讲到你真的会用、会选、会排坑的程度：理解它如何把 SSG 的极致快与 SSR 的可更新结合起来，构成可控的缓存+再生架构。",
     "headings": [

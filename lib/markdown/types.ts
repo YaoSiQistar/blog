@@ -17,4 +17,5 @@ export type MarkdownRenderOptions = {
   references?: ReferenceEntry[];
   postIndex?: PostIndexItem[];
   paragraphAnchors?: boolean;
+  contentPath?: string;
 };

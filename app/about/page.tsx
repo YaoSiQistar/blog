@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+﻿import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 import Container from "@/components/shell/Container";
@@ -14,6 +14,7 @@ import { MarkdownRenderer } from "@/components/markdown/MarkdownRenderer";
 import { parseHeadings } from "@/lib/markdown/parseHeadings";
 import { getAboutPage } from "@/lib/pages/getPage";
 import { buildPageMetadata } from "@/lib/seo/og";
+import SequenceScrub from "@/components/motion/SequenceScrub";
 
 const extractLead = (content: string) => {
   const paragraphs = content
@@ -42,6 +43,7 @@ export default async function AboutPage() {
   if (!page) notFound();
 
   const { frontmatter, content, wordCount } = page;
+  const sequenceFrames = Array.from({ length: 14 }, (_, i) => `/sequence/about/frame-${String(i + 1).padStart(3, "0")}.webp`);
   const headings = parseHeadings(content);
   const showToc = wordCount > 1200 && headings.length > 0;
   const lead = frontmatter.lead?.length ? frontmatter.lead : extractLead(content);
@@ -65,9 +67,13 @@ export default async function AboutPage() {
 
         <AboutLead lead={lead} highlights={frontmatter.highlights} />
 
+        <section className="space-y-4">
+          <SequenceScrub frames={sequenceFrames} heightVh={160} />
+        </section>
+
         <section className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_260px]">
           <div className="max-w-[72ch] space-y-6">
-            <MarkdownRenderer markdown={content} features="ultra" />
+            <MarkdownRenderer markdown={content} features="ultra" contentPath={page.sourcePath} />
           </div>
           {showToc ? (
             <aside className="space-y-6">
@@ -89,3 +95,5 @@ export default async function AboutPage() {
     </main>
   );
 }
+
+

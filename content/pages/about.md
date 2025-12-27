@@ -10,8 +10,8 @@ email: "y88895900@gmail.com"
 links:
   - label: "GitHub"
     url: "https://github.com/YaoSiQistar"
-  - label: "QQ"
-    url: "https://2130458707@qq.com"
+  - label: "yuque"
+    url: "https://www.yuque.com/u48025709"
 highlights:
   - "关注点：前端知识。"
   - "以公开写作的方式记录学习。"

@@ -1,3 +1,4 @@
+import path from "path";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
@@ -33,6 +34,7 @@ import { rehypeChart } from "./plugins/rehype-chart";
 import { rehypeEmbeds } from "./plugins/rehype-embeds";
 import { rehypeNormalizeProperties } from "./plugins/rehype-normalize";
 import { markdownComponents } from "@/components/markdown/MarkdownComponents";
+import { CONTENT_ROOT } from "@/lib/content/fs";
 
 const shouldUse = (value: boolean | undefined) => value === true;
 
@@ -233,6 +235,41 @@ const rehypeFigures = (enabled: boolean) => {
   };
 };
 
+const isRemoteSrc = (src: string) =>
+  src.startsWith("http://") ||
+  src.startsWith("https://") ||
+  src.startsWith("data:") ||
+  src.startsWith("blob:");
+
+const resolveLocalImage = (src: string, contentPath?: string) => {
+  if (!contentPath) return src;
+  if (!src || src.startsWith("/")) return src;
+  if (isRemoteSrc(src)) return src;
+
+  const baseDir = path.dirname(contentPath);
+  const resolved = path.resolve(baseDir, src);
+  if (!resolved.startsWith(CONTENT_ROOT)) return src;
+
+  const relative = path.relative(CONTENT_ROOT, resolved).split(path.sep).join("/");
+  return `/content-assets/${encodeURI(relative)}`;
+};
+
+const rehypeLocalImages = (contentPath?: string) => {
+  return (tree: Root) => {
+    if (!contentPath) return;
+    visit(tree, "element", (node: Element) => {
+      if (node.type !== "element" || node.tagName !== "img") return;
+      const src = node.properties?.src;
+      if (typeof src !== "string") return;
+      const resolved = resolveLocalImage(src, contentPath);
+      if (resolved !== src) {
+        node.properties = node.properties ?? {};
+        node.properties.src = resolved;
+      }
+    });
+  };
+};
+
 export async function renderMarkdown(markdown: string, options: MarkdownRenderOptions = {}) {
   const features = resolveMarkdownFeatures(
     typeof options.features === "string" ? options.features : "blog",
@@ -265,6 +302,7 @@ export async function renderMarkdown(markdown: string, options: MarkdownRenderOp
 
   processor.use(remarkRehype, { allowDangerousHtml: false });
   processor.use(rehypeNormalizeProperties);
+  processor.use(() => rehypeLocalImages(options.contentPath));
 
   if (shouldUse(features.toc)) {
     processor.use(rehypeSlug);

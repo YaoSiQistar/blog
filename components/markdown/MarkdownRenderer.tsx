@@ -14,6 +14,7 @@ type MarkdownRendererProps = {
   references?: ReferenceEntry[];
   postIndex?: PostIndexItem[];
   paragraphAnchors?: boolean;
+  contentPath?: string;
 };
 
 export async function MarkdownRenderer({
@@ -24,6 +25,7 @@ export async function MarkdownRenderer({
   references = [],
   postIndex = [],
   paragraphAnchors,
+  contentPath,
 }: MarkdownRendererProps) {
   const resolvedFeatures = resolveMarkdownFeatures(
     typeof features === "string" ? features : "blog",
@@ -34,6 +36,7 @@ export async function MarkdownRenderer({
     references,
     postIndex,
     paragraphAnchors,
+    contentPath,
   } as MarkdownRenderOptions);
 
   return (

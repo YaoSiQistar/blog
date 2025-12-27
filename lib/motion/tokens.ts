@@ -6,6 +6,7 @@ export const motionTokens = {
     fast: 0.18,
     normal: 0.26,
     slow: 0.34,
+    cinematic: 0.9,
     cinema: 0.9,
   },
   easing: {
@@ -13,6 +14,12 @@ export const motionTokens = {
     anticipate: [0.18, 1.12, 0.24, 1] as const,
   },
   limits: {
+    yMax: 12,
+    scaleMax: 0.04,
+    rotateMax: 8,
+    blurMax: 8,
+    perspective: 1200,
+    staggerMax: 12,
     enterY: 12,
     hoverY: 3,
     magnetic: 8,

@@ -11,7 +11,7 @@ export const siteConfig = {
   siteName: "个人博客",
   defaultTitle: "个人博客",
   defaultDescription:
-    "基于 Next.js、Tailwind 与 Supabase 互动的暖纸质感编辑部博客。",
+    "基于 Next.js、Tailwind 与 Supabase 的暖纸质感博客。",
   defaultOg: "/og-default.svg",
 };
 

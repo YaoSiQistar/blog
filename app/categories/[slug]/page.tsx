@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+﻿import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 import Container from "@/components/shell/Container";
@@ -10,7 +10,8 @@ import CategoryHero from "@/components/category/CategoryHero";
 import CategoryWorkbench from "@/components/category/CategoryWorkbench";
 import CategoryEmpty from "@/components/category/CategoryEmpty";
 import CategoryExitSigns from "@/components/category/CategoryExitSigns";
-import { getPostsPaged } from "@/lib/content";
+import Stacking3D from "@/components/motion/Stacking3D";
+import { getAllCategories, getPostsPaged } from "@/lib/content";
 import { getCategoryBySlug } from "@/lib/categories/getCategoryBySlug";
 import { getTagsForCategory } from "@/lib/categories/getTagsForCategory";
 import {
@@ -34,6 +35,13 @@ const getParam = (
 };
 
 const PAGE_SIZE = 8;
+
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const categories = await getAllCategories();
+  return categories.map((category) => ({ slug: category.slug }));
+}
 
 export async function generateMetadata({
   params,
@@ -103,6 +111,12 @@ export default async function CategoryDetailPage({
     cover: post.cover,
   }));
 
+  const stackCards = paged.items.slice(0, 3).map((post) => ({
+    id: post.slug,
+    title: post.title,
+    subtitle: post.excerpt,
+  }));
+
   const view = getParam(resolvedSearch, "view");
   const backHref = view ? `/categories?view=${view}` : "/categories";
   const clearHref = buildCategoryHref(slug, {
@@ -128,6 +142,13 @@ export default async function CategoryDetailPage({
         />
       </Container>
 
+      {stackCards.length > 0 ? (
+        <Container variant="wide" className="space-y-6">
+          <RuleLine />
+          <Stacking3D cards={stackCards} />
+        </Container>
+      ) : null}
+
       <Container variant="wide" className="space-y-6">
         <RuleLine />
         <CategoryWorkbench slug={slug} tags={tagsInCategory} />
@@ -152,9 +173,9 @@ export default async function CategoryDetailPage({
 
         <div className="flex items-center justify-between pt-6 text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
           <span>
-            第 {paged.page} 页 / 共 {paged.totalPages} 页
+            Page {paged.page} / {paged.totalPages}
           </span>
-          <span>{paged.total} 篇</span>
+          <span>{paged.total} posts</span>
         </div>
 
         <PostsPagination

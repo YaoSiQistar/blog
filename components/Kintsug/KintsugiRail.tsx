@@ -18,7 +18,6 @@ type KintsugRailProps = {
   nodes: readonly KintsugNode[];
   mode: KintsugRailMode;
   containerSelector?: string;
-  debug?: boolean;
   variant?: "default" | "rail" | "compact";
   spacing?: number;
   className?: string;

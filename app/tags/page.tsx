@@ -1,15 +1,15 @@
-import Container from "@/components/shell/Container";
-import PageHeader from "@/components/shell/PageHeader";
+﻿import Container from "@/components/shell/Container";
 import { RuleLine } from "@/components/editorial/RuleLine";
 import Kicker from "@/components/editorial/Kicker";
 import KintsugiTopicRail from "@/components/tags/KintsugiTopicRail";
 import TagsSections, { TagSection } from "@/components/tags/TagsSections";
+import VariableFontHero from "@/components/motion/VariableFontHero";
 import { getAllTags, getHotTags } from "@/lib/content";
 import { buildPageMetadata } from "@/lib/seo/og";
 
 export const metadata = buildPageMetadata({
-  title: "标签",
-  description: "浏览主题墙，发现持续出现的编辑线索。",
+  title: "Tags",
+  description: "Browse tags across the archive index.",
   pathname: "/tags",
 });
 
@@ -21,9 +21,6 @@ const isAlpha = (value: string) => /^[A-Z]$/.test(value);
 
 export default async function TagsPage({ searchParams }: TagsPageProps) {
   const resolvedSearchParams = await searchParams;
-  const debug =
-    resolvedSearchParams?.debug === "1" ||
-    resolvedSearchParams?.debug === "true";
   const tags = await getAllTags();
   const useAlphabet = tags.length >= 40;
   const hotTags = useAlphabet ? [] : await getHotTags();
@@ -53,7 +50,7 @@ export default async function TagsPage({ searchParams }: TagsPageProps) {
         title: letter,
         tags: ordered,
         meta: {
-          countLabel: `${ordered.length} 个标签`,
+          countLabel: `${ordered.length} tags`,
         },
       };
     });
@@ -63,26 +60,26 @@ export default async function TagsPage({ searchParams }: TagsPageProps) {
     sections = [
       {
         id: "sec-popular",
-        title: "热门",
+        title: "Popular",
         tags: popular,
         meta: {
-          countLabel: `${popular.length} 个标签`,
+          countLabel: `${popular.length} tags`,
         },
       },
       {
         id: "sec-all",
-        title: "全部",
+        title: "All",
         tags,
         meta: {
-          countLabel: `${tags.length} 个标签`,
+          countLabel: `${tags.length} tags`,
         },
       },
       {
         id: "sec-end",
-        title: "终章",
+        title: "End",
         tags: [],
         meta: {
-          note: "你已经到达标签墙的尽头。",
+          note: "You have reached the end of the tag wall.",
         },
       },
     ];
@@ -97,21 +94,22 @@ export default async function TagsPage({ searchParams }: TagsPageProps) {
   return (
     <main className="space-y-[var(--section-y)] py-[var(--section-y)]">
       <Container variant="wide" className="space-y-6">
-        <PageHeader
-          label="标签"
-          title="主题墙"
-          description="以博物馆式视角浏览全部主题线索，沿着导览轨迹穿梭于不同分组。"
+        <VariableFontHero
+          title="Tag Atlas"
+          subtitle="Scan themes across the editorial archive."
+          weightRange={[320, 720]}
+          widthRange={[92, 110]}
         />
         <RuleLine />
         <div className="flex flex-wrap items-center justify-between gap-4 rounded-[var(--radius)] border border-border bg-card/70 px-4 py-3">
           <div className="flex flex-wrap items-center gap-4">
-            <Kicker label="目录" caption="标签" />
+            <Kicker label="Catalog" caption="Tags" />
             <span className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
-              共 {tags.length} 个
+              {tags.length} tags
             </span>
           </div>
           <span className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
-            模式 - {useAlphabet ? "字母索引" : "精选"}
+            Mode - {useAlphabet ? "Alphabet" : "Curated"}
           </span>
         </div>
       </Container>
@@ -119,7 +117,7 @@ export default async function TagsPage({ searchParams }: TagsPageProps) {
       <Container variant="wide">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_280px]">
           <div id="tags-root" className="min-w-0 space-y-10">
-            <TagsSections sections={sections} debug={debug} />
+            <TagsSections sections={sections} />
           </div>
           <aside className="space-y-6">
             <div className="lg:sticky lg:top-[6.75rem]">

@@ -1,7 +1,8 @@
+import path from "path";
 import matter from "gray-matter";
 
 import { getEngagementScoresForSlugs } from "@/lib/engagement/queries";
-import { getContentSignature, getPostFilePaths, readFile } from "./fs";
+import { CONTENT_ROOT, getContentSignature, getPostFilePaths, readFile } from "./fs";
 import { parseFrontmatter, slugRegex } from "./schema";
 import type {
   Post,
@@ -10,8 +11,10 @@ import type {
   PostsQueryParams,
 } from "./types";
 
+type PostRecord = Post & { sourcePath: string };
+
 interface ContentCache {
-  posts: Post[];
+  posts: PostRecord[];
   index: PostIndexItem[];
   signature: string;
 }
@@ -51,15 +54,32 @@ const sortByHot = async <T extends { slug: string; dateTimestamp: number }>(item
   });
 };
 
-const toIndexItem = (post: Post): PostIndexItem => {
-  const { content, ...rest } = post;
+const toIndexItem = (post: PostRecord): PostIndexItem => {
+  const { content, sourcePath, ...rest } = post;
   void content;
+  void sourcePath;
   return rest;
+};
+
+const stripSourcePath = ({ sourcePath, ...post }: PostRecord): Post => {
+  void sourcePath;
+  return post;
+};
+
+const resolveContentAsset = (value: string | undefined, filePath: string) => {
+  if (!value) return value;
+  if (value.startsWith("http://") || value.startsWith("https://")) return value;
+  if (value.startsWith("/")) return value;
+  const baseDir = path.dirname(filePath);
+  const resolved = path.resolve(baseDir, value);
+  if (!resolved.startsWith(CONTENT_ROOT)) return value;
+  const relative = path.relative(CONTENT_ROOT, resolved).split(path.sep).join("/");
+  return `/content-assets/${encodeURI(relative)}`;
 };
 
 async function loadPostsFromFiles(files: string[], signature: string): Promise<ContentCache> {
   const slugs = new Set<string>();
-  const posts: Post[] = [];
+  const posts: PostRecord[] = [];
 
   for (const file of files) {
     const raw = await readFile(file);
@@ -79,12 +99,15 @@ async function loadPostsFromFiles(files: string[], signature: string): Promise<C
     const wordCount = normalizedContent
       ? normalizedContent.split(/\s+/).length
       : 0;
-    const readingTime = `${estimateReadingTime(wordCount)} min`;
+    const computedReadingTime = `${estimateReadingTime(wordCount)} min`;
+    const readingTime = frontmatter.readingTime?.trim() || computedReadingTime;
     const excerpt = frontmatter.excerpt?.trim() || createExcerpt(normalizedContent);
+    const cover = resolveContentAsset(frontmatter.cover?.trim(), file);
     const parsedDate = new Date(frontmatter.date);
 
     posts.push({
       ...frontmatter,
+      cover,
       content: normalizedContent,
       excerpt,
       readingTime,
@@ -93,6 +116,7 @@ async function loadPostsFromFiles(files: string[], signature: string): Promise<C
       dateTimestamp: parsedDate.getTime(),
       year: parsedDate.getFullYear(),
       month: parsedDate.getMonth() + 1,
+      sourcePath: file,
     });
   }
 
@@ -132,7 +156,7 @@ export async function getAllPostsIndex(options: { includeDrafts?: boolean } = {}
 
 export async function getAllPosts(options: { includeDrafts?: boolean } = {}): Promise<Post[]> {
   const { posts } = await getContentCache();
-  return filterDrafts(posts, options.includeDrafts);
+  return filterDrafts(posts, options.includeDrafts).map(stripSourcePath);
 }
 
 export async function getPostBySlug(
@@ -145,7 +169,23 @@ export async function getPostBySlug(
   if (!post) return null;
   if (post.draft && !options.includeDrafts) return null;
 
-  return post;
+  return stripSourcePath(post);
+}
+
+export async function getPostBySlugWithSource(
+  slug: string,
+  options: { includeDrafts?: boolean } = {}
+): Promise<{ post: Post; sourcePath: string } | null> {
+  const { posts } = await getContentCache();
+  const post = posts.find((item) => item.slug === slug);
+
+  if (!post) return null;
+  if (post.draft && !options.includeDrafts) return null;
+
+  return {
+    post: stripSourcePath(post),
+    sourcePath: post.sourcePath,
+  };
 }
 
 export async function getPostsPaged(params: PostsQueryParams): Promise<PostsPagedResult> {

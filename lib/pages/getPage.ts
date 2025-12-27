@@ -6,6 +6,7 @@ import { pageFrontmatterSchema, type PageFrontmatter } from "@/lib/pages/frontma
 
 export type PageResult = {
   slug: string;
+  sourcePath: string;
   frontmatter: PageFrontmatter;
   content: string;
   wordCount: number;
@@ -42,6 +43,7 @@ export async function getPage(slug: string): Promise<PageResult | null> {
 
   return {
     slug,
+    sourcePath: result.file,
     frontmatter,
     content: content.trim(),
     wordCount: countWords(content),

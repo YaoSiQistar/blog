@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 import Container from "@/components/shell/Container";
 import PageHeader from "@/components/shell/PageHeader";
@@ -11,8 +11,8 @@ import type { CategoryNode } from "@/lib/categories/mapModel";
 import { buildPageMetadata } from "@/lib/seo/og";
 
 export const metadata = buildPageMetadata({
-  title: "分类",
-  description: "以策展式展厅与编辑部房间探索归档内容。",
+  title: "Categories",
+  description: "Browse the archive by exhibition rooms and curated clusters.",
   pathname: "/categories",
 });
 
@@ -39,7 +39,7 @@ function CategoryGrid({ items }: { items: CategoryNode[] }) {
   if (items.length === 0) {
     return (
       <div className="rounded-[var(--radius)] border border-border bg-card/70 p-6 text-sm text-muted-foreground">
-        暂无可用展厅。
+        No rooms available yet.
       </div>
     );
   }
@@ -50,11 +50,11 @@ function CategoryGrid({ items }: { items: CategoryNode[] }) {
         <Link
           key={item.slug}
           href={`/categories/${item.slug}`}
-          className="group flex h-full flex-col justify-between rounded-[var(--radius)] border border-border bg-card/70 p-5 transition hover:border-primary/60 hover:bg-card/90"
+          className="group flex h-full flex-col justify-between rounded-(--radius) border border-border bg-card/70 p-5 transition hover:border-primary/60 hover:bg-card/90"
         >
           <div className="space-y-3">
             <div className="flex items-center justify-between text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
-              <span>展厅</span>
+              <span>Room</span>
               <span>{item.count}</span>
             </div>
             <h3 className="text-2xl font-semibold text-foreground group-hover:text-primary">
@@ -62,7 +62,7 @@ function CategoryGrid({ items }: { items: CategoryNode[] }) {
             </h3>
             {item.latestDate ? (
               <p className="text-[0.65rem] uppercase tracking-[0.35em] text-muted-foreground/60">
-                最新 {item.latestDate}
+                Latest {item.latestDate}
               </p>
             ) : null}
           </div>
@@ -87,8 +87,8 @@ function CategoryGrid({ items }: { items: CategoryNode[] }) {
 function CategoryList({ items }: { items: CategoryNode[] }) {
   if (items.length === 0) {
     return (
-      <div className="rounded-[var(--radius)] border border-border bg-card/70 p-6 text-sm text-muted-foreground">
-        暂无可用展厅。
+      <div className="rounded-(--radius) border border-border bg-card/70 p-6 text-sm text-muted-foreground">
+        No rooms available yet.
       </div>
     );
   }
@@ -103,14 +103,14 @@ function CategoryList({ items }: { items: CategoryNode[] }) {
         >
           <div className="space-y-2">
             <p className="text-[0.6rem] uppercase tracking-[0.4em] text-muted-foreground/70">
-              展厅
+              Room
             </p>
             <h3 className="text-xl font-semibold text-foreground group-hover:text-primary">
               {item.name}
             </h3>
             {item.latestDate ? (
               <p className="text-[0.6rem] uppercase tracking-[0.35em] text-muted-foreground/60">
-                最新 {item.latestDate}
+                Latest {item.latestDate}
               </p>
             ) : null}
             {item.topTags && item.topTags.length > 0 ? (
@@ -127,7 +127,7 @@ function CategoryList({ items }: { items: CategoryNode[] }) {
             ) : null}
           </div>
           <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground/70">
-            {item.count} 篇
+            {item.count} posts
           </div>
         </Link>
       ))}
@@ -146,11 +146,18 @@ export default async function CategoriesPage({ searchParams }: CategoriesPagePro
     <main className="space-y-[var(--section-y)] py-[var(--section-y)]">
       <Container variant="wide" className="space-y-6">
         <PageHeader
-          label="分类"
-          title="博物馆展厅"
-          description="像参观导览一样浏览归档内容，可切换到地图模式查看展厅布局。"
+          label="Categories"
+          title="Exhibition Rooms"
+          description="Navigate the archive by curated rooms and spatial clusters."
         />
         <RuleLine />
+        <section className="rounded-[var(--radius)] border border-border/60 bg-card/50 p-6 shadow-soft">
+          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Categories</div>
+          <h2 className="mt-3 text-2xl font-semibold text-foreground">Browse editorial archives</h2>
+          <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
+            Explore themes and collections curated from the archive.
+          </p>
+        </section>
         <CategoriesControls total={nodes.length} />
       </Container>
 

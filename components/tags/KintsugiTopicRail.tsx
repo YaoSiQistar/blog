@@ -4,12 +4,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "motion/react";
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { useMotionFlags } from "@/lib/flags";
 import { useReducedMotion } from "@/lib/motion/reduced";
 import { motionTokens } from "@/lib/motion/tokens";
 import { cn } from "@/lib/utils";
 
-import RailHUD from "@/components/debug/RailHUD";
 import { useActiveSection } from "@/components/tags/useActiveSection";
 import { useSectionsMap } from "@/components/tags/useSectionsMap";
 
@@ -66,9 +64,8 @@ export default function KintsugiTopicRail({
   );
   const [progress, setProgress] = useState(0);
   const [sheetOpen, setSheetOpen] = useState(false);
-  const flags = useMotionFlags();
   const prefersReduced = useReducedMotion();
-  const reduced = prefersReduced || flags.reduced;
+  const reduced = prefersReduced;
 
   const positions = useMemo(() => {
     const map = new Map(mappedSections.map((item) => [item.id, item.y]));
@@ -291,13 +288,6 @@ export default function KintsugiTopicRail({
       </Sheet>
     </div>
 
-      <RailHUD
-        visible={flags.debug}
-        activeId={activeId}
-        progress={progress}
-        railHeight={railHeight}
-        mapped={mappedSections}
-      />
     </>
   );
 }

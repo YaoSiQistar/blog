@@ -21,7 +21,6 @@ type UseKintsugMapOptions = {
 };
 
 type KintsugRailFlags = {
-  debug: boolean;
   forcedReduced: boolean;
   cinema: boolean;
 };
@@ -306,30 +305,27 @@ export function useKintsugNavigate() {
 
 export function useKintsugRailFlags(): KintsugRailFlags {
   const searchParams = useSearchParams();
-  const debug = searchParams.get("debug") === "1";
   const forcedReduced = searchParams.get("reduced") === "1";
   const cinema = searchParams.get("cinema") === "1";
 
   return useMemo(
     () => ({
-      debug,
       forcedReduced,
       cinema,
     }),
-    [cinema, debug, forcedReduced]
+    [cinema, forcedReduced]
   );
 }
 
 export function useReducedMotionGate() {
-  const { debug, forcedReduced, cinema } = useKintsugRailFlags();
+  const { forcedReduced, cinema } = useKintsugRailFlags();
   const prefersReduced = useReducedMotion();
 
   return useMemo(
     () => ({
       isReduced: forcedReduced || prefersReduced,
-      debug,
       allowCinema: cinema,
     }),
-    [cinema, debug, forcedReduced, prefersReduced]
+    [cinema, forcedReduced, prefersReduced]
   );
 }

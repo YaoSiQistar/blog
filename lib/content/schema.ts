@@ -18,6 +18,10 @@ const frontmatterSchema = z
       .default([]),
     excerpt: z.string().optional(),
     cover: z.string().optional(),
+    series: z.string().optional(),
+    issue: z.union([z.string(), z.number()]).optional(),
+    readingTime: z.union([z.string(), z.number()]).optional(),
+    poster: z.enum(["a", "b", "plain"]).optional(),
     references: z.string().optional(),
     draft: z.boolean().optional().default(false),
     featured: z.boolean().optional().default(false),
@@ -47,8 +51,19 @@ export function parseFrontmatter(data: unknown, filePath: string): PostFrontmatt
     new Set(result.data.tags.map((tag) => tag.trim()).filter(Boolean))
   );
 
+  const issue =
+    result.data.issue === undefined || result.data.issue === null
+      ? undefined
+      : String(result.data.issue).trim() || undefined;
+  const readingTime =
+    result.data.readingTime === undefined || result.data.readingTime === null
+      ? undefined
+      : String(result.data.readingTime).trim() || undefined;
+
   return {
     ...result.data,
     tags,
+    issue,
+    readingTime,
   };
 }

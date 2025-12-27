@@ -11,6 +11,7 @@ import TagContextStrip from "@/components/tag/TagContextStrip";
 import TagWorkbench from "@/components/tag/TagWorkbench";
 import TagEmpty from "@/components/tag/TagEmpty";
 import TagExitSigns from "@/components/tag/TagExitSigns";
+import { getAllTags } from "@/lib/content";
 import { getTagBySlug } from "@/lib/tags/getTagBySlug";
 import { getRelatedTags } from "@/lib/tags/getRelatedTags";
 import { getPostsByTag } from "@/lib/tags/getPostsByTag";
@@ -27,6 +28,13 @@ interface TagDetailPageProps {
 }
 
 const PAGE_SIZE = 8;
+
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const tags = await getAllTags();
+  return tags.map((tag) => ({ slug: tag.slug }));
+}
 
 const buildTagDescription = (name: string) =>
   `归档于 ${name} 的笔记、文章与参考，被整理成安静的博客索引。`;

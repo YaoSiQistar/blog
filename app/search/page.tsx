@@ -1,4 +1,4 @@
-import Container from "@/components/shell/Container";
+﻿import Container from "@/components/shell/Container";
 import { RuleLine } from "@/components/editorial/RuleLine";
 import SearchHeader from "@/components/search/SearchHeader";
 import SearchWorkbench from "@/components/search/SearchWorkbench";
@@ -7,6 +7,7 @@ import SearchEmpty from "@/components/search/SearchEmpty";
 import SearchResults from "@/components/search/SearchResults";
 import KintsugiResultRail from "@/components/search/KintsugiResultRail";
 import PostsPagination from "@/components/pagination/Pagination";
+import SearchCurtain from "@/components/search/SearchCurtain";
 
 import { getAllCategories, getAllTags } from "@/lib/content";
 import { getSearchIndex } from "@/lib/search/index";
@@ -31,10 +32,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const resolved = await searchParams;
   const query = getParam(resolved, "q");
-  const title = query ? `搜索：${query}` : "搜索";
+  const title = query ? `Search: ${query}` : "Search";
   const description = query
-    ? `“${query}” 的搜索结果。`
-    : "按标题、内容或标签搜索归档。";
+    ? `Results for "${query}" in the archive.`
+    : "Search by title, content, or tags.";
   const pathname = query ? `/search?q=${encodeURIComponent(query)}` : "/search";
 
   return buildPageMetadata({
@@ -69,33 +70,35 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       <Container variant="wide">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_280px]">
           <div className="space-y-6">
-            {hasQuery ? (
-              results && results.total > 0 ? (
-                <>
-                  <div className="text-[0.65rem] uppercase tracking-[0.35em] text-muted-foreground/70">
-                    {results.total} 条结果
-                  </div>
-                  <SearchResults
-                    items={results.items}
-                    query={state.q ?? ""}
-                    page={results.page}
-                    pageSize={results.pageSize}
-                    transitionKey={transitionKey}
-                  />
-                  <div className="pt-4">
-                    <PostsPagination
-                      currentPage={results.page}
-                      totalPages={results.totalPages}
-                      createHref={(page) => buildSearchHref({ ...state, page })}
+            <SearchCurtain swapKey={transitionKey}>
+              {hasQuery ? (
+                results && results.total > 0 ? (
+                  <>
+                    <div className="text-[0.65rem] uppercase tracking-[0.35em] text-muted-foreground/70">
+                      {results.total} results
+                    </div>
+                    <SearchResults
+                      items={results.items}
+                      query={state.q ?? ""}
+                      page={results.page}
+                      pageSize={results.pageSize}
+                      transitionKey={transitionKey}
                     />
-                  </div>
-                </>
+                    <div className="pt-4">
+                      <PostsPagination
+                        currentPage={results.page}
+                        totalPages={results.totalPages}
+                        createHref={(page) => buildSearchHref({ ...state, page })}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <SearchEmpty query={state.q ?? ""} state={state} />
+                )
               ) : (
-                <SearchEmpty query={state.q ?? ""} state={state} />
-              )
-            ) : (
-              <SearchWelcome tags={tags} categories={categories} />
-            )}
+                <SearchWelcome tags={tags} categories={categories} />
+              )}
+            </SearchCurtain>
           </div>
 
           <aside className="hidden space-y-6 lg:block">

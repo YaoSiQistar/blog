@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 
 export interface MotionFlags {
-  debug: boolean;
   cinema: boolean;
   reduced: boolean;
 }
@@ -18,7 +17,6 @@ export function parseMotionFlags(
   };
 
   return {
-    debug: parseFlag(getValue("debug")),
     cinema: parseFlag(getValue("cinema")),
     reduced: parseFlag(getValue("reduced")),
   };
@@ -29,10 +27,9 @@ export function useMotionFlags(): MotionFlags {
 
   return useMemo(() => {
     if (!params) {
-      return { debug: false, cinema: false, reduced: false };
+      return { cinema: false, reduced: false };
     }
     return {
-      debug: parseFlag(params.get("debug")) || parseFlag(params.get("debugMotion")),
       cinema: parseFlag(params.get("cinema")),
       reduced: parseFlag(params.get("reduced")),
     };

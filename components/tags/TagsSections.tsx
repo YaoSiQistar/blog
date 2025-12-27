@@ -13,10 +13,9 @@ export type TagSection = {
 
 type TagsSectionsProps = {
   sections: TagSection[];
-  debug?: boolean;
 };
 
-export default function TagsSections({ sections, debug }: TagsSectionsProps) {
+export default function TagsSections({ sections }: TagsSectionsProps) {
   return (
     <div className="space-y-12">
       {sections.map((section) => (
@@ -36,11 +35,6 @@ export default function TagsSections({ sections, debug }: TagsSectionsProps) {
               >
                 {section.title}
               </h2>
-              {debug && (
-                <span className="text-[0.55rem] uppercase tracking-[0.35em] text-muted-foreground/70">
-                  {section.id}
-                </span>
-              )}
             </div>
             {section.meta?.countLabel && (
               <span className="text-[0.6rem] uppercase tracking-[0.35em] text-muted-foreground/70">

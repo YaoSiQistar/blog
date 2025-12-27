@@ -1,8 +1,10 @@
-import { notFound } from "next/navigation";
+﻿import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import path from "path";
 import { promises as fs } from "fs";
 import { Suspense } from "react";
+import Link from "next/link";
+
 import Container from "@/components/shell/Container";
 import { RuleLine } from "@/components/editorial/RuleLine";
 import PostHero from "@/components/posts/PostHero";
@@ -11,14 +13,15 @@ import { TableOfContents } from "@/components/markdown/TableOfContents";
 import { ReadingProgress } from "@/components/markdown/ReadingProgress";
 import { References } from "@/components/markdown/References";
 import { parseHeadings } from "@/lib/markdown/parseHeadings";
-import { getPostBySlug } from "@/lib/content";
+import { getPostBySlug, getPostBySlugWithSource, getAllPostsIndex } from "@/lib/content";
 import EngagementStream from "@/components/interaction/EngagementStream";
 import CommentsStream from "@/components/interaction/CommentsStream";
-import { getAllPostsIndex } from "@/lib/content";
+import MotionExitSigns from "@/components/motion/MotionExitSigns";
 import type { ReferenceEntry } from "@/lib/markdown/types";
 import { buildOpenGraph, buildTwitter } from "@/lib/seo/og";
 import { buildCanonical } from "@/lib/seo/site";
 import { buildArticleJsonLd } from "@/lib/seo/jsonld";
+import { Button } from "@/components/ui/button";
 
 interface PostDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -44,7 +47,7 @@ export async function generateMetadata({
   const title = post.title;
   const description = post.excerpt;
   const pathname = `/posts/${post.slug}`;
-  const image = post.cover ?? undefined;
+  const image = `/og/posts/${post.slug}`;
 
   return {
     title,
@@ -65,7 +68,8 @@ export async function generateMetadata({
 
 export default async function PostDetailPage({ params }: PostDetailPageProps) {
   const resolvedParams = await params;
-  const post = await getPostBySlug(resolvedParams.slug);
+  const result = await getPostBySlugWithSource(resolvedParams.slug);
+  const post = result?.post ?? null;
 
   if (!post) {
     notFound();
@@ -99,6 +103,13 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
           excerpt={post.excerpt}
           cover={post.cover}
         />
+        <div className="flex justify-end">
+          <Button asChild variant="outline" size="sm">
+            <Link href={`/share/posts/${post.slug}?style=paper-editorial&ratio=landscape`}>
+              Share / Generate poster
+            </Link>
+          </Button>
+        </div>
         <RuleLine className="my-4" />
       </Container>
 
@@ -110,7 +121,7 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
             <Suspense
               fallback={
                 <div className="rounded-[var(--radius)] border border-border bg-card/60 px-4 py-3 text-sm text-muted-foreground">
-                  正在加载互动信息...
+                  Loading engagement...
                 </div>
               }
             >
@@ -122,17 +133,19 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
               postIndex={postIndex}
               references={references}
               paragraphAnchors
+              contentPath={result?.sourcePath}
             />
             <References references={references} />
             <Suspense
               fallback={
                 <div className="rounded-[var(--radius)] border border-border bg-card/60 px-4 py-3 text-sm text-muted-foreground">
-                  正在加载评论...
+                  Loading comments...
                 </div>
               }
             >
               <CommentsStream postSlug={post.slug} />
             </Suspense>
+            <MotionExitSigns />
           </div>
 
           <aside className="space-y-6">

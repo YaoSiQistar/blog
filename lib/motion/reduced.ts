@@ -33,3 +33,11 @@ export function useReducedMotion(): boolean {
 
   return isReduced;
 }
+
+export function useIsReducedMotion(): boolean {
+  return useReducedMotion();
+}
+
+export function maybeMotion<V extends Variants>(variants: V, reduced: boolean): V {
+  return withReducedMotion(variants, reduced);
+}
