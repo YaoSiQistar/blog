@@ -50,7 +50,7 @@ export default async function TagsPage({ searchParams }: TagsPageProps) {
         title: letter,
         tags: ordered,
         meta: {
-          countLabel: `${ordered.length} tags`,
+          countLabel: `${ordered.length} 个标签`,
         },
       };
     });
@@ -60,26 +60,26 @@ export default async function TagsPage({ searchParams }: TagsPageProps) {
     sections = [
       {
         id: "sec-popular",
-        title: "Popular",
+        title: "热门",
         tags: popular,
         meta: {
-          countLabel: `${popular.length} tags`,
+          countLabel: `${popular.length} 个标签`,
         },
       },
       {
         id: "sec-all",
-        title: "All",
+        title: "全部",
         tags,
         meta: {
-          countLabel: `${tags.length} tags`,
+          countLabel: `${tags.length} 个标签`,
         },
       },
       {
         id: "sec-end",
-        title: "End",
+        title: "终点",
         tags: [],
         meta: {
-          note: "You have reached the end of the tag wall.",
+          note: "已到达标签墙的尽头。",
         },
       },
     ];
@@ -95,21 +95,21 @@ export default async function TagsPage({ searchParams }: TagsPageProps) {
     <main className="space-y-[var(--section-y)] py-[var(--section-y)]">
       <Container variant="wide" className="space-y-6">
         <VariableFontHero
-          title="Tag Atlas"
-          subtitle="Scan themes across the editorial archive."
+          title="标签图谱"
+          subtitle="浏览归档中的主题脉络。"
           weightRange={[320, 720]}
           widthRange={[92, 110]}
         />
         <RuleLine />
         <div className="flex flex-wrap items-center justify-between gap-4 rounded-[var(--radius)] border border-border bg-card/70 px-4 py-3">
           <div className="flex flex-wrap items-center gap-4">
-            <Kicker label="Catalog" caption="Tags" />
+            <Kicker label="目录" caption="标签" />
             <span className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
-              {tags.length} tags
+              {tags.length} 个标签
             </span>
           </div>
           <span className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
-            Mode - {useAlphabet ? "Alphabet" : "Curated"}
+            模式 - {useAlphabet ? "字母" : "精选"}
           </span>
         </div>
       </Container>

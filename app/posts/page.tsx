@@ -74,31 +74,31 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
   const kintsugNodes: KintsugNode[] = [
     {
       id: "posts-header",
-      label: "Header",
+      label: "页首",
       kind: "section",
       target: { type: "scroll", selector: "#posts-header" },
       meta: { subtitle: GuideModel.filterSummarySentence },
     },
     {
       id: "posts-workbench",
-      label: "Workbench",
+      label: "筛选台",
       kind: "section",
       target: { type: "scroll", selector: "#posts-workbench" },
-      meta: { subtitle: "Filters + Search" },
+      meta: { subtitle: "筛选与搜索" },
     },
     {
       id: "posts-catalog",
-      label: "Catalog",
+      label: "目录",
       kind: "section",
       target: { type: "scroll", selector: "#posts-catalog" },
-      meta: { subtitle: `${GuideModel.resultsCount} posts` },
+      meta: { subtitle: `${GuideModel.resultsCount} 篇` },
     },
     {
       id: "posts-pagination",
-      label: "Pages",
+      label: "分页",
       kind: "section",
       target: { type: "scroll", selector: "#posts-pagination" },
-      meta: { subtitle: `Page ${GuideModel.page} / ${GuideModel.totalPages}` },
+      meta: { subtitle: `第 ${GuideModel.page} / ${GuideModel.totalPages} 页` },
     },
   ];
 
@@ -118,8 +118,8 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
     >
       <section id="posts-header">
         <PostsPageHeader
-          title="Archive Catalog"
-          description="Browse editorial notes and motion logs through a museum-style list."
+          title="归档目录"
+          description="以编辑部目录浏览笔记与动效记录。"
           summary={GuideModel.filterSummarySentence}
           resultsCount={GuideModel.resultsCount}
           totalPages={GuideModel.totalPages}
@@ -141,16 +141,16 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
           <CatalogList items={catalogItems} stagger />
         ) : (
           <section className="rounded-[var(--radius)] border border-border bg-card/70 p-8 text-center">
-            <p className="text-lg font-semibold text-foreground">No entries yet.</p>
+            <p className="text-lg font-semibold text-foreground">暂无内容。</p>
             <p className="mt-2 text-sm text-muted-foreground">
-              Clear filters or return to the full catalog.
+              清除筛选或回到完整目录。
             </p>
             <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
               <Button asChild variant="secondary">
-                <Link href="/posts">Clear filters</Link>
+                <Link href="/posts">清除筛选</Link>
               </Button>
               <Button asChild variant="ghost">
-                <Link href="/posts">View all</Link>
+                <Link href="/posts">查看全部</Link>
               </Button>
             </div>
           </section>
@@ -160,9 +160,9 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
       <section id="posts-pagination">
         <div className="flex items-center justify-between pt-6 text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
           <span>
-            Page {GuideModel.page} / {GuideModel.totalPages}
+            第 {GuideModel.page} / {GuideModel.totalPages} 页
           </span>
-          <span>{GuideModel.resultsCount} posts</span>
+          <span>{GuideModel.resultsCount} 篇</span>
         </div>
 
         <PostsPagination
@@ -173,7 +173,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
       </section>
 
       <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground/70">
-        The archive grows with each new entry. Check back for fresh exhibits.
+        归档会随新增持续增长，欢迎再来看看新内容。
       </p>
       <MotionExitSigns />
     </PostsLayout>
