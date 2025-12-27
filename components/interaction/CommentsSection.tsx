@@ -44,16 +44,16 @@ export default function CommentsSection({
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground/70">
-              Notes / Comments
+              笔记 / 评论
             </p>
-            <h3 className="text-lg font-semibold text-foreground">Editorial Notes</h3>
+            <h3 className="text-lg font-semibold text-foreground">编辑部笔记</h3>
           </div>
           <span className="text-[0.65rem] uppercase tracking-[0.3em] text-muted-foreground/70">
-            {displayCount} approved
+            已通过 {displayCount}
           </span>
         </div>
         <p className="text-[0.7rem] uppercase tracking-[0.28em] text-muted-foreground/60">
-          New comments are reviewed before publishing.
+          新评论需审核后发布。
         </p>
       </motion.header>
 
@@ -66,9 +66,9 @@ export default function CommentsSection({
       )}
 
       <footer className="flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
-        <span>Be kind. Keep it short.</span>
+        <span>请友善，保持简短。</span>
         <AnimatedLink href="/login" className="text-xs">
-          Login to favorite posts
+          登录以收藏文章
         </AnimatedLink>
       </footer>
     </section>

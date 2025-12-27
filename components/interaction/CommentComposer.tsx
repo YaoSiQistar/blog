@@ -49,7 +49,7 @@ export default function CommentComposer({
     });
 
     if (!parsed.success) {
-      setError(parsed.error.issues[0]?.message ?? "Please enter a note.");
+      setError(parsed.error.issues[0]?.message ?? "请输入评论内容。");
       return;
     }
 
@@ -63,7 +63,7 @@ export default function CommentComposer({
       setContent("");
       setNickname("");
       setShowPendingNotice(true);
-      toast.success("Submitted. Awaiting review.");
+      toast.success("已提交，等待审核。");
     } else {
       setError(result.error);
     }
@@ -95,7 +95,7 @@ export default function CommentComposer({
               transition={{ duration: reduced ? 0 : 0.18 }}
             >
               <Alert variant="destructive">
-                <AlertTitle>Unable to submit</AlertTitle>
+                <AlertTitle>无法提交</AlertTitle>
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             </motion.div>
@@ -106,16 +106,16 @@ export default function CommentComposer({
           <Input
             value={nickname}
             onChange={(event) => setNickname(event.target.value)}
-            placeholder="Nickname (optional)"
+            placeholder="昵称（可选）"
             className="h-9 max-w-[220px] text-sm"
             maxLength={commentLimits.nicknameMax}
             aria-label="Nickname"
           />
           {viewer?.userId ? (
-            <span className="text-xs text-muted-foreground">Signed in as member</span>
+            <span className="text-xs text-muted-foreground">已登录会员</span>
           ) : null}
           <span className="ml-auto text-[0.65rem] uppercase tracking-[0.3em] text-muted-foreground/70">
-            Pending review
+            等待审核
           </span>
         </div>
 
@@ -125,7 +125,7 @@ export default function CommentComposer({
           onChange={(event) => setContent(event.target.value)}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
-          placeholder="Share a note about this piece."
+          placeholder="写下你对这篇文章的想法。"
           className={cn(
             "min-h-[140px] resize-y text-sm leading-relaxed",
             overLimit ? "border-destructive/70 focus-visible:ring-destructive/30" : ""
@@ -145,15 +145,15 @@ export default function CommentComposer({
               {contentCount} / {commentLimits.contentMax}
             </span>
             {overLimit ? (
-              <span className="text-xs text-destructive">Over limit.</span>
+              <span className="text-xs text-destructive">超出字数限制。</span>
             ) : null}
           </div>
           <div className="flex items-center gap-3">
             <span className="text-[0.65rem] uppercase tracking-[0.3em] text-muted-foreground/70">
-              Comments appear after approval.
+              评论需审核后显示。
             </span>
             <Button type="submit" variant="secondary" disabled={!canSubmit}>
-              {pending ? "Submitting..." : "Submit note"}
+              {pending ? "提交中..." : "提交评论"}
             </Button>
           </div>
         </div>

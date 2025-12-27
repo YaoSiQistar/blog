@@ -1,7 +1,7 @@
 import matter from "gray-matter";
 
 import { getEngagementScoresForSlugs } from "@/lib/engagement/queries";
-import { getContentSignature, getPostFilePaths, getSlugFromFilename, readFile } from "./fs";
+import { getContentSignature, getPostFilePaths, readFile } from "./fs";
 import { parseFrontmatter, slugRegex } from "./schema";
 import type {
   Post,
@@ -64,11 +64,10 @@ async function loadPostsFromFiles(files: string[], signature: string): Promise<C
   for (const file of files) {
     const raw = await readFile(file);
     const { data, content } = matter(raw);
-    const fileSlug = getSlugFromFilename(file);
-    const frontmatter = parseFrontmatter(data, file, fileSlug);
+    const frontmatter = parseFrontmatter(data, file);
 
     if (!slugRegex.test(frontmatter.slug)) {
-      throw new Error(`[content] ${file}: slug must be kebab-case`);
+      throw new Error(`[content] ${file}: slug must not contain '/'`);
     }
 
     if (slugs.has(frontmatter.slug)) {

@@ -28,10 +28,9 @@ export default function HomeLatestUltra({ items }: HomeLatestUltraProps) {
           viewport={{ once: true, amount: 0.3 }}
           className="mb-8 space-y-3"
         >
-          <Kicker label="Latest entries" caption="Catalog" />
+          <Kicker label="最新条目" caption="目录" />
           <p className="max-w-2xl text-sm text-muted-foreground">
-            Recent notes curated as an exhibition list. Each entry keeps the rhythm
-            of a museum placard: title first, metadata after.
+            最新笔记被整理成展览清单。每条保持博物馆展签的节奏。
           </p>
         </motion.div>
 

@@ -16,18 +16,18 @@ export default function SearchError({ error, reset }: SearchErrorProps) {
     <Container variant="wide" className="py-[var(--section-y)]">
       <div className="rounded-[var(--radius)] border border-border bg-card/70 p-8">
         <p className="text-[0.65rem] uppercase tracking-[0.45em] text-muted-foreground">
-          Archive Offline
+          归档离线
         </p>
         <h1 className="mt-3 text-2xl font-semibold text-foreground">
-          The archive is temporarily unavailable.
+          归档暂时不可用。
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Try again or return to the home page.
+          可重试或返回首页。
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
-          <Button onClick={reset}>Retry</Button>
+          <Button onClick={reset}>重试</Button>
           <Button asChild variant="secondary">
-            <Link href="/">Back home</Link>
+            <Link href="/">返回首页</Link>
           </Button>
         </div>
       </div>

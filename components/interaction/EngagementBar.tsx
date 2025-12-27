@@ -57,7 +57,7 @@ export default function EngagementBar({
         ...prev,
         likes: Math.max(0, prev.likes + (nextLiked ? -1 : 1)),
       }));
-      toast.error("Unable to update like.");
+      toast.error("无法更新点赞。");
     } finally {
       setPendingLike(false);
     }
@@ -100,7 +100,7 @@ export default function EngagementBar({
         ...prev,
         favorites: Math.max(0, prev.favorites + (nextFavorited ? -1 : 1)),
       }));
-      toast.error("Unable to update favorite.");
+      toast.error("无法更新收藏。");
     } finally {
       setPendingFavorite(false);
     }

@@ -22,7 +22,7 @@ export default function AboutHighlights({ items }: AboutHighlightsProps) {
   return (
     <section className="space-y-4">
       <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
-        Principles
+        原则
       </p>
       <motion.div
         variants={staggerContainer(reduced)}

@@ -8,7 +8,8 @@ import SearchResults from "@/components/search/SearchResults";
 import KintsugiResultRail from "@/components/search/KintsugiResultRail";
 import PostsPagination from "@/components/pagination/Pagination";
 
-import { getAllCategories, getAllTags, getAllPosts } from "@/lib/content";
+import { getAllCategories, getAllTags } from "@/lib/content";
+import { getSearchIndex } from "@/lib/search/index";
 import { parseSearchParams, buildSearchHref } from "@/lib/search/query";
 import { searchPosts } from "@/lib/search/searchPosts";
 import type { Metadata } from "next";
@@ -30,10 +31,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const resolved = await searchParams;
   const query = getParam(resolved, "q");
-  const title = query ? `Search: ${query}` : "Search";
+  const title = query ? `搜索：${query}` : "搜索";
   const description = query
-    ? `Search results for "${query}".`
-    : "Search the archive by title, content, or tags.";
+    ? `“${query}” 的搜索结果。`
+    : "按标题、内容或标签搜索归档。";
   const pathname = query ? `/search?q=${encodeURIComponent(query)}` : "/search";
 
   return buildPageMetadata({
@@ -48,8 +49,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const state = parseSearchParams(resolvedSearchParams);
   const [categories, tags] = await Promise.all([getAllCategories(), getAllTags()]);
   const hasQuery = Boolean(state.q?.trim());
-  const posts = hasQuery ? await getAllPosts() : [];
-  const results = hasQuery ? searchPosts(posts, state) : null;
+  const index = hasQuery ? await getSearchIndex() : [];
+  const results = hasQuery ? searchPosts(index, state) : null;
   const transitionKey = `${state.q ?? ""}-${state.page}-${state.sort}-${state.scope}-${state.category ?? ""}-${state.tags.join(",")}`;
 
   return (
@@ -72,8 +73,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               results && results.total > 0 ? (
                 <>
                   <div className="text-[0.65rem] uppercase tracking-[0.35em] text-muted-foreground/70">
-                    {results.total} results
-                    {typeof results.elapsedMs === "number" ? ` - ${results.elapsedMs}ms` : ""}
+                    {results.total} 条结果
                   </div>
                   <SearchResults
                     items={results.items}

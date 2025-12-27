@@ -86,7 +86,7 @@ export default function TagWorkbench({ slug, relatedTags }: TagWorkbenchProps) {
   const handleTagToggle = (tag: string) => {
     const exists = current.with.includes(tag);
     if (!exists && current.with.length >= MAX_WITH_TAGS) {
-      toast.info("You can combine up to 3 tags.");
+      toast.info("最多可组合 3 个标签。");
       return;
     }
     const nextTags = exists
@@ -110,10 +110,10 @@ export default function TagWorkbench({ slug, relatedTags }: TagWorkbenchProps) {
       const href = buildTagHref(slug, current);
       const url = `${window.location.origin}${href}`;
       await navigator.clipboard.writeText(url);
-      toast.success("Dossier link copied.");
+      toast.success("专题链接已复制。");
     } catch (error) {
       console.error(error);
-      toast.error("Unable to copy link.");
+      toast.error("无法复制链接。");
     }
   };
 
@@ -134,7 +134,7 @@ export default function TagWorkbench({ slug, relatedTags }: TagWorkbenchProps) {
             ref={inputRef}
             value={queryValue}
             onChange={(event) => setQueryValue(event.target.value)}
-            placeholder="Search within this dossier"
+            placeholder="在当前专题中搜索"
             className="h-8 border-0 bg-transparent px-0 text-sm focus-visible:ring-0"
             aria-label="Search within tag dossier"
           />
@@ -157,20 +157,20 @@ export default function TagWorkbench({ slug, relatedTags }: TagWorkbenchProps) {
           className="hidden rounded-full border border-border-subtle bg-background/70 p-1 lg:flex"
         >
           <ToggleGroupItem value="latest" className="px-3 text-xs uppercase tracking-[0.3em]">
-            Latest
+            最新
           </ToggleGroupItem>
           <ToggleGroupItem value="hot" className="px-3 text-xs uppercase tracking-[0.3em]">
-            Hot
+            热门
           </ToggleGroupItem>
         </ToggleGroup>
 
         <div className="ml-auto hidden items-center gap-2 lg:flex">
           <Button type="button" variant="ghost" onClick={handleReset}>
-            Reset
+            重置
           </Button>
           <Button type="button" variant="ghost" onClick={handleCopy} aria-label="Copy dossier link">
             <Copy className="mr-2 size-4" />
-            Copy link
+            复制链接
           </Button>
         </div>
 

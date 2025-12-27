@@ -28,17 +28,17 @@ export default function LoginPromptDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Login required</DialogTitle>
+          <DialogTitle>需要登录</DialogTitle>
           <DialogDescription>
-            Sign in to save this post to your personal collection.
+            登录后即可将此文章保存到个人收藏。
           </DialogDescription>
         </DialogHeader>
         <div className="flex justify-end gap-2">
           <Button variant="ghost" onClick={() => onOpenChange(false)}>
-            Not now
+            暂不
           </Button>
           <Button asChild>
-            <Link href={href}>Go to login</Link>
+            <Link href={href}>前往登录</Link>
           </Button>
         </div>
       </DialogContent>

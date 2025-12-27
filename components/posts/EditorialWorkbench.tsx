@@ -98,10 +98,10 @@ export default function EditorialWorkbench({ tags }: EditorialWorkbenchProps) {
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);  // 复制当前页面URL到剪贴板
-      toast.success("Kintsug link copied.");  // 显示成功提示
+      toast.success("链接已复制。");  // 显示成功提示
     } catch (error) {
       console.error(error);
-      toast.error("Unable to copy link.");  // 显示错误提示
+      toast.error("无法复制链接。");  // 显示错误提示
     }
   };
 
@@ -123,7 +123,7 @@ export default function EditorialWorkbench({ tags }: EditorialWorkbenchProps) {
           <Input
             value={searchValue}  
             onChange={(event) => setSearchValue(event.target.value)}  
-            placeholder="Search the archive"  
+            placeholder="搜索归档"  
             className="h-8 border-0 bg-transparent px-0 text-sm focus-visible:ring-0"  
             aria-label="Search posts"  
           />
@@ -137,10 +137,10 @@ export default function EditorialWorkbench({ tags }: EditorialWorkbenchProps) {
           className="rounded-full border border-border-subtle bg-background/70 p-1"
         >
           <ToggleGroupItem value="latest" className="px-3 text-xs uppercase tracking-[0.3em]">
-            Latest  {/* 最新排序选项 */}
+            最新  {/* 最新排序选项 */}
           </ToggleGroupItem>
           <ToggleGroupItem value="hot" className="px-3 text-xs uppercase tracking-[0.3em]">
-            Hot  {/* 热门排序选项 */}
+            热门  {/* 热门排序选项 */}
           </ToggleGroupItem>
         </ToggleGroup>
 
@@ -148,15 +148,15 @@ export default function EditorialWorkbench({ tags }: EditorialWorkbenchProps) {
         <Popover open={tagsOpen} onOpenChange={setTagsOpen}>
           <PopoverTrigger asChild>
             <Button variant="secondary" className="rounded-full">
-              Tags ({current.tags.length})  {/* 显示当前选中的标签数量 */}
+              标签（{current.tags.length}）  {/* 显示当前选中的标签数量 */}
             </Button>
           </PopoverTrigger>
           <PopoverContent align="end" className="w-72 p-0">  {/* 弹出框内容 */}
             <Command>  {/* 命令菜单组件 */}
-              <CommandInput placeholder="Filter tags" />  {/* 标签过滤输入框 */}
+              <CommandInput placeholder="筛选标签" />  {/* 标签过滤输入框 */}
               <CommandList>  {/* 命令列表 */}
-                <CommandEmpty>No tags found.</CommandEmpty>  {/* 未找到标签时的提示 */}
-                <CommandGroup heading="Tags">  {/* 标签组 */}
+                <CommandEmpty>未找到标签。</CommandEmpty>  {/* 未找到标签时的提示 */}
+                <CommandGroup heading="标签">  {/* 标签组 */}
                   {tags.map((tag) => {
                     const active = current.tags.includes(tag.slug); 
                     return (
@@ -182,12 +182,12 @@ export default function EditorialWorkbench({ tags }: EditorialWorkbenchProps) {
 
         {/* 重置按钮 */}
         <Button type="button" variant="ghost" onClick={handleReset}>
-          Reset
+          重置
         </Button>
 
         {/* 复制链接按钮 */}
         <Button type="button" variant="ghost" onClick={handleCopy} aria-label="Copy Kintsug link">
-          <Copy className="mr-2 size-4" /> Copy link
+          <Copy className="mr-2 size-4" /> 复制链接
         </Button>
 
         {/* 移动端过滤器抽屉（仅在小屏幕显示） */}
@@ -201,7 +201,7 @@ export default function EditorialWorkbench({ tags }: EditorialWorkbenchProps) {
         {/* 分类过滤器标签 */}
         {current.category && (
           <Badge className="rounded-full border border-border-subtle bg-primary/10 text-xs uppercase tracking-[0.3em] text-foreground">
-            Gallery: {current.category}  {/* 显示分类名称 */}
+            分类：{current.category}  {/* 显示分类名称 */}
             <button
               type="button"
               onClick={() => {
@@ -239,7 +239,7 @@ export default function EditorialWorkbench({ tags }: EditorialWorkbenchProps) {
             variant="outline"
             className="rounded-full border border-border-subtle text-xs uppercase tracking-[0.3em]"
           >
-            Search: {current.q}  {/* 显示搜索词 */}
+            搜索：{current.q}  {/* 显示搜索词 */}
             <button
               type="button"
               onClick={() => {

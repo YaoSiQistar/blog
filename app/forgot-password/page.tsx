@@ -42,14 +42,14 @@ export default function ForgotPasswordPage() {
         redirectTo: emailRedirectTo,
       });
       if (error) {
-        const message = mapSupabaseError(error) ?? "Unable to send reset email.";
-        setStatus({ tone: "error", title: "Request denied", message });
+        const message = mapSupabaseError(error) ?? "无法发送重置邮件。";
+        setStatus({ tone: "error", title: "请求失败", message });
         return;
       }
       setStatus({
         tone: "success",
-        title: "Stamped",
-        message: "Check your email for the reset link.",
+        title: "已发出",
+        message: "请检查邮箱中的重置链接。",
       });
     } finally {
       setPending(false);
@@ -64,16 +64,16 @@ export default function ForgotPasswordPage() {
         <section className="w-full max-w-[460px] space-y-6 rounded-[var(--radius-2xl)] border border-border/70 bg-background/60 p-6 backdrop-blur-md">
           <div className="space-y-2">
             <p className="text-[0.6rem] font-medium uppercase tracking-[0.4em] text-muted-foreground/70">
-              Index Desk
+              索引台
             </p>
-            <h1 className="text-2xl font-semibold">Recover access</h1>
+            <h1 className="text-2xl font-semibold">找回访问权限</h1>
             <p className="text-sm text-muted-foreground">
-              We&apos;ll send a reset link to your email.
+              我们会向你的邮箱发送重置链接。
             </p>
           </div>
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="space-y-2">
-              <Label htmlFor="reset-email">Email</Label>
+              <Label htmlFor="reset-email">邮箱</Label>
               <Input
                 id="reset-email"
                 type="email"
@@ -90,10 +90,10 @@ export default function ForgotPasswordPage() {
             <div className="space-y-3">
               <Button type="submit" className="w-full" disabled={pending}>
                 {pending ? <Loader2 className="animate-spin" /> : null}
-                <span>{pending ? "Sending" : "Send reset link"}</span>
+                <span>{pending ? "发送中" : "发送重置链接"}</span>
               </Button>
               <AnimatedLink href={`/login${query}`} className="text-xs">
-                Return to sign in
+                返回登录
               </AnimatedLink>
             </div>
           </form>

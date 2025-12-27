@@ -67,13 +67,13 @@ export default function MeHeader({ email }: MeHeaderProps) {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="space-y-2">
           <p className="text-[0.6rem] font-medium uppercase tracking-[0.4em] text-muted-foreground/70">
-            Dossier
+            档案
           </p>
           <h1 className="text-3xl font-semibold tracking-tight text-foreground">
-            My Dossier
+            我的档案
           </h1>
           <p className="text-sm text-muted-foreground">
-            Saved works, notes, and activity.
+            收藏、笔记与互动记录。
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3 rounded-[var(--radius-xl)] border border-border/70 bg-card/70 px-3 py-2 text-xs">
@@ -82,11 +82,11 @@ export default function MeHeader({ email }: MeHeaderProps) {
               <UserRound className="size-3.5" />
             </span>
             <span className="text-[0.7rem] uppercase tracking-[0.32em] text-muted-foreground/70">
-              Archivist
+              档案员
             </span>
           </div>
           <span className="text-sm text-foreground">
-            {email || "Signed in"}
+            {email || "已登录"}
           </span>
           <Button
             type="button"
@@ -97,14 +97,14 @@ export default function MeHeader({ email }: MeHeaderProps) {
             className={cn("text-xs uppercase tracking-[0.3em]", pending && "opacity-60")}
           >
             <LogOut className="size-3.5" />
-            Sign out
+            退出登录
           </Button>
         </div>
       </div>
 
       {expired ? (
         <div className="rounded-[var(--radius)] border border-destructive/30 bg-[rgba(226,79,79,0.08)] px-4 py-3 text-sm text-destructive">
-          Session expired. Please sign in again.
+          会话已过期，请重新登录。
         </div>
       ) : null}
     </motion.section>

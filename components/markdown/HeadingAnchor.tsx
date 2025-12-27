@@ -48,7 +48,7 @@ export function HeadingAnchor(props?: HeadingAnchorProps | null) {
       )}
       aria-label={copied ? "Copied" : "Copy link"}
     >
-      {copied ? "OK" : <Link2 className="h-3 w-3" />}
+      {copied ? "已复制" : <Link2 className="h-3 w-3" />}
     </a>
   );
 }

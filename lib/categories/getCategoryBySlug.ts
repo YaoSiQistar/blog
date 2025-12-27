@@ -3,7 +3,7 @@ import { slugRegex } from "@/lib/content/schema";
 import { buildCategoryMap } from "./mapModel";
 
 const buildCategoryDescription = (name: string) =>
-  `A curated room of essays and notes exploring ${name} through craft, references, and quiet systems.`;
+  `以工艺、参考与安静的系统为线索，探索 ${name} 的策展式房间。`;
 
 export async function getCategoryBySlug(slug: string) {
   if (!slugRegex.test(slug)) return null;

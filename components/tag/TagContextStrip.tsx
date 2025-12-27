@@ -38,10 +38,10 @@ export default function TagContextStrip({
     try {
       const url = `${window.location.origin}${currentHref}`;
       await navigator.clipboard.writeText(url);
-      toast.success("Tag dossier link copied.");
+      toast.success("标签专题链接已复制。");
     } catch (error) {
       console.error(error);
-      toast.error("Unable to copy link.");
+      toast.error("无法复制链接。");
     }
   };
 
@@ -61,7 +61,7 @@ export default function TagContextStrip({
         </Badge>
         {withTags.length > 0 ? (
           <span className="text-[0.55rem] uppercase tracking-[0.35em] text-muted-foreground/70">
-            With
+            同时包含
           </span>
         ) : null}
         {withTags.map((tag) => (
@@ -78,7 +78,7 @@ export default function TagContextStrip({
             variant="outline"
             className="rounded-full border-border-subtle text-[0.6rem] uppercase tracking-[0.35em]"
           >
-            Search: {q}
+            搜索：{q}
           </Badge>
         ) : null}
       </div>
@@ -88,13 +88,13 @@ export default function TagContextStrip({
           <Button asChild variant="ghost" size="sm" className="gap-2">
             <Link href={clearHref} aria-label="Clear tag filters">
               <X className="size-3" />
-              Clear
+              清除
             </Link>
           </Button>
         )}
         <Button type="button" variant="ghost" size="sm" onClick={handleCopy} className="gap-2">
           <Copy className="size-3.5" />
-          Copy link
+          复制链接
         </Button>
       </div>
     </motion.section>

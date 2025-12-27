@@ -11,8 +11,8 @@ import type { CategoryNode } from "@/lib/categories/mapModel";
 import { buildPageMetadata } from "@/lib/seo/og";
 
 export const metadata = buildPageMetadata({
-  title: "Categories",
-  description: "Explore the archive by curated galleries and editorial rooms.",
+  title: "分类",
+  description: "以策展式展厅与编辑部房间探索归档内容。",
   pathname: "/categories",
 });
 
@@ -39,7 +39,7 @@ function CategoryGrid({ items }: { items: CategoryNode[] }) {
   if (items.length === 0) {
     return (
       <div className="rounded-[var(--radius)] border border-border bg-card/70 p-6 text-sm text-muted-foreground">
-        No galleries found yet.
+        暂无可用展厅。
       </div>
     );
   }
@@ -54,7 +54,7 @@ function CategoryGrid({ items }: { items: CategoryNode[] }) {
         >
           <div className="space-y-3">
             <div className="flex items-center justify-between text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
-              <span>Gallery</span>
+              <span>展厅</span>
               <span>{item.count}</span>
             </div>
             <h3 className="text-2xl font-semibold text-foreground group-hover:text-primary">
@@ -62,7 +62,7 @@ function CategoryGrid({ items }: { items: CategoryNode[] }) {
             </h3>
             {item.latestDate ? (
               <p className="text-[0.65rem] uppercase tracking-[0.35em] text-muted-foreground/60">
-                Latest {item.latestDate}
+                最新 {item.latestDate}
               </p>
             ) : null}
           </div>
@@ -88,7 +88,7 @@ function CategoryList({ items }: { items: CategoryNode[] }) {
   if (items.length === 0) {
     return (
       <div className="rounded-[var(--radius)] border border-border bg-card/70 p-6 text-sm text-muted-foreground">
-        No galleries found yet.
+        暂无可用展厅。
       </div>
     );
   }
@@ -103,14 +103,14 @@ function CategoryList({ items }: { items: CategoryNode[] }) {
         >
           <div className="space-y-2">
             <p className="text-[0.6rem] uppercase tracking-[0.4em] text-muted-foreground/70">
-              Gallery
+              展厅
             </p>
             <h3 className="text-xl font-semibold text-foreground group-hover:text-primary">
               {item.name}
             </h3>
             {item.latestDate ? (
               <p className="text-[0.6rem] uppercase tracking-[0.35em] text-muted-foreground/60">
-                Latest {item.latestDate}
+                最新 {item.latestDate}
               </p>
             ) : null}
             {item.topTags && item.topTags.length > 0 ? (
@@ -127,7 +127,7 @@ function CategoryList({ items }: { items: CategoryNode[] }) {
             ) : null}
           </div>
           <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground/70">
-            {item.count} posts
+            {item.count} 篇
           </div>
         </Link>
       ))}
@@ -146,9 +146,9 @@ export default async function CategoriesPage({ searchParams }: CategoriesPagePro
     <main className="space-y-[var(--section-y)] py-[var(--section-y)]">
       <Container variant="wide" className="space-y-6">
         <PageHeader
-          label="Categories"
-          title="Museum Galleries"
-          description="Navigate the archive like a guided exhibition. Switch to Map Mode to explore the gallery plan."
+          label="分类"
+          title="博物馆展厅"
+          description="像参观导览一样浏览归档内容，可切换到地图模式查看展厅布局。"
         />
         <RuleLine />
         <CategoriesControls total={nodes.length} />

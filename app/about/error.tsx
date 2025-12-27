@@ -18,12 +18,12 @@ export default function AboutError({ reset }: AboutErrorProps) {
       <Container variant="wide">
         <div className="rounded-[var(--radius)] border border-border bg-card/70 p-8 text-center">
           <p className="text-sm text-muted-foreground">
-            The about dossier could not be loaded.
+            关于资料无法加载。
           </p>
           <div className="mt-4 flex justify-center gap-3">
-            <Button onClick={reset}>Retry</Button>
+            <Button onClick={reset}>重试</Button>
             <Button variant="secondary" asChild>
-              <a href="/">Return home</a>
+              <a href="/">返回首页</a>
             </Button>
           </div>
         </div>

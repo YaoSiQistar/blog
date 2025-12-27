@@ -1,41 +1,48 @@
 [
   {
-    "slug": "draft-experiment",
-    "title": "Draft: Experimental Typography",
-    "excerpt": "",
-    "headings": [],
-    "contentText": "This is a draft note. It should never appear in production lists or detail pages unless drafts are explicitly enabled for development."
+    "slug": "csr",
+    "title": "CSR（Client-Side Rendering）彻底讲透：架构、策略与实战避坑",
+    "excerpt": "CSR 不是“把页面提前渲染一下”，而是一整套围绕 **浏览器里的 JavaScript 渲染 + 路由/状态管理 + 数据获取** 的架构。",
+    "headings": [
+      "2.1 网络与解析阶段",
+      "2.2 应用启动阶段（Bootstrap）",
+      "2.3 数据获取阶段（Data Fetch）",
+      "2.4 后续交互阶段",
+      "3.1 强交互体验（像 App 一样）",
+      "3.2 服务端成本低、部署简单",
+      "3.3 前端工程化优势",
+      "4.1 首屏慢的“物理原因”",
+      "4.2 SEO 与分享预览弱的原因",
+      "4.3 性能瓶颈集中在“主线程”",
+      "5.1 首屏策略：App Shell + Skeleton",
+      "5.2 数据策略：避免瀑布、避免重复、缓存优先",
+      "5.3 包体策略：代码分割是 CSR 的生命线",
+      "5.4 客户端路由：状态与 URL 的边界要清晰",
+      "第一优先级：减少首屏 JS（最有效）",
+      "第二优先级：减少主线程阻塞",
+      "第三优先级：更快拿到数据",
+      "第四优先级：资源与渲染细节",
+      "7.1 一个合格 CSR 项目至少要有",
+      "7.2 CSR 最容易翻车的 6 个坑",
+      "8.1 关键指标（看得见的结果）",
+      "8.2 DevTools 具体看哪里"
+    ],
+    "contentText": "下面我把 CSR（Client Side Rendering，客户端渲染）讲到“你真的懂”的程度：从它到底是什么 、 浏览器里发生了什么 、 为什么会快/慢 、 怎么设计架构 、 怎么做性能与工程落地 、 怎么排错与验证 ，给你一套完整心智模型。 1）CSR 到底是什么（架构定义） CSR = 页面主要内容由浏览器里的 JavaScript 生成并更新。 更精确地说： + 服务器第一次返回的 HTML 通常只包含一个“容器壳”（例如 <div id=\"root\" </div ）和指向 JS/CSS 的链接 + 浏览器下载并执行 JS 后： 创建组件树 / 计算 UI 拉取数据（fetch） 把内容渲染到 DOM 后续交互都由客户端路由和状态更新驱动 你可以把 CSR 看成一个“ 在浏览器里运行的应用程序 ”（App），网页只是它的容器。 2）CSR 的完整运行流水线（你必须能背出“发生了什么”） 假设你访问 https://example.com/products/123，典型 CSR 的事件顺序是： 2.1 网络与解析阶段 1. 浏览器请求 HTML（通常很小） 2. 浏览器解析 HTML，构建 DOM（此时页面可能几乎空白或只有 skeleton） 3. 浏览器发现 <link rel=\"stylesheet\" 、<script src=\"...\" ，开始下载 CSS/JS 4. CSS 下载解析，页面有基本样式 5. JS 下载完成，开始执行（这一步是 CSR 的关键瓶颈点） 2.2 应用启动阶段（Bootstrap） 6. JS 初始化运行：加载框架 runtime、路由、状态管理、插件等 7. 执行 createRoot(...).render(<App / )（或 Vue 的 createApp） 8. React/Vue 计算 UI，生成 DOM 更新（首次 render） 2.3 数据获取阶段（Data Fetch） 9. 页面组件发起请求：fetch('/api/products/123') 10. 等数据返回后更新状态 11. 触发二次渲染，填充真实内容（替换 skeleton） 2.4 后续交互阶段 12. 用户点击/输入 → 事件处理 → setState → 重新渲染局部区域 13. 切路由多发生在客户端：不会重新请求整页 HTML（SPA 体验） CSR 的核心：首屏“内容出现”的关键路径=JS 下载+执行+取数。 这也是 CSR 性能的“根”。 3）CSR 的优势：为什么它在很多场景是最正确的选择 3.1 强交互体验（像 App 一样） + 路由切换快（不刷新整页） + 状态在客户端持续存在（例如表单编辑、草稿、复杂编辑器） + 更容易做复杂交互：拖拽、实时过滤、图表联动、WebSocket 实时数据 3.2 服务端成本低、部署简单 + 服务器只负责静态文件（CDN 托管就能跑） + 前后端解耦：API 与前端独立演进 3.3 前端工程化优势 + 统一前端技术栈与组件体系 + 更容易在客户端做缓存、离线、预取等增强 典型适用场景 + 后台管理系统、仪表盘 + 富文本/图形编辑器 + 登录后应用（SEO 不重要） + 实时协作/聊天类 Web App 4）CSR 的代价：它为什么经常“首屏慢、白屏、SEO 弱” 4.1 首屏慢的“物理原因” CSR 首屏内容要出现，通常必须经历： 1. JS 下载完 2. JS 执行完（框架初始化 + 首屏渲染） 3. 数据请求完成（多数业务页面依赖数据） 所以 CSR 首屏常见现象： + 白屏时间 （HTML 只有壳，内容需要 JS） + LCP 被 JS 与数据拖累 + 低端机或弱网下体验明显变差 4.2 SEO 与分享预览弱的原因 如果 HTML 源码里没有正文内容： + 搜索引擎可能抓不到（现代爬虫能跑 JS 但成本高、时机不稳定） + 社交分享预览（OG tags）可能缺失或不准确 4.3 性能瓶颈集中在“主线程” + 大 bundle + hydration（如果你还做了 SSR 才有 hydration；纯 CSR 没 hydration，但也有首次 render 成本） + 首次渲染 + 解析 + 大量组件 mount + 取数后重渲染 5）CSR 架构设计：你必须把 CSR 做成“快启动、渐进显示、可缓存”的应用 下面是 CSR 做对/做错的分水岭。 5.1 首屏策略：App Shell + Skeleton App Shell ：把导航框架、布局骨架尽快渲染出来 Skeleton ：内容区先用骨架占位，数据回来替换 为什么有效？ + 用户更早看到“结构”，感知更快 + 避免 CLS（布局抖动） 怎么做： + 首页/入口页尽量轻 + skeleton 与真实内容保持尺寸一致 5.2 数据策略：避免瀑布、避免重复、缓存优先 CSR 最常见的性能杀手是“组件各自 fetch 导致瀑布”。 正确策略： + 路由级数据加载（进入路由先并行取数据） + 组件只消费数据，不各自拉取（或必须拉取时也要可缓存） + 缓存 + SWR：先用缓存渲染，再后台更新 工程落地： + 把请求封装成“数据层”（哪怕你不用专门库，也要集中管理） + 处理竞态：只接受最新请求结果（AbortController 或序号） 5.3 包体策略：代码分割是 CSR 的生命线 CSR 的首屏 JS 越大越慢，这是硬规律。 必须做： + 路由级懒加载（动态 import） + 大组件懒加载（图表、编辑器、富文本、地图） + 第三方库按需引入（别整包 import） 进阶做： + 预取下一路由（用户 hover/空闲时） + 分离 vendor chunk（提升缓存命中，但别过度拆碎） 5.4 客户端路由：状态与 URL 的边界要清晰 在 CSR 中，URL 是重要状态来源： + 筛选、分页、搜索词放 URL（可分享、可回退） + 临时 UI 状态（弹窗开关）放组件 state + 全局业务状态（用户信息、权限、购物车）放 store 做对体现： + 回退/刷新不丢关键状态 + 分享链接能复现当前视图 6）CSR 性能优化全景：你要按“影响最大→最小”的顺序做 第一优先级：减少首屏 JS（最有效） + 删除不用的依赖 + 路由分包 + 懒加载 + 避免把所有页面逻辑打进入口 第二优先级：减少主线程阻塞 + 大计算放 Web Worker + 列表虚拟化（几千行表格必做） + 事件处理做节流/防抖，避免长任务 第三优先级：更快拿到数据 + 并行请求、批量接口（BFF 聚合） + 接口缓存、CDN（公共数据） + 预取（用户即将进入的页面） 第四优先级：资源与渲染细节 + 图片优化（尺寸、格式、懒加载） + 关键 CSS 与字体策略 + 避免 CLS（固定尺寸、骨架一致） 7）CSR 的“工程落地清单”（真正能用来做项目） 7.1 一个合格 CSR 项目至少要有 + 入口足够轻（首屏不引入全量业务） + 路由懒加载 + 数据层统一封装（错误、重试、取消、缓存） + 全局错误边界（白屏兜底） + 性能度量（至少能看到 LCP/INP、bundle 体积） + 发布缓存策略（静态资源 hash + 长缓存；HTML 短缓存） 7.2 CSR 最容易翻车的 6 个坑 1. 入口 import 了所有页面 → 首屏包爆炸 2. 组件各自 fetch → 请求瀑布 + loading 满天飞 3. 列表不虚拟化 → 一滚就卡 4. 大对象/函数 props 不稳定 → 子组件疯狂重渲染 5. localStorage 同步读写太大 → 首次启动卡顿 6. 发版缓存错配 → 旧 HTML 指向新 JS 失败（白屏） 8）CSR 如何验证“我做对了”（你必须用证据闭环） 你要用这些证据来判断 CSR 架构与优化是否成功： 8.1 关键指标（看得见的结果） + LCP ：首屏内容出现时间（CSR 通常更难压） + INP ：交互响应（大 JS/长任务会毁掉） + JS bundle 大小 ：入口 chunk、首屏路由 chunk + 主线程长任务 ：Performance 面板里 50ms 的任务数量 8.2 DevTools 具体看哪里 + Network：首屏 JS 是否太大、是否并行、是否有瀑布 + Performance：首次加载期间 JS 执行是否占满主线程 + Coverage：哪些 JS 实际没用（删依赖/拆分依据） + Lighthouse：诊断建议（但别迷信分数，要结合业务） 9）CSR 与 SSR/SSG 的边界：你什么时候应该“别硬 CSR” 你应该考虑混合或换模式的信号： + 你非常需要 SEO/分享预览（内容站、电商详情） + 首屏内容必须极快出现（营销页、投放页） + 用户设备普遍较弱/网络差（JS 成本更敏感） + 你的首屏依赖很多数据且渲染重（CSR 会更吃亏） 常见解法是 混合 ： + 主体 SSR/SSG，交互岛 CSR（Islands） + 或 SSR 首屏 + CSR 作为后续导航体验 10）一句话总结 CSR 的“正确姿势” CSR 不是不能快，它需要你把它当成“应用启动优化”问题：让首屏 JS 更小、数据更少瀑布、渲染更渐进、缓存更有效。 如果你愿意，我可以拿你项目里一个典型页面（比如：后台列表页/仪表盘/搜索页）按 CSR 给你做一份“ 首屏关键路径拆解 ”： + 首屏需要哪些 JS chunk？ + 哪些请求是瀑布？怎么并行/聚合？ + 哪些组件导致长任务？怎么拆/虚拟化/worker？ 你只要描述页面结构和交互（不需要贴代码）。",
+    "category": "frontend",
+    "tags": [
+      "csr",
+      "incremental-static-regeneration",
+      "nextjs",
+      "ssg",
+      "ssr",
+      "cdn"
+    ],
+    "date": "2025-12-26",
+    "dateTimestamp": 1766707200000,
+    "readingTime": "2 min"
   },
   {
-    "slug": "quiet-transitions",
-    "title": "Quiet Transitions",
-    "excerpt": "",
-    "headings": [],
-    "contentText": "Quiet transitions reduce fatigue. The content layer should avoid scaling or dramatic movement; focus instead on a subtle dimming and a short, ink like wash. We treat motion as an editorial device. The system should be felt more than seen, prioritizing continuity and readability over decoration."
-  },
-  {
-    "slug": "paper-catalog",
-    "title": "Catalog Lists and Editorial Rhythm",
-    "excerpt": "Catalog lists are the backbone of discovery. This note tracks spacing, rules, and scanability.",
-    "headings": [],
-    "contentText": "Catalog lists should feel like a magazine index: quiet, structured, and easy to scan. Titles carry the emphasis while metadata sits in a lighter voice. We avoid heavy cards and rely on thin rules, soft hover emphasis, and tight vertical rhythm. The spacing system is tuned for both mobile and wide viewports."
-  },
-  {
-    "slug": "design-tokens",
-    "title": "Design Tokens: Warm Paper Set",
-    "excerpt": "",
-    "headings": [],
-    "contentText": "The design system is anchored by a warm paper palette and two primary typefaces. UI elements stay on Inter while long form reading uses a serif that matches the editorial tone. Tokens are mapped directly to shadcn variables so every component inherits the same background, border, and ring colors without custom overrides."
-  },
-  {
-    "slug": "editorial-motion",
-    "title": "Editorial Motion Notes",
-    "excerpt": "Building a quiet motion system that feels like a magazine turning page by page.",
-    "headings": [],
-    "contentText": "Editorial Motion Notes Motion should feel like a breath, not a spectacle. The transition system uses three layers: content, film, and ink. Each layer has a single purpose and stays within strict limits for blur and opacity. The shared element system is the continuity anchor. Titles and covers are tracked by layout IDs so the page change feels like a continuous layout rather than a cut. Future adjustments will favor less movement, smaller easing curves, and an even lighter hand on the ink layer."
-  },
-  {
-    "slug": "isr",
+    "slug": "有意义",
     "title": "ISR（Incremental Static Regeneration）彻底讲透：架构、策略与实战避坑",
     "excerpt": "把 ISR 讲到你真的会用、会选、会排坑的程度：理解它如何把 SSG 的极致快与 SSR 的可更新结合起来，构成可控的缓存+再生架构。",
     "headings": [
@@ -71,6 +78,106 @@
       "10）一个“ISR 页面架构账本”示例（你以后可以照抄）",
       "11）你真正“懂 ISR”的标志：你能回答这些问题"
     ],
-    "contentText": "下面把 ISR（Incremental Static Regeneration，增量静态再生） 讲到你“真的会用、会选、会排坑”的程度。你会看到 ISR 不是一个“功能”，而是一套 缓存 + 再生成 的架构：把 SSG 的极致快 和 SSR 的可更新 揉在一起，并且把“更新”变成可控策略。 先给你一句最核心的定义： ISR = 静态 HTML + 缓存（CDN/边缘） + 过期/触发后在后台再生成并更新缓存（常见是 SWR：stale while revalidate） 1）ISR 到底是什么（架构定义与心智模型） 1.1 ISR 在回答哪两个矛盾 SSG 的矛盾： 静态 HTML 非常快 但内容更新要重建全站/全量构建（慢、贵、复杂） SSR 的矛盾： 内容实时 但每次请求都要算 HTML（贵、压力大、延迟更不稳） ISR 的目标： 大多数请求像 SSG 一样快（直接返回静态 HTML） 内容需要更新时，又能像 SSR 一样“重新生成” 并且生成发生在 后台 ，不把所有用户都拖慢 1.2 ISR 的本质结构：SWR 思想 典型 ISR 工作方式是 Stale While Revalidate（过期可用 + 后台更新） ： 页面有一个“再生周期/失效时间（revalidate）” 在周期内：直接返回缓存的静态 HTML（快） 超过周期后： 先返回旧的 HTML（stale）给当前用户 （仍快） 同时后台触发“再生成”（revalidate）并写回缓存 下一位用户访问就得到新的 HTML 这就是为什么 ISR 既快又能更新： 用户体验优先，更新在后台完成。 2）ISR 的完整运行流水线（你必须能讲清楚每一步） 以页面 /news/123 为例，设定 revalidate = 60s： 2.1 首次生成（预生成或首次访问生成） 构建期可能已经生成 /news/123.html（像 SSG） 或者没有生成，首次访问时生成（按框架能力：fallback / on demand） 生成后： HTML 写入存储（构建产物或边缘缓存） CDN/边缘开始缓存这个 HTML 2.2 正常命中缓存（在 60 秒内） 用户访问： CDN/边缘直接返回静态 HTML（TTFB 极低） 不触发再生成 2.3 缓存过期（超过 60 秒） 第一个来访用户触发“过期窗口”： 仍返回旧 HTML（快） 同时后台触发再生成： 服务端取最新数据 渲染出新 HTML 写回缓存（替换旧版本） 2.4 再生成完成后 后续用户： 命中新 HTML（变新了，但仍是静态级速度） 3）ISR 为什么好用？它解决的核心问题是什么？ 3.1 “快”和“新”不必二选一 快 ：大多数请求都走缓存静态 HTML（接近 SSG） 新 ：内容会在设定时间窗内自动更新（不必全量重建） 稳 ：再生成失败时可以继续返回旧页面（stale 兜底） 3.2 构建规模化：解决“页面太多无法全量构建” 如果你有 10 万个详情页： 纯 SSG：全量构建会爆 ISR：只生成热门页或按需生成，冷门页访问到才生成（按框架实现） 3.3 对源站压力更可控 SSR：每次请求都压力 ISR：只有“过期触发”或“按需触发”时才压力 4）ISR 的两种核心模式：定时再生 vs 按需再生（on demand） 4.1 定时再生（Time based Revalidate） 每个页面设定 revalidate = X 秒/分钟 过期后后台更新 适合： 更新频率可预估：新闻列表、活动页、商品信息（不含实时价格/库存） 允许最多 X 时间的陈旧 优点： 简单可靠 缺点： 无法做到“内容发布立即更新”，需要等到过期窗口或主动触发 4.2 按需再生（On demand Revalidate） CMS 发布内容后发 webhook → 触发某个页面（或某类页面）立即再生 或后台管理操作后触发相关页面再生 适合： “编辑一发布就要生效”的内容站 精准更新：只刷新受影响的页面 优点： 更新更及时、无需等待 TTL 缺点： 需要建立触发链路（webhook、安全校验、去重、队列） 现实项目里通常是两者组合： 定时再生兜底 + 按需再生确保关键更新立即生效 5）ISR 的关键设计题（这是你真正要掌握的） 5.1 revalidate 该设多少？（更新窗口怎么选） 这是“架构与业务”的交汇点： 内容更新很少（文档）：小时级/天级 新闻/榜单：分钟级 商品基础信息：分钟级/小时级 价格/库存：通常不适合进 HTML（应该客户端实时拉或单独接口） 决策原则： 1. 用户能接受的最大陈旧时间 是多少？ 2. 源站成本 能承受多少再生频率？ 3. 页面重要性 不同，revalidate 应不同（热门页更短，冷门页更长） 5.2 缓存键（Cache Key）怎么设计？ 缓存键决定命中率与正确性，尤其是： 语言（Accept Language / locale） 地区/货币 设备（移动/桌面若差异很大） 登录态/权限（通常不要把用户态放进 ISR HTML） 原则： ISR 页面尽量保持“公共可缓存” 个性化放到客户端 islands 或私有接口 5.3 再生成时的并发与锁（避免“惊群”） 当一个热门页面过期，可能有大量请求同时到达： 如果每个请求都触发再生成 → 源站被打爆（thundering herd） 正确做法（框架或你自己要提供）： 单飞机制（single flight） ：同一页面同一时间只允许一个再生任务 其他请求继续返回 stale，或等待同一个再生结果（看策略） 5.4 再生成失败怎么办？ ISR 的稳定性关键在“失败策略”： 常见策略： 失败继续返回旧页面 （stale while error） 记录失败次数与告警 限制重试频率，避免死循环打爆后端 5.5 数据一致性：页面里哪些该静态，哪些必须实时？ 这是 ISR 成败的核心： 适合静态/可接受延迟 ：正文、图片、简介、评分概览 不适合静态 ：实时库存、实时价格、强个性化推荐、用户私有信息 常见混合方案： HTML 用 ISR（快） 关键实时信息用客户端接口补（准） 交互模块用 islands（轻 JS） 6）ISR 与 SSR/SSG/CSR 的关系（你如何做选择） SSG ：构建时一次生成，更新靠重建（最快、但更新不灵活） ISR ：静态为主，后台增量更新（快 + 可更新） SSR ：请求时渲染（最实时/最个性化，但成本与不确定性高） CSR ：客户端渲染（强交互应用，首屏依赖 JS） 适合 ISR 的情况： 页面内容是公共的 更新频率中等（分钟～小时） 需要极好首屏与成本控制 页面数量大（无法全量构建） 7）ISR 的常见落地架构（你应该能画出来） 一个典型 ISR 站点（内容/电商展示）通常长这样： CDN：缓存 HTML（ISR）与静态资源（hash 长缓存） 再生服务：在过期/触发时运行渲染（可能在应用服务器或边缘） 内容来源：CMS / 数据服务 客户端：只做少量交互 islands + 实时数据补充 你在架构上要明确： HTML 谁负责生成？ 生成结果存到哪里（边缘缓存/对象存储/内存）？ 过期策略如何定义？ 再生失败如何兜底？ 触发链路如何保证安全与去重？ 8）ISR 常见坑清单（非常实战） 1. 把强个性化内容放进 ISR HTML 导致无法缓存、或者缓存错给别人（严重事故） 解决：个性化用客户端或私有 SSR，不进公共缓存 2. revalidate 设太短 页面频繁再生，源站压力大、成本暴涨 解决：分层（热门短、冷门长），配 single flight 3. 过期惊群 热门页一过期就被打爆 解决：single flight + stale while revalidate 4. 再生失败导致页面“永远不更新” 没有告警、没有重试策略 解决：失败监控、错误兜底、告警与限流 5. 缓存键设计不当 语言/地区/设备没进缓存键 → 用户看到错版本 Cookie 进缓存键 → 命中率暴跌 解决：明确 Vary 与缓存键策略 6. 更新发布链路缺失 编辑发布后要等很久才更新 解决：on demand revalidate + webhook 9）如何验证 ISR 是否正确（证据闭环） 你要从 4 个角度验证： 性能 绝大多数请求 TTFB 极低（CDN HIT） LCP 优秀（HTML 直接有内容） 新鲜度 内容更新后在设定窗口内可见 或 on demand 触发后几秒内生效 稳定性 后端服务短暂挂了，页面仍可打开（stale 兜底） 再生失败有告警与记录 成本 源站 QPS 不随访问线性增长（只有再生时增加） 再生频率可控（按页面热度分级） 10）一个“ISR 页面架构账本”示例（你以后可以照抄） 以“新闻详情页 /news/:id”为例： 1. HTML 生成：ISR，revalidate=300s（5 分钟） 2. 数据来源：CMS API（构建/再生时拉正文与图片） 3. 交互策略：评论/点赞 islands 客户端加载；实时热度单独接口补 4. 缓存：静态资源 hash 长缓存；HTML CDN 缓存，按 locale vary 5. 更新：CMS 发布触发 on demand revalidate（立即更新），TTL 作为兜底 6. 失败：再生失败继续返回旧 HTML，并告警 11）你真正“懂 ISR”的标志：你能回答这些问题 这个页面允许陈旧多久？revalidate 该设多少？ 哪些内容可以静态，哪些必须实时？ 缓存键怎么设计才能既正确又高命中？ 过期时大量请求怎么避免惊群？ 再生失败怎么办？怎么告警？ CMS 发布后如何立即更新？on demand 链路怎么做安全校验？ 如果你愿意，我可以把 ISR 再往下“落到手能做”的层面： 你告诉我一个你熟悉的页面类型（ 文章、商品详情、列表、活动页 任选），我给你： revalidate 建议值 （按业务更新频率） 哪些字段进 HTML、哪些字段客户端补 缓存键/Vary 设计 on demand revalidate 的触发链路设计（含安全与去重） 惊群与失败兜底策略 并告诉你如何用 DevTools/日志验证命中与更新是否符合预期。"
+    "contentText": "下面把 ISR（Incremental Static Regeneration，增量静态再生） 讲到你“真的会用、会选、会排坑”的程度。你会看到 ISR 不是一个“功能”，而是一套 缓存 + 再生成 的架构：把 SSG 的极致快 和 SSR 的可更新 揉在一起，并且把“更新”变成可控策略。 先给你一句最核心的定义： ISR = 静态 HTML + 缓存（CDN/边缘） + 过期/触发后在后台再生成并更新缓存（常见是 SWR：stale while revalidate） 1）ISR 到底是什么（架构定义与心智模型） 1.1 ISR 在回答哪两个矛盾 SSG 的矛盾： 静态 HTML 非常快 但内容更新要重建全站/全量构建（慢、贵、复杂） SSR 的矛盾： 内容实时 但每次请求都要算 HTML（贵、压力大、延迟更不稳） ISR 的目标： 大多数请求像 SSG 一样快（直接返回静态 HTML） 内容需要更新时，又能像 SSR 一样“重新生成” 并且生成发生在 后台 ，不把所有用户都拖慢 1.2 ISR 的本质结构：SWR 思想 典型 ISR 工作方式是 Stale While Revalidate（过期可用 + 后台更新） ： 页面有一个“再生周期/失效时间（revalidate）” 在周期内：直接返回缓存的静态 HTML（快） 超过周期后： 先返回旧的 HTML（stale）给当前用户 （仍快） 同时后台触发“再生成”（revalidate）并写回缓存 下一位用户访问就得到新的 HTML 这就是为什么 ISR 既快又能更新： 用户体验优先，更新在后台完成。 2）ISR 的完整运行流水线（你必须能讲清楚每一步） 以页面 /news/123 为例，设定 revalidate = 60s： 2.1 首次生成（预生成或首次访问生成） 构建期可能已经生成 /news/123.html（像 SSG） 或者没有生成，首次访问时生成（按框架能力：fallback / on demand） 生成后： HTML 写入存储（构建产物或边缘缓存） CDN/边缘开始缓存这个 HTML 2.2 正常命中缓存（在 60 秒内） 用户访问： CDN/边缘直接返回静态 HTML（TTFB 极低） 不触发再生成 2.3 缓存过期（超过 60 秒） 第一个来访用户触发“过期窗口”： 仍返回旧 HTML（快） 同时后台触发再生成： 服务端取最新数据 渲染出新 HTML 写回缓存（替换旧版本） 2.4 再生成完成后 后续用户： 命中新 HTML（变新了，但仍是静态级速度） 3）ISR 为什么好用？它解决的核心问题是什么？ 3.1 “快”和“新”不必二选一 快 ：大多数请求都走缓存静态 HTML（接近 SSG） 新 ：内容会在设定时间窗内自动更新（不必全量重建） 稳 ：再生成失败时可以继续返回旧页面（stale 兜底） 3.2 构建规模化：解决“页面太多无法全量构建” 如果你有 10 万个详情页： 纯 SSG：全量构建会爆 ISR：只生成热门页或按需生成，冷门页访问到才生成（按框架实现） 3.3 对源站压力更可控 SSR：每次请求都压力 ISR：只有“过期触发”或“按需触发”时才压力 4）ISR 的两种核心模式：定时再生 vs 按需再生（on demand） 4.1 定时再生（Time based Revalidate） 每个页面设定 revalidate = X 秒/分钟 过期后后台更新 适合： 更新频率可预估：新闻列表、活动页、商品信息（不含实时价格/库存） 允许最多 X 时间的陈旧 优点： 简单可靠 缺点： 无法做到“内容发布立即更新”，需要等到过期窗口或主动触发 4.2 按需再生（On demand Revalidate） CMS 发布内容后发 webhook → 触发某个页面（或某类页面）立即再生 或后台管理操作后触发相关页面再生 适合： “编辑一发布就要生效”的内容站 精准更新：只刷新受影响的页面 优点： 更新更及时、无需等待 TTL 缺点： 需要建立触发链路（webhook、安全校验、去重、队列） 现实项目里通常是两者组合： 定时再生兜底 + 按需再生确保关键更新立即生效 5）ISR 的关键设计题（这是你真正要掌握的） 5.1 revalidate 该设多少？（更新窗口怎么选） 这是“架构与业务”的交汇点： 内容更新很少（文档）：小时级/天级 新闻/榜单：分钟级 商品基础信息：分钟级/小时级 价格/库存：通常不适合进 HTML（应该客户端实时拉或单独接口） 决策原则： 1. 用户能接受的最大陈旧时间 是多少？ 2. 源站成本 能承受多少再生频率？ 3. 页面重要性 不同，revalidate 应不同（热门页更短，冷门页更长） 5.2 缓存键（Cache Key）怎么设计？ 缓存键决定命中率与正确性，尤其是： 语言（Accept Language / locale） 地区/货币 设备（移动/桌面若差异很大） 登录态/权限（通常不要把用户态放进 ISR HTML） 原则： ISR 页面尽量保持“公共可缓存” 个性化放到客户端 islands 或私有接口 5.3 再生成时的并发与锁（避免“惊群”） 当一个热门页面过期，可能有大量请求同时到达： 如果每个请求都触发再生成 → 源站被打爆（thundering herd） 正确做法（框架或你自己要提供）： 单飞机制（single flight） ：同一页面同一时间只允许一个再生任务 其他请求继续返回 stale，或等待同一个再生结果（看策略） 5.4 再生成失败怎么办？ ISR 的稳定性关键在“失败策略”： 常见策略： 失败继续返回旧页面 （stale while error） 记录失败次数与告警 限制重试频率，避免死循环打爆后端 5.5 数据一致性：页面里哪些该静态，哪些必须实时？ 这是 ISR 成败的核心： 适合静态/可接受延迟 ：正文、图片、简介、评分概览 不适合静态 ：实时库存、实时价格、强个性化推荐、用户私有信息 常见混合方案： HTML 用 ISR（快） 关键实时信息用客户端接口补（准） 交互模块用 islands（轻 JS） 6）ISR 与 SSR/SSG/CSR 的关系（你如何做选择） SSG ：构建时一次生成，更新靠重建（最快、但更新不灵活） ISR ：静态为主，后台增量更新（快 + 可更新） SSR ：请求时渲染（最实时/最个性化，但成本与不确定性高） CSR ：客户端渲染（强交互应用，首屏依赖 JS） 适合 ISR 的情况： 页面内容是公共的 更新频率中等（分钟～小时） 需要极好首屏与成本控制 页面数量大（无法全量构建） 7）ISR 的常见落地架构（你应该能画出来） 一个典型 ISR 站点（内容/电商展示）通常长这样： CDN：缓存 HTML（ISR）与静态资源（hash 长缓存） 再生服务：在过期/触发时运行渲染（可能在应用服务器或边缘） 内容来源：CMS / 数据服务 客户端：只做少量交互 islands + 实时数据补充 你在架构上要明确： HTML 谁负责生成？ 生成结果存到哪里（边缘缓存/对象存储/内存）？ 过期策略如何定义？ 再生失败如何兜底？ 触发链路如何保证安全与去重？ 8）ISR 常见坑清单（非常实战） 1. 把强个性化内容放进 ISR HTML 导致无法缓存、或者缓存错给别人（严重事故） 解决：个性化用客户端或私有 SSR，不进公共缓存 2. revalidate 设太短 页面频繁再生，源站压力大、成本暴涨 解决：分层（热门短、冷门长），配 single flight 3. 过期惊群 热门页一过期就被打爆 解决：single flight + stale while revalidate 4. 再生失败导致页面“永远不更新” 没有告警、没有重试策略 解决：失败监控、错误兜底、告警与限流 5. 缓存键设计不当 语言/地区/设备没进缓存键 → 用户看到错版本 Cookie 进缓存键 → 命中率暴跌 解决：明确 Vary 与缓存键策略 6. 更新发布链路缺失 编辑发布后要等很久才更新 解决：on demand revalidate + webhook 9）如何验证 ISR 是否正确（证据闭环） 你要从 4 个角度验证： 性能 绝大多数请求 TTFB 极低（CDN HIT） LCP 优秀（HTML 直接有内容） 新鲜度 内容更新后在设定窗口内可见 或 on demand 触发后几秒内生效 稳定性 后端服务短暂挂了，页面仍可打开（stale 兜底） 再生失败有告警与记录 成本 源站 QPS 不随访问线性增长（只有再生时增加） 再生频率可控（按页面热度分级） 10）一个“ISR 页面架构账本”示例（你以后可以照抄） 以“新闻详情页 /news/:id”为例： 1. HTML 生成：ISR，revalidate=300s（5 分钟） 2. 数据来源：CMS API（构建/再生时拉正文与图片） 3. 交互策略：评论/点赞 islands 客户端加载；实时热度单独接口补 4. 缓存：静态资源 hash 长缓存；HTML CDN 缓存，按 locale vary 5. 更新：CMS 发布触发 on demand revalidate（立即更新），TTL 作为兜底 6. 失败：再生失败继续返回旧 HTML，并告警 11）你真正“懂 ISR”的标志：你能回答这些问题 这个页面允许陈旧多久？revalidate 该设多少？ 哪些内容可以静态，哪些必须实时？ 缓存键怎么设计才能既正确又高命中？ 过期时大量请求怎么避免惊群？ 再生失败怎么办？怎么告警？ CMS 发布后如何立即更新？on demand 链路怎么做安全校验？ 如果你愿意，我可以把 ISR 再往下“落到手能做”的层面： 你告诉我一个你熟悉的页面类型（ 文章、商品详情、列表、活动页 任选），我给你： revalidate 建议值 （按业务更新频率） 哪些字段进 HTML、哪些字段客户端补 缓存键/Vary 设计 on demand revalidate 的触发链路设计（含安全与去重） 惊群与失败兜底策略 并告诉你如何用 DevTools/日志验证命中与更新是否符合预期。",
+    "category": "frontend",
+    "tags": [
+      "isr",
+      "incremental-static-regeneration",
+      "nextjs",
+      "ssg",
+      "ssr",
+      "cdn"
+    ],
+    "date": "2025-12-26",
+    "dateTimestamp": 1766707200000,
+    "readingTime": "2 min"
+  },
+  {
+    "slug": "ssg",
+    "title": "SSG（Static Site Generation，静态站点生成）彻底讲透：架构、策略与实战避坑",
+    "excerpt": "SSG 不是“把页面提前渲染一下”，而是一整套围绕 **构建时渲染 + CDN 缓存 + 内容生产/发布链路** 的架构。",
+    "headings": [
+      "2.1 构建阶段（Build time）",
+      "2.2 部署阶段（Deploy）",
+      "2.3 访问阶段（Runtime）",
+      "3.1 SSG 的性能优势是“物理级”的",
+      "3.2 SSG 的稳定性也更强",
+      "4.1 内容更新：如何让用户看到新内容？",
+      "4.2 页面规模：页面数量太多怎么办？",
+      "4.3 个性化：按用户变化怎么办？",
+      "5.1 公共且稳定的内容（最适合 SSG）",
+      "5.2 公共但会变化的内容（SSG + 再生成）",
+      "5.3 私有个性化内容（不要强上 SSG）",
+      "6.1 纯静态（0 JS）",
+      "6.2 SSG + 全量 hydration（静态首屏 + SPA 接管）",
+      "6.3 SSG + Islands（强烈推荐的现代内容站形态）",
+      "7.1 内容来源（Content Source）",
+      "7.2 构建触发（Build Trigger）",
+      "7.3 预览环境（Preview）",
+      "8.1 静态资源（JS/CSS/图片）",
+      "8.2 HTML（静态页面文件）",
+      "10.1 功能验证",
+      "10.2 性能验证",
+      "10.3 成本与稳定性验证",
+      "如果你愿意，我可以继续把 1.4 ISR（增量静态再生）讲到同样深度，并且告诉你："
+    ],
+    "contentText": "下面我把 SSG（Static Site Generation，静态站点生成）讲到你“能独立做架构决策、能落地、能排坑”的程度。你会看到：SSG 不是“把页面提前渲染一下”，而是一整套围绕 构建时渲染 + CDN 缓存 + 内容生产/发布链路 的架构。 1）SSG 到底是什么（架构定义） SSG = 在“构建时（build time）”把页面渲染成静态 HTML 文件，然后部署到 CDN/静态服务器。 访问时： + 用户请求某个 URL + CDN 直接返回对应的 .html（以及静态资源 JS/CSS/图片） + 浏览器解析 HTML 即可展示内容 （交互如果需要，再加载 JS 做增强：可以是全量 hydration，也可以是局部岛屿） 一句话： SSR 是“请求时渲染”，SSG 是“构建时渲染”。 2）SSG 的完整运行流水线（你必须能讲清楚“发生了什么”） 以“文章站/商品展示页”为例： 2.1 构建阶段（Build time） 1. 构建系统启动（CI 或本地）：npm run build 2. 读取内容源（Markdown / CMS API / 数据库导出 / Git 仓库） 3. 生成路由列表（例如所有文章 slug：/posts/a、/posts/b） 4. 对每个路由执行渲染： 运行页面组件（在 Node/构建环境） 拉取对应数据（文章正文、作者信息） 输出静态 HTML 文件（/posts/a/index.html） 5. 同时生成静态资源：JS/CSS、图片优化产物等（带 hash 指纹） 6. 输出构建产物目录（dist/out） 2.2 部署阶段（Deploy） 1. 把 dist 上传到 CDN/对象存储（S3、OSS、Cloudflare R2 等） 2. CDN 分发到边缘节点，配置缓存策略 2.3 访问阶段（Runtime） 1. 用户访问页面：CDN 直接吐 HTML（通常 TTFB 极低） 2. 浏览器立刻看到内容（LCP 很容易优秀） 3. 需要交互的部分再加载 JS（可选：全量 hydration / islands / 纯无 JS） 关键： 渲染发生在构建时，不在用户请求时。 这就是 SSG 快、便宜、稳定的根源。 3）SSG 为什么快？快在哪里？（本质优势） 3.1 SSG 的性能优势是“物理级”的 因为： + 不需要每个请求都在服务器算 HTML（没有 SSR 的“请求时计算”） + HTML 是静态文件，CDN 边缘直接返回（网络距离近、缓存命中高） + 静态资源天然适合长缓存（hash + immutable） 结果通常是： + TTFB 极低 + LCP 极好 + 源站压力几乎为零（甚至没有源站） 3.2 SSG 的稳定性也更强 + 没有运行时渲染服务，就少了“渲染服务挂了就全站挂”的风险 + 高并发访问时主要靠 CDN 扛（天生抗压） 4）SSG 的代价：它难在哪里？为什么不是所有站都 SSG SSG 的核心矛盾是： 页面在构建时就定型了，但真实世界的数据在不断变化。 于是带来三类问题： 4.1 内容更新：如何让用户看到新内容？ + 内容变了 → 你必须重新构建并部署（或者用 ISR/增量更新） + 内容更新频率越高，构建压力越大 4.2 页面规模：页面数量太多怎么办？ + 10 万页面全量构建会慢到不可接受 + 这催生了：增量构建、分批构建、按需生成（ISR / on demand） 4.3 个性化：按用户变化怎么办？ + SSG 输出的是公共 HTML + 如果页面强个性化（用户权益、推荐、订单），就不能纯 SSG 解决只能是： + 客户端再拉私有数据（CSR 补） + 或边缘/服务器拼装（更复杂） + 或把个性化限定在小组件（islands） 5）SSG 的“正确使用姿势”：分清三类内容 这是你做架构决策最重要的一条。 5.1 公共且稳定的内容（最适合 SSG） + 文档、博客、产品介绍页、帮助中心 + 公共商品信息（不含实时库存/价格波动） 5.2 公共但会变化的内容（SSG + 再生成） + 新闻、榜单、商品列表 → 用 ISR/定时重建/按需重建 5.3 私有个性化内容（不要强上 SSG） + 用户中心、订单、权限菜单 → CSR 或 SSR 更合理 （或“主体 SSG + 个性化小岛”） 6）SSG + 交互：你必须理解“静态 HTML”与“JS 增强”的组合方式 SSG 并不等于“没有 JS”。它只是“HTML 是静态的”。 常见组合： 6.1 纯静态（0 JS） + 只有内容展示，靠 HTML/CSS 优点：最快、最稳、最省钱 适合：文档、说明页 6.2 SSG + 全量 hydration（静态首屏 + SPA 接管） + 首屏由静态 HTML 出 + JS 加载后整站变成 SPA（后续导航 CSR） 优点：首屏快 + SPA 体验 代价：仍有 hydration 税（JS 体积） 6.3 SSG + Islands（强烈推荐的现代内容站形态） + 页面主体静态（正文、布局） + 只有评论/点赞/搜索等小区域加载 JS 优点： JS 极小，交互税最低 适合：媒体/营销/电商展示 你会发现：SSG 的“上限”很高，关键在于你怎么控制交互 JS 的范围。 7）SSG 的数据来源与“内容流水线”设计（架构层核心） SSG 最大的工程挑战不是渲染，而是： 内容从哪里来、什么时候触发构建、如何预览与发布 。 7.1 内容来源（Content Source） + Git 仓库（Markdown）：最简单、版本化好 + Headless CMS（Contentful、Strapi 等）：编辑友好 + API 导出：从数据库导出静态快照 7.2 构建触发（Build Trigger） + Git push 触发构建（文档/博客常见） + CMS 发布触发 webhook → 触发构建 + 定时构建（每天/每小时刷新榜单） 7.3 预览环境（Preview） 现代内容团队需要： + 草稿预览（不影响线上） + PR Preview（每个 PR 一个预览 URL） 如果你没有预览链路，内容生产会非常痛苦。 8）缓存策略：SSG 的甜点，但也最容易“发版错配” SSG 通常这样配缓存： 8.1 静态资源（JS/CSS/图片） + 文件名带 hash + Cache Control: max age=31536000, immutable + CDN 长缓存 8.2 HTML（静态页面文件） + 可以缓存，但要考虑“更新时刻” + 常见策略： HTML 短缓存（更稳） 或 HTML 也长缓存，但配合版本化路径/刷新策略（更复杂） 大坑： 如果你把 HTML 也长缓存，而 HTML 引用的 JS/CSS 版本变了，可能出现： + 旧 HTML 指向不存在的新资源 → 404 → 白屏 解决原则： + 静态资源一定版本化（hash） + HTML 的缓存策略要与你的发布策略匹配（要么短缓存，要么严格版本化路径） 9）SSG 常见坑清单（提前知道能省一年） 1. 页面数量爆炸导致构建时间不可控 → 需要增量构建/ISR/分批构建策略 2. 把动态数据硬塞进构建期 → 价格/库存这类实时数据不适合纯 SSG，要做客户端补或边缘拼装 3. 构建期依赖外部 API 不稳定 → 构建失败、发布中断（要有重试、缓存、降级数据源） 4. 把太多数据序列化进 HTML → HTML 变巨大，反而拖慢首屏（要控制 payload） 5. 预览/发布链路缺失 → 内容团队无法高效协作，回滚困难 6. 缓存策略不匹配导致白屏 → HTML 与静态资源版本错配（发布策略必须严谨） 10）如何验证你做的 SSG “真的正确”（证据闭环） 你可以用这些方法确认： 10.1 功能验证 + 断网/禁 JS：页面是否仍能显示核心内容（SSG 的本质价值） + View Source：正文是否在 HTML 源码里（SEO 也会吃到） 10.2 性能验证 + Network：TTFB 是否显著降低（CDN 命中） + Lighthouse：LCP 是否优秀 + 资源瀑布：是否没有“请求时渲染”导致的等待 10.3 成本与稳定性验证 + 源站 QPS 接近 0（主要由 CDN 扛） + 高峰访问是否几乎不影响系统（因为都是静态） 11）SSG 与 SSR/CSR/ISR 的边界：你怎么做选择 你可以用一句话来决策： + 内容稳定且公共 → SSG + 内容公共但会更新 → SSG + ISR/重建 + 内容强个性化/实时性强 → SSR 或 CSR + 内容为主 + 少量交互 → SSG + Islands（现代最优形态之一） 12）一个“SSG 页面架构账本”示例（你以后可以照抄） 以“文章详情页”为例： 1. HTML 生成：SSG（构建时生成每篇文章 HTML） 2. 数据来源：Markdown/CMS（构建时拉取文章、作者信息） 3. 交互策略：正文静态；评论/点赞作为 Islands 客户端加载 4. 缓存策略：JS/CSS hash 长缓存；HTML 短缓存或按发布策略刷新 验证：TTFB<50ms（CDN），LCP 优秀，禁 JS 仍可读正文 如果你愿意，我可以继续把 1.4 ISR（增量静态再生）讲到同样深度，并且告诉你： + SSG 规模化怎么做（10 万页面如何构建） + CMS 发布触发按需重建怎么设计 + 如何避免“构建爆炸”和“缓存错配白屏” 你也可以告诉我：你更关心 SSG 在 文档/博客 、还是 电商/内容站 的落地，我可以按场景给你一套“可直接照做”的架构方案。",
+    "category": "frontend",
+    "tags": [
+      "isr",
+      "incremental-static-regeneration",
+      "nextjs",
+      "ssg",
+      "ssr",
+      "cdn"
+    ],
+    "date": "2025-12-26",
+    "dateTimestamp": 1766707200000,
+    "readingTime": "2 min"
+  },
+  {
+    "slug": "ssr",
+    "title": "为什么说 SSR 是架构决策？",
+    "excerpt": "把 SSR 讲到你能用它做架构决策、能排障、能优化的程度：理解它为什么快/慢、数据与缓存怎么设计、Hydration 税怎么减、什么时候该用/不该用、常见坑与验证手段。",
+    "headings": [
+      "2.1 首次请求：从浏览器到服务器",
+      "2.2 客户端接管：Hydration（交互税）",
+      "3.1 SSR 主要提升的体验",
+      "3.2 SSR 对性能指标的典型影响",
+      "4.1 服务端成本与延迟",
+      "4.2 数据瀑布（SSR 最常见的“TTFB 杀手”）",
+      "4.3 Hydration（交互税）",
+      "5.1 数据：在哪拿？拿多少？怎么避免瀑布？",
+      "常见正确形态",
+      "你必须注意的坑",
+      "5.2 缓存：SSR 能不能缓存？怎么缓存才不翻车？",
+      "5.3 交互：如何减 hydration 税？",
+      "6.1 SSR（每次请求渲染）",
+      "6.2 SSR + 缓存（接近静态）",
+      "6.3 Streaming SSR（流式 SSR）",
+      "6.4 SSR + Islands（混合）",
+      "7.1 强烈适合 SSR 的场景",
+      "7.2 不一定适合 SSR 的场景",
+      "7.3 常见折中（非常实用）",
+      "8.1 Hydration mismatch（最典型）",
+      "8.2 TTFB 高",
+      "8.3 “看得见但点不动”（INP 差）",
+      "9.1 看 HTML 是否真的“有内容”",
+      "9.2 看性能指标结构",
+      "9.3 看缓存与成本"
+    ],
+    "contentText": "下面我把 SSR（Server Side Rendering，服务端渲染） 讲到“你能用它做架构决策、能排障、能优化”的程度。结构会非常系统： 它是什么 → 浏览器与服务器发生了什么 → 为什么快/慢 → 数据与缓存怎么设计 → Hydration 税怎么减 → 什么时候该用/不该用 → 常见坑与验证手段 。 1）SSR 到底是什么（架构定义） SSR = 页面首次请求时，由服务器把 UI 渲染成 HTML 返回给浏览器。 关键点： + 服务器返回的 HTML 已经包含首屏内容 （不是空壳） + 浏览器拿到 HTML 后能立刻“看见内容” + 但要变成“可交互的 React 应用”，还需要客户端加载 JS 并进行 Hydration（水合/注水接管） SSR ≠ 纯静态 HTML SSR = “服务端先把内容画出来” + “客户端再接管交互” 2）SSR 的完整运行流水线（你必须能把每一步讲清楚） 以 React/Next 类框架为例（概念通用）： 2.1 首次请求：从浏览器到服务器 1. 浏览器请求 GET /products/123 2. 服务端路由匹配到页面组件（例如 ProductPage） 3. 服务端获取数据（商品详情、价格、库存、推荐等） 4. 服务端执行渲染：把组件树渲染成 HTML 字符串/流 5. 服务端返回 HTML（可能包含序列化数据，供客户端复用） 6. 浏览器解析 HTML，立刻绘制出首屏内容（ 此时“可见”但不一定“可交互” ） 2.2 客户端接管：Hydration（交互税） 1. 浏览器下载 JS（框架 runtime + 页面代码 + 依赖） 2. React 在客户端“用同一棵组件树”对齐已有 HTML 3. 绑定事件监听、恢复状态、建立内部 Fiber 结构 4. Hydration 完成后，页面才完全可交互 SSR 的性能画像通常是： 首屏内容更早出现（LCP 更好） ，但 可交互时间可能被 hydration 拖住（INP/TTI 风险） 3）SSR 为什么快？它快在哪些指标上？ SSR“快”的核心是： 关键内容不等 JS 执行也能出现 。 3.1 SSR 主要提升的体验 + 首屏可见更早 ：HTML 已经有内容，浏览器解析即渲染 + SEO 更自然 ：爬虫直接抓 HTML 就有正文 + 分享预览更稳 ：OG tags、meta 可在服务端按页面生成 3.2 SSR 对性能指标的典型影响 + LCP 往往更好 ：最大内容元素更早进入 DOM + TTFB 往往更差或更不稳定 ：服务器需要取数+渲染 + INP/交互响应可能变差 ：hydration 很重时出现“看得见点不动” 你要把 SSR 理解成：用服务器算力换首屏可见性，但你要管理 hydration 税与服务器延迟。 4）SSR 的代价：它慢在哪里？为什么复杂？ SSR 的复杂不是“会写 renderToString”，而是这些系统问题： 4.1 服务端成本与延迟 + 每个请求都要执行渲染（CPU） + 每个请求可能还要取数据（IO） + 高并发下需要： 缓存 连接池 限流降级 监控与扩容 4.2 数据瀑布（SSR 最常见的“TTFB 杀手”） 如果服务端渲染过程中数据获取是串行的： + A 数据回来才能请求 B + B 回来才能渲染 C 那 TTFB 会被拖爆 。 解决方向： + 路由级并行 loader + BFF 聚合一次返回 + Streaming SSR + Suspense（先出骨架/关键块） 4.3 Hydration（交互税） SSR 的 HTML 只是“静态内容”，交互需要 hydration： + 页面越大、组件越多、JS 越大 → hydration 越慢 + hydration 期间主线程忙 → 用户输入响应差（INP） 5）SSR 架构最关键的 3 个设计题 你真正要掌握 SSR，不是 API，是这三题： 5.1 数据：在哪拿？拿多少？怎么避免瀑布？ 常见正确形态 + 路由级数据加载 ：进入页面先把该页面需要的数据并行拿齐 + 服务端聚合 ：通过 BFF 把多个后端请求合并成 1 次 + 复用数据 ：服务端拿到的数据序列化给客户端，避免客户端再请求一遍（不然“SSR 一次 + 客户端又请求一次”会浪费） 你必须注意的坑 + 序列化体积过大：把巨量数据塞进 HTML 反而拖慢首屏 + 把私密信息序列化到客户端：安全事故 5.2 缓存：SSR 能不能缓存？怎么缓存才不翻车？ SSR 并不是一定“每次都算”，很多 SSR 页面可以缓存。 关键在于： 缓存键 与 个性化程度 。 + 公共内容（文章、商品）：适合 CDN/Edge 缓存 HTML + 按地区/语言变化：缓存键要包含地区/语言 + 按用户变化（登录态/权益）：通常不适合公共缓存；可能需要“私有缓存”或“ESI/边缘拼装” 你要掌握的缓存原则： + 静态资源：hash + 长缓存 + HTML：通常短缓存或按策略缓存（SSR/ISR/Edge） 5.3 交互：如何减 hydration 税？ 核心目标： 减少需要在客户端水合的东西 。 常见策略（按效果从大到小）： 1. 减少客户端 JS ：大库懒加载、去掉不必要依赖 2. 局部水合（Islands） ：只让少数交互组件水合 3. 延迟水合 ：首屏非关键交互（比如评论）滚动到再水合 4. 把更多逻辑留在服务端 ：让页面更“内容化” 6）SSR 的不同形态（你要分得清，不然会混乱） 6.1 SSR（每次请求渲染） + 最实时，但成本最大 + 适合强实时个性化 6.2 SSR + 缓存（接近静态） + 热门公共页面缓存命中率高 + 成本下降，体验仍好 + 难点：缓存失效与 Vary 设计 6.3 Streaming SSR（流式 SSR） + 先把能渲染的部分吐出来，晚点补剩下的 + 适合数据依赖复杂的页面 + 配合 Suspense 能显著改善“首屏可见” 6.4 SSR + Islands（混合） + 主体 SSR 出 HTML + 交互模块 CSR/岛屿加载 + 是现代内容型站点的高性价比解法 7）SSR 什么时候该用？什么时候不该用？（决策表） 7.1 强烈适合 SSR 的场景 + SEO 关键（内容站、商品详情、落地页） + 首屏必须非常快“见到内容” + 分享预览要准确（动态 meta） + 需要服务端鉴权/重定向（登录态强相关页面） 7.2 不一定适合 SSR 的场景 + 后台系统/强交互 App（CSR 更自然） + 页面个性化极强但无法有效缓存（成本高） + 服务端资源紧张、业务高峰波动大 + 你无法管理 hydration 税（页面巨大、JS 很重） 7.3 常见折中（非常实用） + 首页/详情 SSR，后台 CSR + 列表 ISR，详情 SSR + 主体 SSR，评论/推荐 Islands 8）SSR 最常见的“翻车点”与排查 8.1 Hydration mismatch（最典型） 现象： + 控制台警告：服务端 HTML 与客户端渲染不一致 + 页面闪动、事件不绑定、局部错乱 常见原因： + render 中使用 Date.now() / Math.random()（服务端与客户端值不同） + 依赖 window/document（服务端没有） + 读取本地时区/语言导致差异 + 条件渲染依赖“仅客户端可知的信息”（比如 localStorage） 解决思路： + 把不确定值延后到 effect 中 + 用 “客户端专用组件” 或在客户端挂载后再渲染 + 确保服务端与客户端初始状态一致 8.2 TTFB 高 原因： + 服务端取数串行瀑布 + 后端接口慢/不稳定 + SSR 服务器 CPU 忙（渲染太重） 排查： + 服务端打点：路由匹配、取数耗时、渲染耗时 + APM/日志：慢请求链路 + 缓存命中率检查 8.3 “看得见但点不动”（INP 差） 原因： + JS 太大 + hydration 太重 + 首屏渲染/计算太多（大列表、复杂图表） 解决： + 代码分割、延迟加载 + Islands/局部水合 + 虚拟列表、减少首屏组件数量 + 低优先级更新延后（并发特性/transition 思路） 9）SSR 如何验证“我做对了”（证据闭环） 你必须能用工具证明 SSR 的收益与代价： 9.1 看 HTML 是否真的“有内容” + View Source：正文是否在 HTML 里 + 禁用 JS：页面是否仍能展示核心内容（这是 SSR 的价值体现） 9.2 看性能指标结构 + Network：TTFB 是否上升？HTML 是否可缓存？ + Performance：hydration 期间是否大量长任务？ + LCP：是否改善？ + INP：是否变差？是否需要减水合？ 9.3 看缓存与成本 + CDN 命中率、源站 QPS、渲染耗时分布 + 热点页面是否被有效缓存，避免 SSR 被打爆 10）一句话总结 SSR 的“正确姿势” SSR 用服务器先把首屏内容送达，换取更好的可见性与 SEO；但你必须用并行取数/缓存/流式/局部水合来控制 TTFB 与 hydration 税，否则 SSR 只是把问题从客户端搬到服务端。 如果你愿意，我可以用一个具体页面（例如“商品详情页”或“文章详情页”）给你做一份 SSR 的 架构账本 ： + 服务端取数怎么并行？ + 哪些数据应该序列化给客户端？ + 哪些部分做 Islands？ + HTML/CDN 缓存键怎么设计？ + 怎么验证 LCP/INP/TTFB 的变化？ 你告诉我页面类型（内容/电商/登录页/列表页）和是否有登录态个性化，我就按你的场景把 SSR 方案落到可执行级别。",
+    "category": "frontend",
+    "tags": [
+      "isr",
+      "incremental-static-regeneration",
+      "nextjs",
+      "ssg",
+      "ssr",
+      "cdn"
+    ],
+    "date": "2025-12-26",
+    "dateTimestamp": 1766707200000,
+    "readingTime": "2 min"
   }
 ]

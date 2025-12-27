@@ -17,9 +17,9 @@ import {
 } from "@/lib/me/query";
 
 const tabs: Array<{ value: DossierTab; label: string }> = [
-  { value: "favorites", label: "Favorites" },
-  { value: "likes", label: "Likes" },
-  { value: "comments", label: "Comments" },
+  { value: "favorites", label: "收藏" },
+  { value: "likes", label: "点赞" },
+  { value: "comments", label: "评论" },
 ];
 
 export default function DossierTabs() {

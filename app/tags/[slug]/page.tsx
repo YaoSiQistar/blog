@@ -29,7 +29,7 @@ interface TagDetailPageProps {
 const PAGE_SIZE = 8;
 
 const buildTagDescription = (name: string) =>
-  `Notes, essays, and references filed under ${name}, arranged as a quiet editorial index.`;
+  `归档于 ${name} 的笔记、文章与参考，被整理成安静的博客索引。`;
 
 export async function generateMetadata({
   params,
@@ -74,7 +74,7 @@ export default async function TagDetailPage({ params, searchParams }: TagDetailP
     }),
   ]);
 
-  const subtitle = `A dossier of ${paged.baseCount} works filed under \"${tag.name}\".`;
+  const subtitle = `专题收录 ${paged.baseCount} 篇，归档于「${tag.name}」。`;
   const description = buildTagDescription(tag.name);
 
   const catalogItems = paged.items.map((post) => ({
@@ -144,9 +144,9 @@ export default async function TagDetailPage({ params, searchParams }: TagDetailP
 
         <div className="flex items-center justify-between pt-6 text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
           <span>
-            Page {paged.page} of {paged.totalPages}
+            第 {paged.page} 页 / 共 {paged.totalPages} 页
           </span>
-          <span>{paged.total} works</span>
+          <span>{paged.total} 篇</span>
         </div>
 
         <PostsPagination

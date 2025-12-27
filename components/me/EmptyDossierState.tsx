@@ -8,18 +8,18 @@ import type { DossierTab } from "@/lib/me/query";
 
 const copy = {
   favorites: {
-    title: "No saved works yet.",
-    cta: "Browse posts",
+    title: "暂无收藏。",
+    cta: "浏览文章",
     href: "/posts",
   },
   likes: {
-    title: "No likes yet.",
-    cta: "Explore",
+    title: "暂无点赞。",
+    cta: "去探索",
     href: "/posts",
   },
   comments: {
-    title: "No comments yet.",
-    cta: "Join the discussion",
+    title: "暂无评论。",
+    cta: "加入讨论",
     href: "/posts",
   },
 } as const;

@@ -27,9 +27,9 @@ export default function PendingNoticeCard({ onDismiss }: PendingNoticeCardProps)
     >
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-1">
-          <p className="text-sm font-medium text-foreground">Submitted</p>
+          <p className="text-sm font-medium text-foreground">已提交</p>
           <p className="text-xs text-muted-foreground">
-            Your note is pending review and will appear once approved.
+            你的留言正在审核，通过后会显示。
           </p>
         </div>
         <Button

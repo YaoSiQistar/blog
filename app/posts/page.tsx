@@ -16,8 +16,8 @@ import type { KintsugNode } from "@/lib/Kintsug-rail/types";
 import { buildPageMetadata } from "@/lib/seo/og";
 
 export const metadata = buildPageMetadata({
-  title: "Archive",
-  description: "Browse the editorial archive with filters for tags and galleries.",
+  title: "归档",
+  description: "用标签与展厅筛选浏览博客归档。",
   pathname: "/posts",
 });
 
@@ -62,31 +62,31 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
   const kintsugNodes: KintsugNode[] = [
     {
       id: "posts-header",
-      label: "Header",
+      label: "抬头",
       kind: "section",
       target: { type: "scroll", selector: "#posts-header" },
       meta: { subtitle: GuideModel.filterSummarySentence },
     },
     {
       id: "posts-workbench",
-      label: "Workbench",
+      label: "工作台",
       kind: "section",
       target: { type: "scroll", selector: "#posts-workbench" },
-      meta: { subtitle: "Filters + search" },
+      meta: { subtitle: "筛选 + 搜索" },
     },
     {
       id: "posts-catalog",
-      label: "Catalog",
+      label: "目录",
       kind: "section",
       target: { type: "scroll", selector: "#posts-catalog" },
-      meta: { subtitle: `${GuideModel.resultsCount} works` },
+      meta: { subtitle: `${GuideModel.resultsCount} 篇` },
     },
     {
       id: "posts-pagination",
-      label: "Pages",
+      label: "分页",
       kind: "section",
       target: { type: "scroll", selector: "#posts-pagination" },
-      meta: { subtitle: `Page ${GuideModel.page} / ${GuideModel.totalPages}` },
+      meta: { subtitle: `第 ${GuideModel.page} / ${GuideModel.totalPages} 页` },
     },
   ];
 
@@ -106,8 +106,8 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
     >
       <section id="posts-header">
         <PostsPageHeader
-          title="The Archive Catalog"
-          description="A curated wall of editorial notes, arranged like a museum inventory of ink and motion."
+          title="归档目录"
+          description="以博物馆清单的方式编排编辑部笔记与动效记录。"
           summary={GuideModel.filterSummarySentence}
           resultsCount={GuideModel.resultsCount}
           totalPages={GuideModel.totalPages}
@@ -126,17 +126,17 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
         ) : (
           <section className="rounded-[var(--radius)] border border-border bg-card/70 p-8 text-center">
             <p className="text-lg font-semibold text-foreground">
-              No works in this gallery.
+              此展厅暂无内容。
             </p>
             <p className="mt-2 text-sm text-muted-foreground">
-              Try clearing filters or returning to the full catalog.
+              试试清除筛选或返回完整目录。
             </p>
             <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
               <Button asChild variant="secondary">
-                <Link href="/posts">Clear filters</Link>
+                <Link href="/posts">清除筛选</Link>
               </Button>
               <Button asChild variant="ghost">
-                <Link href="/posts">Back to all</Link>
+                <Link href="/posts">返回全部</Link>
               </Button>
             </div>
           </section>
@@ -146,9 +146,9 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
       <section id="posts-pagination">
         <div className="flex items-center justify-between pt-6 text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
           <span>
-            Page {GuideModel.page} of {GuideModel.totalPages}
+            第 {GuideModel.page} 页 / 共 {GuideModel.totalPages} 页
           </span>
-          <span>{GuideModel.resultsCount} works</span>
+          <span>{GuideModel.resultsCount} 篇</span>
         </div>
 
         <PostsPagination
@@ -159,8 +159,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
       </section>
 
       <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground/70">
-        The archive updates with every new note. Return often to discover new
-        galleries.
+        归档会随新笔记持续更新，欢迎常回来发现新展厅。
       </p>
     </PostsLayout>
   );

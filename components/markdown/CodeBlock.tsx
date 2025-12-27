@@ -23,7 +23,7 @@ export function CodeBlock(props: ComponentProps<"pre"> = {}) {
       {title ? <div className="markdown-code-title">{title}</div> : null}
       {codeText ? (
         <div className="markdown-code-toolbar">
-          <CopyButton value={codeText} label="Copy" />
+          <CopyButton value={codeText} label="复制" />
         </div>
       ) : null}
       <pre {...rest} className={cn("markdown-pre", resolvedClassName)}>

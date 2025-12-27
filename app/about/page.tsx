@@ -28,10 +28,10 @@ export async function generateMetadata(): Promise<Metadata> {
   if (!page) return {};
 
   const description =
-    page.frontmatter.subtitle || page.frontmatter.lead?.[0] || "About the editor.";
+    page.frontmatter.subtitle || page.frontmatter.lead?.[0] || "关于编辑者。";
 
   return buildPageMetadata({
-    title: page.frontmatter.title || "About",
+    title: page.frontmatter.title || "关于",
     description,
     pathname: "/about",
   });
@@ -47,9 +47,9 @@ export default async function AboutPage() {
   const lead = frontmatter.lead?.length ? frontmatter.lead : extractLead(content);
 
   return (
-    <main className="relative space-y-[var(--section-y)] py-[var(--section-y)]">
-      <PaperAtmosphere />
+    <main className="relative  pt-(--section-y) ">
       <KintsugiGate />
+      <PaperAtmosphere />
       <Container variant="wide" className="space-y-12">
         <AboutHero
           title={frontmatter.title}

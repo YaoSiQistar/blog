@@ -22,6 +22,20 @@ export type SearchResultItem = {
   score: number;
 };
 
+export type SearchIndexItem = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  contentText: string;
+  headings: string[];
+  category: string;
+  tags: string[];
+  date: string;
+  dateTimestamp: number;
+  readingTime: string;
+  cover?: string;
+};
+
 export type SearchResultsPage = {
   items: SearchResultItem[];
   total: number;

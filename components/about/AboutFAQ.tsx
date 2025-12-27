@@ -17,7 +17,7 @@ export default function AboutFAQ({ items }: AboutFAQProps) {
   return (
     <section className="space-y-4">
       <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
-        Questions
+        常见问题
       </p>
       <div className="rounded-[var(--radius)] border border-border bg-card/70 px-4">
         <Accordion type="multiple">

@@ -30,10 +30,10 @@ export default function ProfilePlaque({
     if (!email) return;
     try {
       await navigator.clipboard.writeText(email);
-      toast.success("Email copied.");
+      toast.success("邮箱已复制。");
     } catch (error) {
       console.error(error);
-      toast.error("Unable to copy email.");
+      toast.error("无法复制邮箱。");
     }
   };
 
@@ -47,23 +47,23 @@ export default function ProfilePlaque({
       <div className="flex items-center gap-4">
         {avatar ? (
           <div className="relative size-16 overflow-hidden rounded-full border border-border/70">
-            <Image src={avatar} alt={name ?? "Profile photo"} fill className="object-cover" />
+            <Image src={avatar} alt={name ?? "个人头像"} fill className="object-cover" />
           </div>
         ) : null}
         <div className="space-y-1">
           <p className="text-xs uppercase tracking-[0.32em] text-muted-foreground/70">
-            Profile
+            档案
           </p>
-          <div className="text-lg font-semibold text-foreground">{name ?? "Editor"}</div>
-          <div className="text-sm text-muted-foreground">{role ?? "Writer / Builder"}</div>
+          <div className="text-lg font-semibold text-foreground">{name ?? "编辑"}</div>
+          <div className="text-sm text-muted-foreground">{role ?? "作者 / 构建者"}</div>
         </div>
       </div>
 
       <div className="grid gap-2 text-sm text-muted-foreground">
-        {location ? <div>Based in {location}.</div> : null}
+        {location ? <div>所在地：{location}</div> : null}
         {now ? (
           <div className="rounded-full border border-border/70 bg-background/70 px-3 py-1 text-[0.7rem] uppercase tracking-[0.3em] text-foreground/80">
-            Now: {now}
+            现在：{now}
           </div>
         ) : null}
         {email ? (
@@ -94,7 +94,7 @@ export default function ProfilePlaque({
       {email ? (
         <Button type="button" variant="ghost" size="sm" onClick={handleCopyEmail}>
           <Copy className="size-3.5" />
-          Copy email
+          复制邮箱
         </Button>
       ) : null}
     </div>

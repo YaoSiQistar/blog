@@ -1,18 +1,7 @@
-import type { Post } from "@/lib/content/types";
 import { buildSnippet } from "./snippet";
-import type { SearchQueryState, SearchResultItem, SearchResultsPage } from "./types";
+import type { SearchIndexItem, SearchQueryState, SearchResultItem, SearchResultsPage } from "./types";
 
 const DEFAULT_PAGE_SIZE = 8;
-
-const stripMarkdown = (value: string) =>
-  value
-    .replace(/```[\s\S]*?```/g, " ")
-    .replace(/`([^`]+)`/g, "$1")
-    .replace(/!\[.*?\]\(.*?\)/g, " ")
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-    .replace(/[#>*_~-]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
 
 const tokenize = (query: string) =>
   query
@@ -46,16 +35,16 @@ const scoreField = (value: string, tokens: string[], weight: number) => {
   };
 };
 
-const getSnippetSource = (plainContent: string, excerpt: string, query: string) => {
-  const lower = plainContent.toLowerCase();
+const getSnippetSource = (contentText: string, excerpt: string, query: string) => {
+  const lower = contentText.toLowerCase();
   const tokens = tokenize(query);
   const hasContentMatch = tokens.some((token) => lower.includes(token));
-  if (hasContentMatch) return plainContent;
-  return excerpt || plainContent;
+  if (hasContentMatch) return contentText;
+  return excerpt || contentText;
 };
 
 export function searchPosts(
-  posts: Post[],
+  posts: SearchIndexItem[],
   state: SearchQueryState,
   pageSize = DEFAULT_PAGE_SIZE
 ): SearchResultsPage {
@@ -84,7 +73,7 @@ export function searchPosts(
   const dateMap = new Map(filtered.map((post) => [post.slug, post.dateTimestamp]));
 
   filtered.forEach((post) => {
-    const plainContent = stripMarkdown(post.content);
+    const contentText = post.contentText ?? "";
     const scope = state.scope;
     let score = 0;
 
@@ -98,12 +87,12 @@ export function searchPosts(
     }
 
     if (scope === "all" || scope === "content") {
-      score += scoreField(plainContent, tokens, 1).score;
+      score += scoreField(contentText, tokens, 1).score;
     }
 
     if (score <= 0) return;
 
-    const source = getSnippetSource(plainContent, post.excerpt, q);
+    const source = getSnippetSource(contentText, post.excerpt, q);
     const snippet = buildSnippet(source, q, 85);
 
     results.push({

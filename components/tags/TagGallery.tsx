@@ -17,7 +17,7 @@ export default function TagGallery({ tags, className, compact }: TagGalleryProps
   if (!tags.length) {
     return (
       <p className="text-sm text-muted-foreground">
-        No tags in this section yet.
+        当前分组暂无标签。
       </p>
     );
   }
@@ -45,7 +45,7 @@ export default function TagGallery({ tags, className, compact }: TagGalleryProps
             </span>
           </div>
           <div className="mt-1 text-[0.6rem] uppercase tracking-[0.35em] text-muted-foreground/60">
-            Archive Tag
+            归档标签
           </div>
         </Link>
       ))}

@@ -10,7 +10,7 @@ type CopyButtonProps = {
 
 export function CopyButton(props?: CopyButtonProps | null) {
   const safeProps = props ?? { value: "" };
-  const { value = "", label = "Copy", className } = safeProps;
+  const { value = "", label = "复制", className } = safeProps;
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export function CopyButton(props?: CopyButtonProps | null) {
       onClick={handleCopy}
       className={`rounded-full border border-border/70 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.45em] text-muted-foreground transition hover:border-foreground hover:text-foreground ${className ?? ""}`}
     >
-      {copied ? "Copied" : label}
+      {copied ? "已复制" : label}
     </button>
   );
 }

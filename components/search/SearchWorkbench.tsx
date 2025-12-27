@@ -122,7 +122,7 @@ export default function SearchWorkbench({ categories, tags }: SearchWorkbenchPro
   const toggleTag = (slug: string) => {
     const exists = current.tags.includes(slug);
     if (!exists && current.tags.length >= MAX_SEARCH_TAGS) {
-      toast.info(`Select up to ${MAX_SEARCH_TAGS} tags.`);
+      toast.info(`最多选择 ${MAX_SEARCH_TAGS} 个标签。`);
       return;
     }
     const nextTags = exists ? current.tags.filter((tag) => tag !== slug) : [...current.tags, slug];
@@ -146,10 +146,10 @@ export default function SearchWorkbench({ categories, tags }: SearchWorkbenchPro
       const href = buildSearchHref(current);
       const url = `${window.location.origin}${href}`;
       await navigator.clipboard.writeText(url);
-      toast.success("Search link copied.");
+      toast.success("搜索链接已复制。");
     } catch (error) {
       console.error(error);
-      toast.error("Unable to copy link.");
+      toast.error("无法复制链接。");
     }
   };
 
@@ -172,7 +172,7 @@ export default function SearchWorkbench({ categories, tags }: SearchWorkbenchPro
             ref={inputRef}
             value={queryValue}
             onChange={(event) => setQueryValue(event.target.value)}
-            placeholder="Search the archive"
+            placeholder="搜索归档"
             className="h-8 border-0 bg-transparent px-0 text-sm focus-visible:ring-0"
             aria-label="Search the archive"
           />
@@ -193,7 +193,7 @@ export default function SearchWorkbench({ categories, tags }: SearchWorkbenchPro
         </div>
 
         <Button type="submit" className="rounded-full">
-          Search
+          搜索
         </Button>
 
         <div className="hidden items-center gap-3 lg:flex">
@@ -204,35 +204,35 @@ export default function SearchWorkbench({ categories, tags }: SearchWorkbenchPro
             className="rounded-full border border-border-subtle bg-background/70 p-1"
           >
             <ToggleGroupItem value="all" className="px-3 text-xs uppercase tracking-[0.3em]">
-              All
+              全部
             </ToggleGroupItem>
             <ToggleGroupItem value="title" className="px-3 text-xs uppercase tracking-[0.3em]">
-              Title
+              标题
             </ToggleGroupItem>
             <ToggleGroupItem value="content" className="px-3 text-xs uppercase tracking-[0.3em]">
-              Content
+              正文
             </ToggleGroupItem>
             <ToggleGroupItem value="tags" className="px-3 text-xs uppercase tracking-[0.3em]">
-              Tags
+              标签
             </ToggleGroupItem>
           </ToggleGroup>
 
           <Select value={current.sort} onValueChange={handleSortChange}>
             <SelectTrigger className="w-[160px] rounded-full text-xs uppercase tracking-[0.3em]">
-              <SelectValue placeholder="Sort" />
+              <SelectValue placeholder="排序" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="relevance">Relevance</SelectItem>
-              <SelectItem value="latest">Latest</SelectItem>
+              <SelectItem value="relevance">相关度</SelectItem>
+              <SelectItem value="latest">最新</SelectItem>
             </SelectContent>
           </Select>
 
           <Select value={current.category ?? "all"} onValueChange={handleCategoryChange}>
             <SelectTrigger className="w-[180px] rounded-full text-xs uppercase tracking-[0.3em]">
-              <SelectValue placeholder="Category" />
+              <SelectValue placeholder="分类" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All categories</SelectItem>
+              <SelectItem value="all">全部分类</SelectItem>
               {categories.map((category) => (
                 <SelectItem key={category.slug} value={category.slug}>
                   {category.slug} ({category.count})
@@ -244,15 +244,15 @@ export default function SearchWorkbench({ categories, tags }: SearchWorkbenchPro
           <Popover open={tagOpen} onOpenChange={setTagOpen}>
             <PopoverTrigger asChild>
               <Button variant="secondary" className="rounded-full">
-                Tags ({current.tags.length})
+                标签（{current.tags.length}）
               </Button>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-72 p-0">
               <Command>
-                <CommandInput placeholder="Filter tags" />
+                <CommandInput placeholder="筛选标签" />
                 <CommandList>
-                  <CommandEmpty>No tags found.</CommandEmpty>
-                  <CommandGroup heading="Tags">
+                  <CommandEmpty>未找到标签。</CommandEmpty>
+                  <CommandGroup heading="标签">
                     {tags.map((tag) => {
                       const active = current.tags.includes(tag.slug);
                       return (
@@ -279,11 +279,11 @@ export default function SearchWorkbench({ categories, tags }: SearchWorkbenchPro
 
         <div className="ml-auto hidden items-center gap-2 lg:flex">
           <Button type="button" variant="ghost" onClick={handleReset}>
-            Reset
+            重置
           </Button>
           <Button type="button" variant="ghost" onClick={handleCopy} aria-label="Copy search link">
             <Copy className="mr-2 size-4" />
-            Copy link
+            复制链接
           </Button>
         </div>
 
@@ -292,16 +292,16 @@ export default function SearchWorkbench({ categories, tags }: SearchWorkbenchPro
             <SheetTrigger asChild>
               <Button type="button" variant="secondary">
                 <SlidersHorizontal className="mr-2 size-4" />
-                Filters
+                筛选
               </Button>
             </SheetTrigger>
             <SheetContent side="bottom">
               <SheetHeader>
-                <SheetTitle>Filters</SheetTitle>
+                <SheetTitle>筛选</SheetTitle>
               </SheetHeader>
               <div className="space-y-4 p-4">
                 <div className="space-y-2">
-                  <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">Scope</p>
+                  <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">范围</p>
                   <ToggleGroup
                     type="single"
                     value={current.scope}
@@ -309,41 +309,41 @@ export default function SearchWorkbench({ categories, tags }: SearchWorkbenchPro
                     className="rounded-full border border-border-subtle bg-background/70 p-1"
                   >
                     <ToggleGroupItem value="all" className="px-3 text-xs uppercase tracking-[0.3em]">
-                      All
+                      全部
                     </ToggleGroupItem>
                     <ToggleGroupItem value="title" className="px-3 text-xs uppercase tracking-[0.3em]">
-                      Title
+                      标题
                     </ToggleGroupItem>
                     <ToggleGroupItem value="content" className="px-3 text-xs uppercase tracking-[0.3em]">
-                      Content
+                      正文
                     </ToggleGroupItem>
                     <ToggleGroupItem value="tags" className="px-3 text-xs uppercase tracking-[0.3em]">
-                      Tags
+                      标签
                     </ToggleGroupItem>
                   </ToggleGroup>
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">Sort</p>
+                  <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">排序</p>
                   <Select value={current.sort} onValueChange={handleSortChange}>
                     <SelectTrigger className="w-full rounded-full text-xs uppercase tracking-[0.3em]">
-                      <SelectValue placeholder="Sort" />
+                      <SelectValue placeholder="排序" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="relevance">Relevance</SelectItem>
-                      <SelectItem value="latest">Latest</SelectItem>
+                      <SelectItem value="relevance">相关度</SelectItem>
+                      <SelectItem value="latest">最新</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">Category</p>
+                  <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">分类</p>
                   <Select value={current.category ?? "all"} onValueChange={handleCategoryChange}>
                     <SelectTrigger className="w-full rounded-full text-xs uppercase tracking-[0.3em]">
-                      <SelectValue placeholder="Category" />
+                      <SelectValue placeholder="分类" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All categories</SelectItem>
+                      <SelectItem value="all">全部分类</SelectItem>
                       {categories.map((category) => (
                         <SelectItem key={category.slug} value={category.slug}>
                           {category.slug} ({category.count})
@@ -354,7 +354,7 @@ export default function SearchWorkbench({ categories, tags }: SearchWorkbenchPro
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">Tags</p>
+                  <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">标签</p>
                   <div className="grid gap-2">
                     {tags.map((tag) => {
                       const active = current.tags.includes(tag.slug);
@@ -379,11 +379,11 @@ export default function SearchWorkbench({ categories, tags }: SearchWorkbenchPro
 
                 <div className="flex flex-wrap items-center gap-2">
                   <Button type="button" variant="ghost" onClick={handleReset}>
-                    Reset
+                    重置
                   </Button>
                   <Button type="button" variant="ghost" onClick={handleCopy}>
                     <Copy className="mr-2 size-4" />
-                    Copy link
+                    复制链接
                   </Button>
                 </div>
               </div>
@@ -396,7 +396,7 @@ export default function SearchWorkbench({ categories, tags }: SearchWorkbenchPro
         <div className="flex flex-wrap items-center gap-2">
           {current.q ? (
             <Badge variant="outline" className="rounded-full border-border-subtle text-xs uppercase tracking-[0.3em]">
-              Query: {current.q}
+              关键词：{current.q}
               <button
                 type="button"
                 className="ml-2"
@@ -409,7 +409,7 @@ export default function SearchWorkbench({ categories, tags }: SearchWorkbenchPro
           ) : null}
           {current.category ? (
             <Badge className="rounded-full border-border-subtle bg-primary/10 text-xs uppercase tracking-[0.3em] text-foreground">
-              Category: {current.category}
+              分类：{current.category}
               <button
                 type="button"
                 className="ml-2"
@@ -439,7 +439,7 @@ export default function SearchWorkbench({ categories, tags }: SearchWorkbenchPro
           ))}
           {current.scope !== "all" ? (
             <Badge variant="outline" className="rounded-full border-border-subtle text-xs uppercase tracking-[0.3em]">
-              Scope: {current.scope}
+              范围：{current.scope === "title" ? "标题" : current.scope === "content" ? "正文" : "标签"}
               <button
                 type="button"
                 className="ml-2"
@@ -452,7 +452,7 @@ export default function SearchWorkbench({ categories, tags }: SearchWorkbenchPro
           ) : null}
           {current.sort !== "relevance" ? (
             <Badge variant="outline" className="rounded-full border-border-subtle text-xs uppercase tracking-[0.3em]">
-              Sort: {current.sort}
+              排序：{current.sort === "latest" ? "最新" : "相关度"}
               <button
                 type="button"
                 className="ml-2"

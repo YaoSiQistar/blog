@@ -38,7 +38,7 @@ export default function TagHero({
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="space-y-3">
           <p className="text-xs uppercase tracking-[0.45em] text-muted-foreground/70">
-            Tag Dossier
+            标签专题
           </p>
           <h1 className="font-serif text-4xl font-semibold leading-tight text-foreground sm:text-5xl">
             {name}
@@ -46,8 +46,8 @@ export default function TagHero({
           <p className="text-sm text-muted-foreground">{subtitle}</p>
         </div>
         <div className="flex flex-col items-end gap-2 text-[0.65rem] uppercase tracking-[0.35em] text-muted-foreground/70">
-          <span>{count} works</span>
-          {latestDate ? <span>Updated {latestDate}</span> : null}
+          <span>{count} 篇</span>
+          {latestDate ? <span>更新于 {latestDate}</span> : null}
         </div>
       </div>
 

@@ -61,7 +61,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="zh-CN"
       className="scroll-smooth"
       data-scroll-behavior="smooth"
     >

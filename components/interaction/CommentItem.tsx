@@ -15,7 +15,7 @@ type CommentItemProps = {
 
 export default function CommentItem({ comment, animate = true }: CommentItemProps) {
   const reduced = useReducedMotion();
-  const name = comment.nickname?.trim() || "Anonymous";
+  const name = comment.nickname?.trim() || "匿名";
   const initial = name.charAt(0).toUpperCase();
   const relative = formatRelativeTime(comment.created_at);
   const absolute = formatAbsoluteTime(comment.created_at);

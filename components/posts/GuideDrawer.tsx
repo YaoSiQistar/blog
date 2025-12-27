@@ -23,14 +23,14 @@ export default function GuideDrawer({ categories, tags }: GuideDrawerProps) {
       {/* 抽屉触发器 - 点击按钮打开抽屉 */}
       <DrawerTrigger asChild>
         <Button variant="secondary" className="rounded-full">
-          <Map className="mr-2 size-4" /> Guide  {/* 地图图标和文字 */}
+          <Map className="mr-2 size-4" /> 导览  {/* 地图图标和文字 */}
         </Button>
       </DrawerTrigger>
       {/* 抽屉内容区域 */}
       <DrawerContent className="p-4">
         {/* 抽屉头部，包含标题 */}
         <DrawerHeader>
-          <DrawerTitle>Gallery Guide</DrawerTitle>  {/* 抽屉标题 */}
+          <DrawerTitle>展厅导览</DrawerTitle>  {/* 抽屉标题 */}
         </DrawerHeader>
         {/* 抽屉主体内容区域 */}
         <div className="px-2 pb-6">

@@ -8,8 +8,8 @@ import { getAllTags, getHotTags } from "@/lib/content";
 import { buildPageMetadata } from "@/lib/seo/og";
 
 export const metadata = buildPageMetadata({
-  title: "Tags",
-  description: "Browse the topic wall and discover recurring editorial threads.",
+  title: "标签",
+  description: "浏览主题墙，发现持续出现的编辑线索。",
   pathname: "/tags",
 });
 
@@ -53,7 +53,7 @@ export default async function TagsPage({ searchParams }: TagsPageProps) {
         title: letter,
         tags: ordered,
         meta: {
-          countLabel: `${ordered.length} tags`,
+          countLabel: `${ordered.length} 个标签`,
         },
       };
     });
@@ -63,26 +63,26 @@ export default async function TagsPage({ searchParams }: TagsPageProps) {
     sections = [
       {
         id: "sec-popular",
-        title: "Popular",
+        title: "热门",
         tags: popular,
         meta: {
-          countLabel: `${popular.length} tags`,
+          countLabel: `${popular.length} 个标签`,
         },
       },
       {
         id: "sec-all",
-        title: "All",
+        title: "全部",
         tags,
         meta: {
-          countLabel: `${tags.length} tags`,
+          countLabel: `${tags.length} 个标签`,
         },
       },
       {
         id: "sec-end",
-        title: "End",
+        title: "终章",
         tags: [],
         meta: {
-          note: "You have reached the end of the gallery wall.",
+          note: "你已经到达标签墙的尽头。",
         },
       },
     ];
@@ -98,20 +98,20 @@ export default async function TagsPage({ searchParams }: TagsPageProps) {
     <main className="space-y-[var(--section-y)] py-[var(--section-y)]">
       <Container variant="wide" className="space-y-6">
         <PageHeader
-          label="Tags"
-          title="The Topic Wall"
-          description="A museum-style view of every topic thread. Follow the guide rail to drift between curations."
+          label="标签"
+          title="主题墙"
+          description="以博物馆式视角浏览全部主题线索，沿着导览轨迹穿梭于不同分组。"
         />
         <RuleLine />
         <div className="flex flex-wrap items-center justify-between gap-4 rounded-[var(--radius)] border border-border bg-card/70 px-4 py-3">
           <div className="flex flex-wrap items-center gap-4">
-            <Kicker label="Catalog" caption="Tags" />
+            <Kicker label="目录" caption="标签" />
             <span className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
-              {tags.length} total
+              共 {tags.length} 个
             </span>
           </div>
           <span className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
-            Mode - {useAlphabet ? "Alphabet" : "Curated"}
+            模式 - {useAlphabet ? "字母索引" : "精选"}
           </span>
         </div>
       </Container>

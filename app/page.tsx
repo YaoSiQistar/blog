@@ -9,8 +9,8 @@ import { getAllCategories, getAllTags, getPostsPaged } from "@/lib/content";
 import { buildPageMetadata } from "@/lib/seo/og";
 
 export const metadata = buildPageMetadata({
-  title: "Home",
-  description: "A warm paper editorial journal with cinematic motion notes.",
+  title: "首页",
+  description: "带有电影感动效的暖纸质感博客。",
   pathname: "/",
 });
 
@@ -35,31 +35,31 @@ export default async function Home() {
   const herokintsugNodes = [
     {
       id: "module-hero",
-      label: "Hero",
+      label: "序章",
       kind: "module",
       target: { type: "scroll", selector: "#hero" },
-      meta: { subtitle: "Entrance" },
+      meta: { subtitle: "入口" },
     },
     {
       id: "module-latest",
-      label: "Latest",
+      label: "最新",
       kind: "module",
       target: { type: "scroll", selector: "#latest" },
-      meta: { subtitle: "Catalog" },
+      meta: { subtitle: "目录" },
     },
     {
       id: "module-galleries",
-      label: "Galleries",
+      label: "馆藏",
       kind: "module",
       target: { type: "scroll", selector: "#galleries" },
-      meta: { subtitle: "Rooms" },
+      meta: { subtitle: "厅室" },
     },
     {
       id: "module-footer",
-      label: "Curator note",
+      label: "编者札记",
       kind: "module",
       target: { type: "scroll", selector: "#footer" },
-      meta: { subtitle: "Closing" },
+      meta: { subtitle: "收束" },
     },
   ] as const;
 

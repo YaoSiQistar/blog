@@ -21,9 +21,9 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const reset = resolvedSearchParams?.reset;
   const notice =
     typeof reset === "string" && reset === "1"
-      ? "Password updated. Sign in again."
+      ? "密码已更新，请重新登录。"
       : typeof verified === "string" && verified === "1"
-        ? "Email verified. Sign in to continue."
+        ? "邮箱已验证，请登录继续。"
         : null;
 
   return <AuthFlipPage mode="login" redirectTo={redirectTo} notice={notice} />;

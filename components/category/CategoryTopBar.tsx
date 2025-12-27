@@ -14,10 +14,10 @@ export default function CategoryTopBar({ categoryName, backHref }: CategoryTopBa
         className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-2 text-[0.65rem] uppercase tracking-[0.35em] text-muted-foreground transition hover:border-primary/50 hover:text-foreground"
       >
         <ChevronLeft className="size-3.5" />
-        Back to Galleries
+        返回展厅
       </Link>
       <span className="text-[0.6rem] uppercase tracking-[0.45em] text-muted-foreground/60">
-        Galleries / {categoryName}
+        展厅 / {categoryName}
       </span>
     </div>
   );

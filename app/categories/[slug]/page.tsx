@@ -152,9 +152,9 @@ export default async function CategoryDetailPage({
 
         <div className="flex items-center justify-between pt-6 text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
           <span>
-            Page {paged.page} of {paged.totalPages}
+            第 {paged.page} 页 / 共 {paged.totalPages} 页
           </span>
-          <span>{paged.total} works</span>
+          <span>{paged.total} 篇</span>
         </div>
 
         <PostsPagination

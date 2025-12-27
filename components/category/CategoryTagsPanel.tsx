@@ -41,20 +41,20 @@ export default function CategoryTagsPanel({
   return (
     <div className={cn("space-y-3", className)}>
       <div className="flex items-center justify-between text-[0.6rem] uppercase tracking-[0.35em] text-muted-foreground/70">
-        <span>Top tags</span>
+        <span>热门标签</span>
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button variant="ghost" size="sm" className="h-7 gap-2 text-[0.55rem] uppercase tracking-[0.3em]">
               <Search className="size-3" />
-              Find tag
+              查找标签
             </Button>
           </PopoverTrigger>
           <PopoverContent align="end" className="w-72 p-0">
             <Command>
-              <CommandInput placeholder="Search tags" />
+              <CommandInput placeholder="搜索标签" />
               <CommandList>
-                <CommandEmpty>No tags found.</CommandEmpty>
-                <CommandGroup heading="Tags">
+                <CommandEmpty>未找到标签。</CommandEmpty>
+                <CommandGroup heading="标签">
                   {tags.map((tag) => {
                     const active = selected.includes(tag.slug);
                     return (

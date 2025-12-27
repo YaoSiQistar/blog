@@ -2,20 +2,18 @@ import { z } from "zod";
 
 import type { PostFrontmatter } from "./types";
 
-export const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+export const slugRegex = /^[^/]+$/;
 
 const frontmatterSchema = z
   .object({
     title: z.string().min(1, "title is required"),
     date: z.string().min(1, "date is required"),
-    slug: z
-      .string()
-      .regex(slugRegex, "slug must be lowercase and kebab-case"),
+    slug: z.string().min(1, "slug is required").regex(slugRegex, "slug must not contain '/'"),
     category: z
       .string()
-      .regex(slugRegex, "category must be lowercase and kebab-case"),
+      .regex(slugRegex, "category must not contain '/'"),
     tags: z
-      .array(z.string().regex(slugRegex, "tags must be lowercase and kebab-case"))
+      .array(z.string().regex(slugRegex, "tags must not contain '/'"))
       .optional()
       .default([]),
     excerpt: z.string().optional(),
@@ -32,11 +30,7 @@ const formatIssues = (issues: z.ZodIssue[]) =>
     .map((issue) => `${issue.path.join(".") || "frontmatter"}: ${issue.message}`)
     .join("; ");
 
-export function parseFrontmatter(
-  data: unknown,
-  filePath: string,
-  fileSlug: string
-): PostFrontmatter {
+export function parseFrontmatter(data: unknown, filePath: string): PostFrontmatter {
   const result = frontmatterSchema.safeParse(data);
   if (!result.success) {
     throw new Error(`[content] ${filePath}: ${formatIssues(result.error.issues)}`);
@@ -46,12 +40,6 @@ export function parseFrontmatter(
   if (Number.isNaN(parsedDate.getTime())) {
     throw new Error(
       `[content] ${filePath}: date must be a valid ISO or YYYY-MM-DD string`
-    );
-  }
-
-  if (result.data.slug !== fileSlug) {
-    throw new Error(
-      `[content] ${filePath}: slug "${result.data.slug}" must match filename slug "${fileSlug}"`
     );
   }
 

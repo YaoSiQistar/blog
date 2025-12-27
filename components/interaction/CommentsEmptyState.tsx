@@ -20,9 +20,9 @@ export default function CommentsEmptyState({ onFocusComposer }: CommentsEmptySta
       animate="visible"
       className="rounded-[var(--radius)] border border-border/60 bg-card/50 px-4 py-4 text-sm"
     >
-      <p className="font-medium text-foreground">No published notes yet.</p>
+      <p className="font-medium text-foreground">暂无已发布评论。</p>
       <p className="mt-1 text-xs text-muted-foreground">
-        Be the first to leave a note - it will appear after review.
+        你可以成为第一个留言者，审核后将会显示。
       </p>
       <Button
         type="button"
@@ -31,7 +31,7 @@ export default function CommentsEmptyState({ onFocusComposer }: CommentsEmptySta
         className="mt-3"
         onClick={onFocusComposer}
       >
-        Write a note
+        写一条评论
       </Button>
     </motion.div>
   );

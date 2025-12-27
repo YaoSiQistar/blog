@@ -34,10 +34,9 @@ export default function HomeGalleries({ categories, tags }: HomeGalleriesProps) 
           viewport={{ once: true, amount: 0.3 }}
           className="mb-10 space-y-3"
         >
-          <Kicker label="Galleries" caption="Entrance" />
+          <Kicker label="展厅" caption="入口" />
           <p className="max-w-2xl text-sm text-muted-foreground">
-            Navigate the archive by room. Categories behave like wings in a museum,
-            while tags act as small placards that connect related works.
+            以房间为单位浏览归档。分类像博物馆的馆翼，标签则像连接相关作品的小展签。
           </p>
         </motion.div>
 
@@ -50,7 +49,7 @@ export default function HomeGalleries({ categories, tags }: HomeGalleriesProps) 
             className="rounded-[var(--radius)] border border-border bg-card/70 p-6"
           >
             <div className="text-xs uppercase tracking-[0.35em] text-muted-foreground">
-              Categories
+              分类
             </div>
             <div className="mt-4 grid gap-3">
               {categories.map((item) => (
@@ -75,7 +74,7 @@ export default function HomeGalleries({ categories, tags }: HomeGalleriesProps) 
             className="rounded-[var(--radius)] border border-border bg-card/70 p-6"
           >
             <div className="text-xs uppercase tracking-[0.35em] text-muted-foreground">
-              Tags
+              标签
             </div>
             <div className="mt-4 grid gap-3">
               {tags.slice(0, 8).map((item) => (

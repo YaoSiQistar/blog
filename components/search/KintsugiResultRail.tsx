@@ -49,13 +49,13 @@ export default function KintsugiResultRail({
     <div className="rounded-[var(--radius)] border border-border/70 bg-card/60 p-4 shadow-soft">
       <div className="space-y-1">
         <div className="text-[0.6rem] uppercase tracking-[0.35em] text-muted-foreground/70">
-          Result Rail
+          结果轨迹
         </div>
         <div className="text-xs uppercase tracking-[0.35em] text-foreground">
-          Page {page} / {totalPages}
+          第 {page} / {totalPages} 页
         </div>
         <div className="text-[0.6rem] uppercase tracking-[0.3em] text-muted-foreground/70">
-          {total} results
+          {total} 条结果
         </div>
       </div>
 

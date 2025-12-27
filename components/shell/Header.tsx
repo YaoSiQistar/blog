@@ -7,17 +7,18 @@ import { usePathname } from "next/navigation";
 import AnimatedLink from "@/components/motion/AnimatedLink";
 import { motionTokens } from "@/lib/motion/tokens";
 import { useReducedMotion } from "@/lib/motion/reduced";
+import { siteConfig } from "@/lib/seo/site";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "Posts", href: "/posts" },
-  { label: "Categories", href: "/categories" },
-  { label: "tags", href: "/tags" },
-  { label: "Search", href: "/search" },
-  { label: "About", href: "/about" },
-  { label: "Me", href: "/me" },
-  { label: "Login", href: "/login" }
+  { label: "首页", href: "/" },
+  { label: "文章", href: "/posts" },
+  { label: "分类", href: "/categories" },
+  { label: "标签", href: "/tags" },
+  { label: "搜索", href: "/search" },
+  { label: "关于", href: "/about" },
+  { label: "我的", href: "/me" },
+  { label: "登录", href: "/login" }
 ];
 
 type HeaderVariant = "default" | "hero";
@@ -73,7 +74,7 @@ export default function Header({ variant = "default" }: HeaderProps) {
           underlineThickness={1}
           underlineOffset={-4}
         >
-          My Blog
+          {siteConfig.siteName}
         </AnimatedLink>
 
         <nav className="flex items-center gap-6 text-xs uppercase tracking-[0.25em]">

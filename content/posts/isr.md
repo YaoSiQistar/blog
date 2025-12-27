@@ -6,7 +6,6 @@ slug: "isr"
 category: "frontend"
 tags: ["isr", "incremental-static-regeneration", "nextjs", "ssg", "ssr", "cdn"]
 excerpt: "把 ISR 讲到你真的会用、会选、会排坑的程度：理解它如何把 SSG 的极致快与 SSR 的可更新结合起来，构成可控的缓存+再生架构。"
-cover: "https://iwswvelanxnqhmayeayl.supabase.co/storage/v1/object/public/tp/1.jpg"
 draft: false
 featured: false
 pinned: false

@@ -19,7 +19,15 @@ type CalloutProps = HTMLAttributes<HTMLDivElement> & {
 export function Callout(props: CalloutProps = {}) {
   const { variant = "note", title, className, children, ...rest } = props;
   const Icon = icons[variant] ?? Info;
-  const displayTitle = title ?? variant.toUpperCase();
+  const displayTitle =
+    title ??
+    ({
+      note: "提示",
+      tip: "技巧",
+      warning: "注意",
+      danger: "警告",
+      theorem: "定理",
+    }[variant] ?? variant.toUpperCase());
 
   return (
     <div

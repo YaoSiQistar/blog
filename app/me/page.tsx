@@ -13,6 +13,8 @@ import { getServerUser } from "@/lib/auth/session";
 import { buildRedirectQuery } from "@/lib/auth/redirect";
 import { parseDossierParams, buildDossierHref } from "@/lib/me/query";
 import { getFavoritesForUser } from "@/lib/me/favorites";
+import { getLikesForUser } from "@/lib/me/likes";
+import { getCommentsForUser } from "@/lib/me/comments";
 
 type MePageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -33,8 +35,12 @@ export default async function MePage({ searchParams }: MePageProps) {
       ? await getFavoritesForUser(user.id, { q: state.q, sort: state.sort })
       : [];
 
-  const likes: ActivityItem[] = [];
-  const comments: ActivityItem[] = [];
+  const likes: ActivityItem[] =
+    state.tab === "likes" ? await getLikesForUser(user.id, { q: state.q }) : [];
+  const comments: ActivityItem[] =
+    state.tab === "comments"
+      ? await getCommentsForUser(user.id, { q: state.q })
+      : [];
 
   return (
     <main className="relative py-[var(--section-y)]">
@@ -57,7 +63,7 @@ export default async function MePage({ searchParams }: MePageProps) {
 
         {state.tab === "likes" ? (
           likes.length > 0 ? (
-            <ActivityList items={likes} emptyLabel="No likes yet." />
+            <ActivityList items={likes} emptyLabel="暂无点赞。" />
           ) : (
             <EmptyDossierState tab="likes" />
           )
@@ -65,13 +71,13 @@ export default async function MePage({ searchParams }: MePageProps) {
 
         {state.tab === "comments" ? (
           comments.length > 0 ? (
-            <ActivityList items={comments} emptyLabel="No comments yet." />
+            <ActivityList items={comments} emptyLabel="暂无评论。" />
           ) : (
             <EmptyDossierState tab="comments" />
           )
         ) : null}
 
-        <p className="text-xs text-muted-foreground">This dossier is private.</p>
+        <p className="text-xs text-muted-foreground">此档案仅本人可见。</p>
       </Container>
     </main>
   );

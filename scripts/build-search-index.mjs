@@ -9,6 +9,8 @@ import { toString } from "mdast-util-to-string";
 const POSTS_DIR = path.join(process.cwd(), "content", "posts");
 const OUT_PATH = path.join(process.cwd(), "public", "search-index.json");
 
+const WORDS_PER_MINUTE = 360;
+
 const stripMarkdown = (value) =>
   value
     .replace(/```[\s\S]*?```/g, " ")
@@ -41,12 +43,23 @@ for (const file of files) {
   if (!slug) continue;
 
   const stripped = stripMarkdown(content);
+  const plain = stripMarkdown(content);
+  const wordCount = plain ? plain.split(/\s+/).length : 0;
+  const readingTime = `${Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE))} min`;
+  const parsedDate = data.date ? new Date(data.date) : null;
+
   index.push({
     slug,
     title: data.title ?? "",
     excerpt: data.excerpt ?? "",
     headings: extractHeadings(content),
-    contentText: stripped,
+    contentText: plain,
+    category: data.category ?? "",
+    tags: Array.isArray(data.tags) ? data.tags : [],
+    date: data.date ?? "",
+    dateTimestamp: parsedDate ? parsedDate.getTime() : 0,
+    readingTime,
+    cover: data.cover,
   });
 }
 

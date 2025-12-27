@@ -22,7 +22,7 @@ export default function RecentSearches() {
     <div className="rounded-[var(--radius)] border border-border/70 bg-background/60 p-4">
       <div className="flex items-center justify-between">
         <div className="text-[0.6rem] uppercase tracking-[0.4em] text-muted-foreground">
-          Recent
+          最近
         </div>
         {recent.length > 0 ? (
           <button
@@ -30,13 +30,13 @@ export default function RecentSearches() {
             onClick={handleClear}
             className="text-[0.55rem] uppercase tracking-[0.35em] text-muted-foreground/70"
           >
-            Clear
+            清除
           </button>
         ) : null}
       </div>
       <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
         {recent.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No recent searches yet.</p>
+          <p className="text-sm text-muted-foreground">暂无最近搜索。</p>
         ) : (
           recent.map((term) => (
             <Link

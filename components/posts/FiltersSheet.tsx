@@ -40,16 +40,16 @@ export default function FiltersSheet({ tags }: FiltersSheetProps) {
     <Sheet>
       <SheetTrigger asChild>
         <Button variant="secondary" className="rounded-full">
-          <Filter className="mr-2 size-4" /> Filters
+          <Filter className="mr-2 size-4" /> 筛选
         </Button>
       </SheetTrigger>
       <SheetContent side="bottom" className="space-y-6">
         <SheetHeader>
-          <SheetTitle>Editorial Filters</SheetTitle>
+          <SheetTitle>博客筛选</SheetTitle>
         </SheetHeader>
 
         <div className="space-y-3">
-          <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">Sort</p>
+          <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">排序</p>
           <ToggleGroup
             type="single"
             value={current.sort}
@@ -57,16 +57,16 @@ export default function FiltersSheet({ tags }: FiltersSheetProps) {
             className="rounded-full border border-border-subtle bg-background/70 p-1"
           >
             <ToggleGroupItem value="latest" className="px-3 text-xs uppercase tracking-[0.3em]">
-              Latest
+              最新
             </ToggleGroupItem>
             <ToggleGroupItem value="hot" className="px-3 text-xs uppercase tracking-[0.3em]">
-              Hot
+              热门
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
 
         <div className="space-y-3">
-          <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">Tags</p>
+          <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">标签</p>
           <ScrollArea className="h-48">
             <div className="flex flex-wrap gap-2">
               {tags.map((tag) => {

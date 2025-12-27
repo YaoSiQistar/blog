@@ -8,10 +8,10 @@ const siteUrl = rawSiteUrl.replace(/\/+$/, "");
 
 export const siteConfig = {
   siteUrl,
-  siteName: "Editorial Journal",
-  defaultTitle: "Editorial Journal",
+  siteName: "个人博客",
+  defaultTitle: "个人博客",
   defaultDescription:
-    "Warm paper editorial blog built with Next.js, Tailwind, and Supabase engagement.",
+    "基于 Next.js、Tailwind 与 Supabase 互动的暖纸质感编辑部博客。",
   defaultOg: "/og-default.svg",
 };
 

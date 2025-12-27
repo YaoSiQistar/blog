@@ -27,16 +27,16 @@ export default function AuthFlipPage({
             <div className="w-full max-w-[460px] space-y-5">
               <div className="space-y-2">
                 <p className="text-[0.6rem] font-medium uppercase tracking-[0.4em] text-muted-foreground/70">
-                  Index Desk
+                  索引台
                 </p>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <span className="h-[1px] w-7 bg-border/70" />
-                  Access
+                  访问
                 </div>
               </div>
               <PlaqueFlipCard mode={mode} redirectTo={redirectTo} notice={notice} />
               <p className="text-xs text-muted-foreground">
-                The archive keeps your favorites, annotations, and personal cataloging.
+                归档会保存你的收藏、批注与个人整理记录。
               </p>
             </div>
           </section>
@@ -48,13 +48,13 @@ export default function AuthFlipPage({
               )}
             >
               <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
-                Today&apos;s Guide
+                今日导览
               </p>
               <p className="mt-4 text-base font-medium">
-                Unlock favorites, comments, and your personal catalog trail.
+                解锁收藏、评论与个人目录轨迹。
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
-                Your archive remains private, synced, and portable across devices.
+                你的归档保持私密、同步，并可在多设备间携带。
               </p>
             </div>
           </aside>

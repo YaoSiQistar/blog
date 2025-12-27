@@ -1,55 +1,55 @@
 ---
-title: "About"
-subtitle: "Warm paper, sharp ideas."
+title: "关于"
+subtitle: "我是姚思奇，欢迎大家"
 slug: "about"
 name: "姚思奇"
-role: "Builder / Writer"
-location: "深圳, 中国"
-now: "Designing the warm-paper archive system"
-email: ""
+role: "程序员、作者"
+location: "深圳，中国"
+now: "学习前端"
+email: "y88895900@gmail.com"
 links:
   - label: "GitHub"
-    url: "https://github.com/"
-  - label: "X"
-    url: "https://x.com/"
+    url: "https://github.com/YaoSiQistar"
+  - label: "QQ"
+    url: "https://2130458707@qq.com"
 highlights:
-  - "Focus: product design, motion, editorial UX."
-  - "Writing in public about systems and constraints."
-  - "Building a calm, fast, markdown-first archive."
+  - "关注点：前端知识。"
+  - "以公开写作的方式记录学习。"
+  - "打造一个安静、快速、以 Markdown 为核心的blog。"
 faq:
-  - q: "Why this blog?"
-    a: "To document decisions and share patterns that stay useful beyond a single project."
-  - q: "What do you write about?"
-    a: "Editorial UX, motion restraint, and the systems behind long-lived products."
-  - q: "How often do you publish?"
-    a: "When an idea earns the space: usually weekly, sometimes in focused series."
+  - q: "为什么做这个博客？"
+    a: "为了记录决策过程，并分享那些不会只对单个项目有效、而是能长期复用的模式。"
+  - q: "你主要写什么？"
+    a: "前端的一切, 包括但不限于：语言、设计、产品、工程、动画、性能优化、工具链、框架、原理。"
+  - q: "你多久发布一次？"
+    a: "当一个想法值得写就会发布：通常每周，会以专题系列的形式集中更新。"
 cta:
   primary:
-    label: "Browse Posts"
+    label: "浏览文章"
     href: "/posts"
   secondary:
-    label: "Search the Archive"
+    label: "搜索归档"
     href: "/search"
 lead:
-  - "I write as a builder who cares about calm interfaces and deliberate systems. This archive is where design notes, product decisions, and motion experiments live side by side."
-  - "Each entry is a small dossier: what I observed, why it mattered, and how the choice holds up over time."
-  - "If you are here for practical patterns, start with the posts. If you are here for taste, read the principles and the FAQ."
+  - "我以建设者的身份写作，关注“安静优美的界面”和“审慎严谨的系统”。这个归档里同时存放设计笔记、产品决策，以及学习过程。"
+  - "每一篇都像一个小档案：我观察到了什么、为什么重要、以及这个选择如何经得起时间检验。"
+  - "如果你想要实用的模式，可以从文章开始；如果你想了解我的审美取向，可以读读原则与 FAQ。"
 ---
 
-## The work
+## 工作内容
 
-This site is a long-form notebook for product design and engineering decisions. I keep the writing close to the work: a project, a question, a constraint, and the choice that follows.
+这个网站是一份关于产品设计与工程决策的长文笔记。我尽量让写作贴近真实工作：一个项目、一个问题、一个约束，以及由此做出的选择。
 
-The goal is not volume. The goal is clarity. Each piece should help you understand a system, a trade-off, or a way of composing motion that respects the reader.
+目标不是数量，而是清晰。每一篇文章都应该帮助你理解一个系统、一个取舍方式。
 
-## The archive
+## 归档
 
-Everything is stored in Markdown and tracked in Git. That is the point: the archive is portable, inspectable, and long-lived. It also means updates are easy to maintain and easy to trace.
+所有内容都以 Markdown 存储，并用 Git 跟踪。这正是关键：归档可迁移、可检查、能长期存在。也因此，更新更容易维护，也更容易追溯。
 
-The posts are designed to read well on small screens, and to keep headings and highlights scannable for people who are browsing quickly.
+文章在小屏设备上也会有良好的阅读体验，同时保持标题与重点内容对快速浏览的人足够友好、易于扫读。
 
-## How I write
+## 我如何写作
 
-I write to keep a decision from becoming a guess later. That means the writing favors reasons over outcomes, and is honest about what did not work.
+我写作，是为了避免某个决策在未来变成“凭感觉猜”。所以写作更偏向解释原因，而不是只展示结果，也会诚实记录哪些方法没有奏效。
 
-If a system makes it into this archive, it is because it will matter a year from now.
+如果一个系统能出现在这个归档里，那是因为它在一年之后仍然值得被记住。

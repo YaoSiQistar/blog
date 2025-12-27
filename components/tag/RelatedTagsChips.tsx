@@ -32,9 +32,9 @@ export default function RelatedTagsChips({
   return (
     <div className={cn("space-y-3", className)}>
       <div className="flex items-center justify-between text-[0.6rem] uppercase tracking-[0.35em] text-muted-foreground/70">
-        <span>Related tags</span>
+        <span>相关标签</span>
         <span className="text-[0.55rem] uppercase tracking-[0.35em] text-muted-foreground/50">
-          Top {Math.min(tags.length, 12)}
+          前 {Math.min(tags.length, 12)}
         </span>
       </div>
       <motion.div

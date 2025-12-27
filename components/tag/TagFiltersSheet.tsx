@@ -65,28 +65,28 @@ export default function TagFiltersSheet({
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button type="button" variant="secondary">
-          Filters
+          筛选
         </Button>
       </SheetTrigger>
       <SheetContent side="bottom" className="p-0">
         <SheetHeader className="px-4 pt-4">
           <SheetTitle className="text-sm uppercase tracking-[0.35em] text-muted-foreground">
-            Tag Filters
+            标签筛选
           </SheetTitle>
         </SheetHeader>
         <div className="space-y-4 px-4 pb-6">
           <div className="space-y-2">
-            <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">Search</p>
+            <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">搜索</p>
             <Input
               value={draft.q ?? ""}
               onChange={(event) => setDraft((prev) => ({ ...prev, q: event.target.value }))}
-              placeholder="Search within this dossier"
+              placeholder="在专题内搜索"
               className="h-9 text-sm"
             />
           </div>
 
           <div className="space-y-2">
-            <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">Sort</p>
+            <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">排序</p>
             <ToggleGroup
               type="single"
               value={draft.sort}
@@ -94,20 +94,20 @@ export default function TagFiltersSheet({
               className="rounded-full border border-border-subtle bg-background/70 p-1"
             >
               <ToggleGroupItem value="latest" className="px-3 text-xs uppercase tracking-[0.3em]">
-                Latest
+                最新
               </ToggleGroupItem>
               <ToggleGroupItem value="hot" className="px-3 text-xs uppercase tracking-[0.3em]">
-                Hot
+                热门
               </ToggleGroupItem>
             </ToggleGroup>
           </div>
 
           <div className="space-y-2">
-            <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">With tags</p>
+            <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">组合标签</p>
             <Input
               value={tagQuery}
               onChange={(event) => setTagQuery(event.target.value)}
-              placeholder="Filter related tags"
+              placeholder="筛选相关标签"
               className="h-9 text-sm"
             />
             <div className="grid gap-2">
@@ -138,13 +138,13 @@ export default function TagFiltersSheet({
               })}
             </div>
             <p className="text-[0.55rem] uppercase tracking-[0.35em] text-muted-foreground/60">
-              Combine up to {MAX_WITH_TAGS} tags.
+              最多可组合 {MAX_WITH_TAGS} 个标签。
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
             <Button type="button" variant="ghost" onClick={handleReset}>
-              Reset
+              重置
             </Button>
             <Button
               type="button"
@@ -153,7 +153,7 @@ export default function TagFiltersSheet({
                 setOpen(false);
               }}
             >
-              Apply
+              应用
             </Button>
           </div>
         </div>

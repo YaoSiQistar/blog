@@ -43,7 +43,7 @@ export default function AboutHero({
           transition={transition}
           className="text-[0.6rem] font-medium uppercase tracking-[0.4em] text-muted-foreground/70"
         >
-          About
+          关于
         </motion.p>
         <motion.h1
           initial={reduced ? false : { opacity: 0, y: 10 }}

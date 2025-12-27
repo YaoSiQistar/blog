@@ -12,11 +12,8 @@ import { ReadingProgress } from "@/components/markdown/ReadingProgress";
 import { References } from "@/components/markdown/References";
 import { parseHeadings } from "@/lib/markdown/parseHeadings";
 import { getPostBySlug } from "@/lib/content";
-import EngagementBar from "@/components/interaction/EngagementBar";
-import CommentsSection from "@/components/interaction/CommentsSection";
-import { getApprovedComments, getCounts, getViewerState } from "@/lib/engagement/queries";
-import { getAnonKeyFromCookies } from "@/lib/anon/anonKey";
-import { getServerUser } from "@/lib/auth/session";
+import EngagementStream from "@/components/interaction/EngagementStream";
+import CommentsStream from "@/components/interaction/CommentsStream";
 import { getAllPostsIndex } from "@/lib/content";
 import type { ReferenceEntry } from "@/lib/markdown/types";
 import { buildOpenGraph, buildTwitter } from "@/lib/seo/og";
@@ -75,13 +72,7 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
   }
 
   const headings = parseHeadings(post.content);
-  const [user, anonKey] = await Promise.all([getServerUser(), getAnonKeyFromCookies()]);
-  const [counts, viewer, approvedComments, references] = await Promise.all([
-    getCounts(post.slug),
-    getViewerState(post.slug, { userId: user?.id, anonKey }),
-    getApprovedComments(post.slug),
-    loadPostReferences(post.references),
-  ]);
+  const references = await loadPostReferences(post.references);
   const postIndex = await getAllPostsIndex({ includeDrafts: true });
   const jsonLd = buildArticleJsonLd({
     title: post.title,
@@ -119,16 +110,11 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
             <Suspense
               fallback={
                 <div className="rounded-[var(--radius)] border border-border bg-card/60 px-4 py-3 text-sm text-muted-foreground">
-                  Loading engagement...
+                  正在加载互动信息...
                 </div>
               }
             >
-              <EngagementBar
-                postSlug={post.slug}
-                initialCounts={counts}
-                initialViewer={viewer}
-                isAuthenticated={Boolean(user?.id)}
-              />
+              <EngagementStream postSlug={post.slug} />
             </Suspense>
             <MarkdownRenderer
               markdown={post.content}
@@ -141,16 +127,11 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
             <Suspense
               fallback={
                 <div className="rounded-[var(--radius)] border border-border bg-card/60 px-4 py-3 text-sm text-muted-foreground">
-                  Loading comments...
+                  正在加载评论...
                 </div>
               }
             >
-              <CommentsSection
-                postSlug={post.slug}
-                initialComments={approvedComments}
-                approvedCount={counts.commentsApproved}
-                viewer={user?.id ? { userId: user.id } : undefined}
-              />
+              <CommentsStream postSlug={post.slug} />
             </Suspense>
           </div>
 

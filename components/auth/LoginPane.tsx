@@ -42,7 +42,7 @@ export default function LoginPane({
     notice
       ? {
           tone: "success",
-          title: "Stamped",
+          title: "已确认",
           message: notice,
         }
       : null
@@ -74,8 +74,8 @@ export default function LoginPane({
         password,
       });
       if (error) {
-        const message = mapSupabaseError(error) ?? "Unable to sign in.";
-        setStatus({ tone: "error", title: "Check in refused", message });
+        const message = mapSupabaseError(error) ?? "无法登录。";
+        setStatus({ tone: "error", title: "登录被拒绝", message });
         return;
       }
       const destination = resolveRedirect(redirectTo);
@@ -89,12 +89,12 @@ export default function LoginPane({
   return (
     <div className="space-y-6">
       <AuthPlaqueHeader
-        title="Access the Archive"
-        subtitle="Sign in to save and annotate."
+        title="访问归档"
+        subtitle="登录以保存与标注。"
       />
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="space-y-2">
-          <Label htmlFor="login-email">Email</Label>
+          <Label htmlFor="login-email">邮箱</Label>
           <Input
             id="login-email"
             type="email"
@@ -113,7 +113,7 @@ export default function LoginPane({
         </div>
         <PasswordField
           id="login-password"
-          label="Password"
+          label="密码"
           value={password}
           onChange={(value) => {
             setPassword(value);
@@ -130,7 +130,7 @@ export default function LoginPane({
             <Button type="submit" className="w-full" disabled={pending}>
               {pending ? <Loader2 className="animate-spin" /> : null}
               <span className="motion-reduce:transition-none" data-slot="label">
-                {pending ? "Signing in" : "Sign in"}
+                {pending ? "登录中" : "登录"}
               </span>
             </Button>
           </motion.div>

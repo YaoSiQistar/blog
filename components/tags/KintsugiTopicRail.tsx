@@ -162,10 +162,10 @@ export default function KintsugiTopicRail({
         <div className="rounded-[var(--radius)] border border-border/70 bg-card/60 p-4 shadow-soft">
           <div className="space-y-1">
             <div className="text-[0.6rem] uppercase tracking-[0.35em] text-muted-foreground/70">
-              Topic Guide
+              导览目录
             </div>
             <div className="text-xs uppercase tracking-[0.35em] text-foreground">
-              {activeSection?.label ?? "-"} - {activeSection?.count ?? 0} tags
+              {activeSection?.label ?? "-"} - {activeSection?.count ?? 0} 个标签
             </div>
           </div>
 
@@ -230,7 +230,7 @@ export default function KintsugiTopicRail({
                     delay: reduced ? 0 : index * topicRailTokens.motion.stagger,
                     ease: motionTokens.easing.easeOut,
                   }}
-                  aria-label={`${section.label} - ${section.count} tags`}
+                  aria-label={`${section.label} - ${section.count} 个标签`}
                 >
                   <span className="sr-only">{section.label}</span>
                   <span
@@ -239,7 +239,7 @@ export default function KintsugiTopicRail({
                       isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
                     )}
                   >
-                    {section.label} - {section.count} tags
+                    {section.label} - {section.count} 个标签
                   </span>
                 </motion.button>
               );
@@ -247,7 +247,7 @@ export default function KintsugiTopicRail({
           </div>
 
           <div className="mt-4 flex items-center justify-between text-[0.6rem] uppercase tracking-[0.35em] text-muted-foreground/70">
-            <span>Progress</span>
+            <span>进度</span>
             <span>{Math.round(progress * 100)}%</span>
           </div>
           <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-muted/70">
@@ -264,7 +264,7 @@ export default function KintsugiTopicRail({
           <div className="rounded-[var(--radius)] border border-border bg-card/80 p-3 shadow-soft backdrop-blur-sm">
             <div className="flex items-center justify-between gap-3">
               <div className="text-[0.6rem] uppercase tracking-[0.35em] text-muted-foreground/70">
-                Topic Guide
+                导览目录
               </div>
               <SheetTrigger asChild>
                 <button
@@ -284,12 +284,12 @@ export default function KintsugiTopicRail({
           </div>
           <SheetContent side="bottom">
             <SheetHeader>
-              <SheetTitle>Topic Guide</SheetTitle>
-            </SheetHeader>
-            <div className="p-4">{list}</div>
-          </SheetContent>
-        </Sheet>
-      </div>
+            <SheetTitle>导览目录</SheetTitle>
+          </SheetHeader>
+          <div className="p-4">{list}</div>
+        </SheetContent>
+      </Sheet>
+    </div>
 
       <RailHUD
         visible={flags.debug}

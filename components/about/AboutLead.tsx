@@ -26,7 +26,7 @@ export default function AboutLead({ lead, highlights = [] }: AboutLeadProps) {
           )}
         >
           <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
-            Highlights
+            亮点
           </p>
           <ul className="mt-3 space-y-2 text-sm text-foreground">
             {leadHighlights.map((item) => (

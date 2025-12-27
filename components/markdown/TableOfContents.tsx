@@ -46,15 +46,16 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
   }, [headings]);
 
   const renderList = () => (
-    <div className="space-y-3">
+      <div className="space-y-3">
       <div className="text-[0.6rem] font-semibold uppercase tracking-[0.32em] text-muted-foreground">
-        On this page
+        本页目录
       </div>
       <ul className="space-y-1 text-sm">
         {headings.map((heading) => {
           const isActive = heading.id === activeId;
           const indent =
-            heading.depth === 4 ? "pl-6" : heading.depth === 3 ? "pl-4" : "pl-1";
+            heading.depth === 4 ? "pl-6" : heading.depth === 3 ? "pl-4" : heading.depth === 2 ? "pl-2" : "pl-0";
+          const h1Tone = heading.depth === 1 ? "text-foreground font-medium tracking-[0.01em]" : "";
           return (
             <li key={heading.id}>
               <AnimatedLink
@@ -62,6 +63,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
                 className={cn(
                   "block w-full rounded-full px-3 py-1 text-[0.85rem] leading-snug transition",
                   indent,
+                  h1Tone,
                   isActive
                     ? "bg-card text-foreground shadow-[inset_0_0_0_1px_rgba(13,59,102,0.25)]"
                     : "text-muted-foreground hover:text-foreground hover:bg-card/60"
@@ -85,12 +87,12 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
       <Sheet>
         <SheetTrigger asChild>
           <button className="lg:hidden rounded-full border border-border px-4 py-2 text-xs uppercase tracking-[0.4em] text-muted-foreground">
-            Contents
+            目录
           </button>
         </SheetTrigger>
         <SheetContent side="right">
           <SheetHeader>
-            <SheetTitle>Contents</SheetTitle>
+            <SheetTitle>目录</SheetTitle>
           </SheetHeader>
           <div className="space-y-4">{renderList()}</div>
         </SheetContent>

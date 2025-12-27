@@ -19,16 +19,7 @@ export async function readFile(filePath: string): Promise<string> {
 }
 
 export function getSlugFromFilename(filePath: string): string {
-  const base = path.basename(filePath, ".md");
-  const match = base.match(/^\d{4}-\d{2}-\d{2}-(.+)$/);
-
-  if (!match) {
-    throw new Error(
-      `[content] ${filePath}: filename must match YYYY-MM-DD-slug.md`
-    );
-  }
-
-  return match[1];
+  return path.basename(filePath, ".md");
 }
 
 export async function getContentSignature(files: string[]): Promise<string> {

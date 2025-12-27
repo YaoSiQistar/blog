@@ -8,20 +8,20 @@ export default function CategoryNotFound() {
     <Container variant="wide" className="py-[var(--section-y)]">
       <div className="rounded-[var(--radius)] border border-border bg-card/70 p-8">
         <p className="text-[0.65rem] uppercase tracking-[0.45em] text-muted-foreground">
-          Gallery Missing
+          展厅不存在
         </p>
         <h1 className="mt-3 text-2xl font-semibold text-foreground">
-          This gallery does not exist.
+          该展厅不存在。
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Return to the museum map to continue exploring.
+          返回展厅地图继续探索。
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Button asChild>
-            <Link href="/categories">Back to galleries</Link>
+            <Link href="/categories">返回展厅列表</Link>
           </Button>
           <Button asChild variant="secondary">
-            <Link href="/posts">Browse all posts</Link>
+            <Link href="/posts">浏览全部文章</Link>
           </Button>
         </div>
       </div>

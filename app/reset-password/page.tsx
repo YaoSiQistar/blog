@@ -49,8 +49,8 @@ export default function ResetPasswordPage() {
         if (active) {
           setStatus({
             tone: "error",
-            title: "Access expired",
-            message: "The recovery link is missing or expired. Request a new one.",
+            title: "访问已过期",
+            message: "恢复链接缺失或已过期，请重新申请。",
           });
         }
         return;
@@ -61,8 +61,8 @@ export default function ResetPasswordPage() {
       if (error) {
         setStatus({
           tone: "error",
-          title: "Access denied",
-          message: mapSupabaseError(error) ?? "Unable to verify the recovery link.",
+          title: "访问被拒绝",
+          message: mapSupabaseError(error) ?? "无法验证恢复链接。",
         });
         return;
       }
@@ -100,16 +100,16 @@ export default function ResetPasswordPage() {
       if (error) {
         setStatus({
           tone: "error",
-          title: "Reset failed",
-          message: mapSupabaseError(error) ?? "Unable to update your password.",
+          title: "重置失败",
+          message: mapSupabaseError(error) ?? "无法更新密码。",
         });
         return;
       }
       await supabase.auth.signOut();
       setStatus({
         tone: "success",
-        title: "Stamped",
-        message: "Password updated. Please sign in again.",
+        title: "已完成",
+        message: "密码已更新，请重新登录。",
       });
       router.replace(`/login?reset=1${query ? `&${query.slice(1)}` : ""}`);
     } finally {
@@ -125,18 +125,18 @@ export default function ResetPasswordPage() {
         <section className="w-full max-w-[460px] space-y-6 rounded-[var(--radius-2xl)] border border-border/70 bg-background/60 p-6 backdrop-blur-md">
           <div className="space-y-2">
             <p className="text-[0.6rem] font-medium uppercase tracking-[0.4em] text-muted-foreground/70">
-              Index Desk
+              索引台
             </p>
-            <h1 className="text-2xl font-semibold">Reset access</h1>
+            <h1 className="text-2xl font-semibold">重置访问</h1>
             <p className="text-sm text-muted-foreground">
-              Choose a new password to reopen your archive.
+              选择新密码以重新开启你的归档。
             </p>
           </div>
 
           {!ready && !status ? (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Loader2 className="animate-spin" />
-              Verifying recovery link...
+              正在验证恢复链接...
             </div>
           ) : null}
 
@@ -148,7 +148,7 @@ export default function ResetPasswordPage() {
             <form className="space-y-4" onSubmit={handleSubmit}>
               <PasswordField
                 id="reset-password"
-                label="New password"
+                label="新密码"
                 value={password}
                 onChange={(value) => {
                   setPassword(value);
@@ -160,7 +160,7 @@ export default function ResetPasswordPage() {
               />
               <PasswordField
                 id="reset-confirm"
-                label="Confirm password"
+                label="确认密码"
                 value={confirmPassword}
                 onChange={(value) => {
                   setConfirmPassword(value);
@@ -172,10 +172,10 @@ export default function ResetPasswordPage() {
               <div className="space-y-3">
                 <Button type="submit" className="w-full" disabled={pending}>
                   {pending ? <Loader2 className="animate-spin" /> : null}
-                  <span>{pending ? "Updating" : "Update password"}</span>
+                  <span>{pending ? "更新中" : "更新密码"}</span>
                 </Button>
                 <AnimatedLink href={`/login${query}`} className="text-xs">
-                  Return to sign in
+                  返回登录
                 </AnimatedLink>
               </div>
             </form>
@@ -184,7 +184,7 @@ export default function ResetPasswordPage() {
           {!ready && status?.tone === "error" ? (
             <div className="text-xs text-muted-foreground">
               <AnimatedLink href={`/forgot-password${query}`} className="text-xs">
-                Request another recovery email
+                重新申请恢复邮件
               </AnimatedLink>
             </div>
           ) : null}

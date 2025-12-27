@@ -95,9 +95,9 @@ export default function MuseumGuidePanel({ categories, tags }: MuseumGuidePanelP
       {/* 分类部分标题 */}
       <div className="space-y-1">
         <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground/70">
-          Museum Galleries
+          博物馆展厅
         </p>
-        <h3 className="text-base font-semibold text-foreground">Galleries</h3>
+        <h3 className="text-base font-semibold text-foreground">展厅</h3>
       </div>
 
       {/* 分类列表 */}
@@ -137,7 +137,7 @@ export default function MuseumGuidePanel({ categories, tags }: MuseumGuidePanelP
       <div className="space-y-3">
         {/* 标签部分标题和展开/收起按钮 */}
         <div className="flex items-center justify-between">
-          <h4 className="text-sm font-semibold text-foreground">Popular Tags</h4>
+          <h4 className="text-sm font-semibold text-foreground">热门标签</h4>
           <Button
             type="button"
             variant="ghost"
@@ -148,11 +148,11 @@ export default function MuseumGuidePanel({ categories, tags }: MuseumGuidePanelP
           >
             {expanded ? (
               <>
-                Less <ChevronUp className="ml-1 size-3" />
+                收起 <ChevronUp className="ml-1 size-3" />
               </>
             ) : (
               <>
-                More <ChevronDown className="ml-1 size-3" />
+                更多 <ChevronDown className="ml-1 size-3" />
               </>
             )}
           </Button>
@@ -161,7 +161,7 @@ export default function MuseumGuidePanel({ categories, tags }: MuseumGuidePanelP
         <Input
           value={tagQuery}
           onChange={(event) => setTagQuery(event.target.value)}
-          placeholder="Search tags"
+          placeholder="搜索标签"
           className="h-9 text-sm"
           aria-label="Search tags"
         />
@@ -192,11 +192,11 @@ export default function MuseumGuidePanel({ categories, tags }: MuseumGuidePanelP
       {/* 快捷方式部分 */}
       <div className="space-y-2 rounded-2xl border border-border-subtle bg-card/80 p-3">
         <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
-          Shortcuts
+          快捷入口
         </p>
         <Button asChild variant="ghost" className="w-full justify-between text-sm">
           <Link href="/me">
-            <span>My Favorites</span>
+            <span>我的收藏</span>
             <span className="text-xs text-muted-foreground/60">/me</span>
           </Link>
         </Button>
@@ -209,7 +209,7 @@ export default function MuseumGuidePanel({ categories, tags }: MuseumGuidePanelP
         className="w-full"
         onClick={handleReset}
       >
-        Clear Guide
+        清空导览
       </Button>
     </motion.aside>
   );

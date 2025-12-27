@@ -91,7 +91,7 @@ export default function CategoryWorkbench({ slug, tags }: CategoryWorkbenchProps
   const handleTagToggle = (tag: string) => {
     const exists = current.tags.includes(tag);
     if (!exists && current.tags.length >= MAX_CATEGORY_TAGS) {
-      toast.info(`Select up to ${MAX_CATEGORY_TAGS} tags.`);
+      toast.info(`最多选择 ${MAX_CATEGORY_TAGS} 个标签。`);
       return;
     }
     const nextTags = exists ? current.tags.filter((t) => t !== tag) : [...current.tags, tag];
@@ -113,15 +113,16 @@ export default function CategoryWorkbench({ slug, tags }: CategoryWorkbenchProps
       const href = buildCategoryHref(slug, current);
       const url = `${window.location.origin}${href}`;
       await navigator.clipboard.writeText(url);
-      toast.success("Gallery link copied.");
+      toast.success("展厅链接已复制。");
     } catch (error) {
       console.error(error);
-      toast.error("Unable to copy link.");
+      toast.error("无法复制链接。");
     }
   };
 
   const showChips =
     current.q || current.tags.length > 0 || current.sort !== "latest";
+  const sortLabel = current.sort === "latest" ? "Latest" : "Hot";
 
   return (
     <div className="space-y-4">
@@ -140,7 +141,7 @@ export default function CategoryWorkbench({ slug, tags }: CategoryWorkbenchProps
             ref={inputRef}
             value={queryValue}
             onChange={(event) => setQueryValue(event.target.value)}
-            placeholder="Search within this gallery"
+            placeholder="在当前展厅中搜索"
             className="h-8 border-0 bg-transparent px-0 text-sm focus-visible:ring-0"
             aria-label="Search within gallery"
           />
@@ -163,20 +164,20 @@ export default function CategoryWorkbench({ slug, tags }: CategoryWorkbenchProps
           className="hidden rounded-full border border-border-subtle bg-background/70 p-1 lg:flex"
         >
           <ToggleGroupItem value="latest" className="px-3 text-xs uppercase tracking-[0.3em]">
-            Latest
+            最新
           </ToggleGroupItem>
           <ToggleGroupItem value="hot" className="px-3 text-xs uppercase tracking-[0.3em]">
-            Hot
+            热门
           </ToggleGroupItem>
         </ToggleGroup>
 
         <div className="ml-auto hidden items-center gap-2 lg:flex">
           <Button type="button" variant="ghost" onClick={handleReset}>
-            Reset
+            重置
           </Button>
           <Button type="button" variant="ghost" onClick={handleCopy} aria-label="Copy gallery link">
             <Copy className="mr-2 size-4" />
-            Copy link
+            复制链接
           </Button>
         </div>
 
@@ -199,7 +200,7 @@ export default function CategoryWorkbench({ slug, tags }: CategoryWorkbenchProps
         <div className="flex flex-wrap items-center gap-2">
           {current.q ? (
             <Badge variant="outline" className="rounded-full border-border-subtle text-xs uppercase tracking-[0.3em]">
-              Search: {current.q}
+              搜索：{current.q}
               <button
                 type="button"
                 className="ml-2"
@@ -229,7 +230,7 @@ export default function CategoryWorkbench({ slug, tags }: CategoryWorkbenchProps
           ))}
           {current.sort !== "latest" ? (
             <Badge variant="outline" className="rounded-full border-border-subtle text-xs uppercase tracking-[0.3em]">
-              Sort: {current.sort}
+              Sort: {sortLabel}
               <button
                 type="button"
                 className="ml-2"

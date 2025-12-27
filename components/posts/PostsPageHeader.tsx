@@ -22,7 +22,7 @@ export default function PostsPageHeader({
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground/70">
-            Museum Index
+            博客索引
           </p>
           <h1 className="font-serif text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
             {title}
@@ -34,9 +34,9 @@ export default function PostsPageHeader({
       <div className="flex flex-wrap items-center gap-3 text-[0.7rem] uppercase tracking-[0.35em] text-muted-foreground/80">
         <span>{summary}</span>
         <span className="h-3 w-px bg-border" />
-        <span>{resultsCount} works</span>
+        <span>{resultsCount} 篇</span>
         <span className="h-3 w-px bg-border" />
-        <span>{totalPages} pages</span>
+        <span>{totalPages} 页</span>
       </div>
     </header>
   );

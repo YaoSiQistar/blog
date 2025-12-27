@@ -28,45 +28,22 @@ export async function getEngagementScoresForSlugs(slugs: string[]): Promise<Enga
   const uniqueSlugs = Array.from(new Set(slugs.filter(Boolean)));
   if (uniqueSlugs.length === 0) return {};
 
-  const likeCounts = new Map<string, number>();
-  const commentCounts = new Map<string, number>();
+  const scores: EngagementScores = {};
   const chunks = chunk(uniqueSlugs, 400);
 
   for (const batch of chunks) {
-    const [likesResult, commentsResult] = await Promise.all([
-      supabaseAdmin.from("likes").select("post_slug").in("post_slug", batch),
-      supabaseAdmin
-        .from("comments")
-        .select("post_slug")
-        .in("post_slug", batch)
-        .eq("status", "approved"),
-    ]);
+    const { data, error } = await supabaseAdmin.rpc("get_engagement_scores", {
+      slugs: batch,
+    });
 
-    if (likesResult.error || commentsResult.error) {
-      throw new Error(
-        likesResult.error?.message ||
-          commentsResult.error?.message ||
-          "Failed to load engagement scores."
-      );
+    if (error) {
+      throw new Error(error.message || "Failed to load engagement scores.");
     }
 
-    (likesResult.data ?? []).forEach((row) => {
-      const slug = row.post_slug;
-      likeCounts.set(slug, (likeCounts.get(slug) ?? 0) + 1);
-    });
-
-    (commentsResult.data ?? []).forEach((row) => {
-      const slug = row.post_slug;
-      commentCounts.set(slug, (commentCounts.get(slug) ?? 0) + 1);
+    (data ?? []).forEach((row: { post_slug: string; score: number }) => {
+      scores[row.post_slug] = row.score ?? 0;
     });
   }
-
-  const scores: EngagementScores = {};
-  uniqueSlugs.forEach((slug) => {
-    const likes = likeCounts.get(slug) ?? 0;
-    const comments = commentCounts.get(slug) ?? 0;
-    scores[slug] = likes + comments;
-  });
 
   return scores;
 }

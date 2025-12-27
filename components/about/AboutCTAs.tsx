@@ -23,7 +23,7 @@ export default function AboutCTAs({ primary, secondary, tertiary }: AboutCTAsPro
   return (
     <section className="space-y-4">
       <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
-        Exit points
+        出口指引
       </p>
       <div className="grid gap-4 md:grid-cols-2">
         {cards.slice(0, 2).map((cta) => (
@@ -36,11 +36,11 @@ export default function AboutCTAs({ primary, secondary, tertiary }: AboutCTAsPro
               )}
             >
               <span className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
-                Guide
+                导览
               </span>
               <span className="text-lg font-semibold text-foreground">{cta.label}</span>
               <span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-                Enter
+                进入
               </span>
             </Link>
           </SheenHover>

@@ -23,14 +23,11 @@ export default function HomeFooterNote() {
           viewport={{ once: true, amount: 0.4 }}
           className="rounded-[var(--radius)] border border-border bg-card/70 p-8"
         >
-          <Kicker label="Curator note" caption="Footer" />
+          <Kicker label="编者札记" caption="尾声" />
           <p className="mt-4 text-sm text-muted-foreground">
-            Thank you for visiting my personal blog. Here, I share my thoughts,
-            experiences, and insights on various topics that interest me. I hope
-            you find the content engaging and thought-provoking. Feel free to
-            explore, comment, and connect with me. Your feedback and interaction
-            are highly appreciated as they help me grow and improve this space.
-            Happy reading!
+            感谢你来到我的个人博客。在这里，我记录感兴趣话题的思考、经历与洞见。
+            希望这些内容能带来启发与共鸣，欢迎自由探索、评论并与我交流。
+            你的反馈与互动对我非常重要，它们帮助我持续完善这片空间。阅读愉快。
           </p>
         </motion.div>
       </Container>

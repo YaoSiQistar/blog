@@ -23,7 +23,7 @@ export async function submitComment(
     });
 
     if (response.status === 429) {
-      return { ok: false, error: "Too fast. Try again in a moment." };
+      return { ok: false, error: "操作过快，请稍后再试。" };
     }
 
     const data = await response.json().catch(() => ({}));
@@ -31,12 +31,12 @@ export async function submitComment(
     if (!response.ok) {
       return {
         ok: false,
-        error: data.error || "Network error. Please try again.",
+        error: data.error || "网络错误，请稍后再试。",
       };
     }
 
     return { ok: true, status: data.status ?? "pending" };
   } catch {
-    return { ok: false, error: "Network error. Please try again." };
+    return { ok: false, error: "网络错误，请稍后再试。" };
   }
 }

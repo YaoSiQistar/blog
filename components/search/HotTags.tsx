@@ -8,7 +8,7 @@ export default function HotTags({ tags }: HotTagsProps) {
   return (
     <div className="rounded-[var(--radius)] border border-border/70 bg-background/60 p-4">
       <div className="text-[0.6rem] uppercase tracking-[0.4em] text-muted-foreground">
-        Hot Tags
+        热门标签
       </div>
       <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
         {tags.slice(0, 12).map((tag) => (

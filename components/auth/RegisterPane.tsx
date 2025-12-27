@@ -74,8 +74,8 @@ export default function RegisterPane({ redirectTo, onSwitchMode }: RegisterPaneP
         options: emailRedirectTo ? { emailRedirectTo } : undefined,
       });
       if (error) {
-        const message = mapSupabaseError(error) ?? "Unable to create account.";
-        setStatus({ tone: "error", title: "Request denied", message });
+        const message = mapSupabaseError(error) ?? "无法创建账户。";
+        setStatus({ tone: "error", title: "请求失败", message });
         return;
       }
 
@@ -86,8 +86,8 @@ export default function RegisterPane({ redirectTo, onSwitchMode }: RegisterPaneP
       } else {
         setStatus({
           tone: "success",
-          title: "Stamped",
-          message: "Check your email to confirm your account.",
+          title: "已发送",
+          message: "请检查邮箱完成账号验证。",
         });
       }
     } finally {
@@ -98,12 +98,12 @@ export default function RegisterPane({ redirectTo, onSwitchMode }: RegisterPaneP
   return (
     <div className="space-y-6">
       <AuthPlaqueHeader
-        title="Request Access"
-        subtitle="Create an account for your archive."
+        title="申请访问"
+        subtitle="创建账号以使用你的归档。"
       />
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="space-y-2">
-          <Label htmlFor="register-email">Email</Label>
+          <Label htmlFor="register-email">邮箱</Label>
           <Input
             id="register-email"
             type="email"
@@ -122,7 +122,7 @@ export default function RegisterPane({ redirectTo, onSwitchMode }: RegisterPaneP
         </div>
         <PasswordField
           id="register-password"
-          label="Password"
+          label="密码"
           value={password}
           onChange={(value) => {
             setPassword(value);
@@ -133,7 +133,7 @@ export default function RegisterPane({ redirectTo, onSwitchMode }: RegisterPaneP
         />
         <PasswordField
           id="register-confirm"
-          label="Confirm password"
+          label="确认密码"
           value={confirmPassword}
           onChange={(value) => {
             setConfirmPassword(value);
@@ -149,7 +149,7 @@ export default function RegisterPane({ redirectTo, onSwitchMode }: RegisterPaneP
           <motion.div layoutId="auth-primary-action" layout>
             <Button type="submit" className="w-full" disabled={pending}>
               {pending ? <Loader2 className="animate-spin" /> : null}
-              <span>{pending ? "Requesting" : "Create account"}</span>
+              <span>{pending ? "申请中" : "创建账号"}</span>
             </Button>
           </motion.div>
           <AuthFooterLinks mode="register" redirectTo={redirectTo} onSwitch={onSwitchMode} />

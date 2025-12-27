@@ -20,12 +20,12 @@ export default function MeError({ reset }: MeErrorProps) {
       <Container variant="wide">
         <div className="rounded-[var(--radius)] border border-border bg-card/70 p-8 text-center">
           <p className="text-sm text-muted-foreground">
-            The dossier is temporarily unavailable.
+            档案暂时不可用。
           </p>
           <div className="mt-4 flex justify-center gap-3">
-            <Button onClick={reset}>Retry</Button>
+            <Button onClick={reset}>重试</Button>
             <Button variant="secondary" asChild>
-              <a href="/posts">Browse posts</a>
+              <a href="/posts">浏览文章</a>
             </Button>
           </div>
         </div>

@@ -11,20 +11,20 @@ export function mapSupabaseError(error?: SupabaseErrorLike | null) {
   const message = normalize(error.message);
 
   if (message.includes("invalid login credentials")) {
-    return "The email or password is incorrect.";
+    return "邮箱或密码错误。";
   }
   if (message.includes("email not confirmed")) {
-    return "Please confirm your email to continue.";
+    return "请先验证邮箱后再继续。";
   }
   if (message.includes("already registered")) {
-    return "That email already exists. Try signing in instead.";
+    return "该邮箱已注册，请直接登录。";
   }
   if (message.includes("password should be at least")) {
-    return "Password is too short. Please choose a longer one.";
+    return "密码过短，请设置更长的密码。";
   }
   if (message.includes("rate limit") || message.includes("too many requests")) {
-    return "Too many attempts. Please wait a moment and try again.";
+    return "请求过于频繁，请稍后再试。";
   }
 
-  return error.message || "Something went wrong. Please try again.";
+  return error.message || "出现错误，请稍后再试。";
 }

@@ -74,7 +74,7 @@ export function ReadingPosition(props?: ReadingPositionProps | null) {
         className
       )}
     >
-      {copied ? "Copied" : "Copy section link"}
+      {copied ? "已复制" : "复制段落链接"}
     </button>
   );
 }

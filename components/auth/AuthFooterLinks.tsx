@@ -25,10 +25,10 @@ export default function AuthFooterLinks({
           onClick={() => onSwitch("register")}
           className="text-foreground transition hover:text-primary"
         >
-          Create account
+          创建账号
         </button>
         <AnimatedLink href={`/forgot-password${query}`} className="text-xs">
-          Forgot password
+          忘记密码
         </AnimatedLink>
       </div>
     );
@@ -41,10 +41,10 @@ export default function AuthFooterLinks({
         onClick={() => onSwitch("login")}
         className="text-foreground transition hover:text-primary"
       >
-        Already have an account
+        已有账号
       </button>
       <AnimatedLink href="/about" className="text-xs text-muted-foreground">
-        Terms &amp; archive use
+        条款与归档使用说明
       </AnimatedLink>
     </div>
   );

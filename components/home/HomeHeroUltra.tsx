@@ -47,10 +47,10 @@ export default function HomeHeroUltra() {
                 className="space-y-6"
               >
                 <div className="text-xs uppercase tracking-[0.4em] text-muted-foreground">
-                  Museum Editorial Archive
+                  博物馆式博客归档
                 </div>
                 <RevealTextMask
-                  text="A quiet catalog of ink, paper, and motion."
+                  text="一个安静的博客目录"
                   className="text-4xl font-semibold leading-tight md:text-5xl"
                   delay={motionTokens.ultra.titleRevealDelay * cinemaFactor}
                 />
@@ -64,9 +64,8 @@ export default function HomeHeroUltra() {
                   }}
                   className="max-w-xl text-base text-muted-foreground"
                 >
-                  An editorial space for warm paper stories, cinematic motion notes,
-                  and curated research. The archive is written in Markdown and
-                  arranged like a gallery wall.
+                  为前端学习而设的编辑空间。
+                  归档以 Markdown 撰写，并像展墙一样被编排。
                 </motion.p>
                 <motion.div
                   initial={reduced ? false : { opacity: 0, y: 8 }}
@@ -79,9 +78,9 @@ export default function HomeHeroUltra() {
                   className="flex flex-wrap items-center gap-4"
                 >
                   <Magnetic className="inline-flex">
-                    <Button variant="default">Enter the archive</Button>
+                    <Button variant="default">进入归档</Button>
                   </Magnetic>
-                  <Button variant="secondary">View catalog</Button>
+                  <Button variant="secondary">查看目录</Button>
                 </motion.div>
               </motion.div>
 
@@ -99,20 +98,20 @@ export default function HomeHeroUltra() {
                 )}
               >
                 <div className="text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
-                  Exhibition Label
+                  展签
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span>Collection</span>
-                    <span className="text-foreground">Edition 01</span>
+                    <span>藏品</span>
+                    <span className="text-foreground">第 01 版</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span>Location</span>
-                    <span className="text-foreground">Studio Archive</span>
+                    <span>地点</span>
+                    <span className="text-foreground">工作室档案馆</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span>Index</span>
-                    <span className="text-foreground">2025-ULTRA</span>
+                    <span>索引</span>
+                    <span className="text-foreground">2025</span>
                   </div>
                 </div>
               </motion.aside>

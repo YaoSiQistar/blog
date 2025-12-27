@@ -39,17 +39,17 @@ export default function RemoveFavoriteButton({
           body: JSON.stringify({ postSlug, action: "add" }),
         });
         if (!response.ok) {
-          toast.error("Unable to restore favorite.");
+          toast.error("无法恢复收藏。");
         }
       } catch (error) {
         console.error(error);
-        toast.error("Unable to restore favorite.");
+        toast.error("无法恢复收藏。");
       }
     };
 
-    toast("Removed from favorites.", {
+    toast("已从收藏中移除。", {
       action: {
-        label: "Undo",
+        label: "撤销",
         onClick: () => {
           void undo();
         },
@@ -64,12 +64,12 @@ export default function RemoveFavoriteButton({
       });
       if (!response.ok) {
         if (!undone) onUndo();
-        toast.error("Unable to remove favorite.");
+        toast.error("无法移除收藏。");
       }
     } catch (error) {
       console.error(error);
       if (!undone) onUndo();
-      toast.error("Unable to remove favorite.");
+      toast.error("无法移除收藏。");
     } finally {
       setPending(false);
     }
@@ -89,7 +89,7 @@ export default function RemoveFavoriteButton({
       )}
     >
       <Trash2 className="size-3.5" />
-      Remove
+      移除
     </Button>
   );
 }

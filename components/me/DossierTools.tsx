@@ -98,10 +98,10 @@ export default function DossierTools() {
       const href = buildDossierHref(current);
       const url = `${window.location.origin}${href}`;
       await navigator.clipboard.writeText(url);
-      toast.success("Dossier link copied.");
+      toast.success("档案链接已复制。");
     } catch (error) {
       console.error(error);
-      toast.error("Unable to copy link.");
+      toast.error("无法复制链接。");
     }
   };
 
@@ -124,7 +124,7 @@ export default function DossierTools() {
             ref={inputRef}
             value={queryValue}
             onChange={(event) => setQueryValue(event.target.value)}
-            placeholder={isFavorites ? "Search favorites" : "Search dossier"}
+            placeholder={isFavorites ? "搜索收藏" : "搜索档案"}
             className="h-8 border-0 bg-transparent px-0 text-sm focus-visible:ring-0"
             aria-label="Search dossier"
             disabled={!isFavorites}
@@ -143,17 +143,17 @@ export default function DossierTools() {
         </div>
 
         <Button type="submit" className="rounded-full" disabled={!isFavorites}>
-          Search
+          搜索
         </Button>
 
         <div className="hidden items-center gap-3 lg:flex">
           <Select value={current.sort} onValueChange={handleSortChange} disabled={!isFavorites}>
             <SelectTrigger className="w-[170px] rounded-full text-xs uppercase tracking-[0.3em]">
-              <SelectValue placeholder="Sort" />
+              <SelectValue placeholder="排序" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="saved">Latest saved</SelectItem>
-              <SelectItem value="published">Latest published</SelectItem>
+              <SelectItem value="saved">最新收藏</SelectItem>
+              <SelectItem value="published">最新发布</SelectItem>
             </SelectContent>
           </Select>
 
@@ -164,21 +164,21 @@ export default function DossierTools() {
             className="rounded-full border border-border-subtle bg-background/70 p-1"
           >
             <ToggleGroupItem value="list" className="px-3 text-xs uppercase tracking-[0.3em]">
-              List
+              列表
             </ToggleGroupItem>
             <ToggleGroupItem value="compact" className="px-3 text-xs uppercase tracking-[0.3em]">
-              Compact
+              紧凑
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
 
         <div className="ml-auto hidden items-center gap-2 lg:flex">
           <Button type="button" variant="ghost" onClick={handleReset}>
-            Reset
+            重置
           </Button>
           <Button type="button" variant="ghost" onClick={handleCopy}>
             <Copy className="mr-2 size-4" />
-            Copy link
+            复制链接
           </Button>
         </div>
 
@@ -187,29 +187,29 @@ export default function DossierTools() {
             <SheetTrigger asChild>
               <Button type="button" variant="secondary">
                 <SlidersHorizontal className="mr-2 size-4" />
-                Tools
+                工具
               </Button>
             </SheetTrigger>
             <SheetContent side="bottom">
               <SheetHeader>
-                <SheetTitle>Dossier tools</SheetTitle>
+                <SheetTitle>档案工具</SheetTitle>
               </SheetHeader>
               <div className="space-y-4 p-4">
                 <div className="space-y-2">
-                  <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">Sort</p>
+                  <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">排序</p>
                   <Select value={current.sort} onValueChange={handleSortChange} disabled={!isFavorites}>
                     <SelectTrigger className="w-full rounded-full text-xs uppercase tracking-[0.3em]">
-                      <SelectValue placeholder="Sort" />
+                      <SelectValue placeholder="排序" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="saved">Latest saved</SelectItem>
-                      <SelectItem value="published">Latest published</SelectItem>
+                      <SelectItem value="saved">最新收藏</SelectItem>
+                      <SelectItem value="published">最新发布</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">View</p>
+                  <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">视图</p>
                   <ToggleGroup
                     type="single"
                     value={current.view}
@@ -217,21 +217,21 @@ export default function DossierTools() {
                     className="rounded-full border border-border-subtle bg-background/70 p-1"
                   >
                     <ToggleGroupItem value="list" className="px-3 text-xs uppercase tracking-[0.3em]">
-                      List
+                      列表
                     </ToggleGroupItem>
                     <ToggleGroupItem value="compact" className="px-3 text-xs uppercase tracking-[0.3em]">
-                      Compact
+                      紧凑
                     </ToggleGroupItem>
                   </ToggleGroup>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
                   <Button type="button" variant="ghost" onClick={handleReset}>
-                    Reset
+                    重置
                   </Button>
                   <Button type="button" variant="ghost" onClick={handleCopy}>
                     <Copy className="mr-2 size-4" />
-                    Copy link
+                    复制链接
                   </Button>
                 </div>
               </div>
@@ -242,7 +242,7 @@ export default function DossierTools() {
 
       {!isFavorites ? (
         <p className="text-xs text-muted-foreground">
-          Filters apply to favorites. Activity tabs update automatically.
+          筛选仅对收藏生效，活动页会自动更新。
         </p>
       ) : null}
     </div>
