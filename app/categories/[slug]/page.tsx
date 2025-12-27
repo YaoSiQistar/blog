@@ -11,6 +11,7 @@ import CategoryWorkbench from "@/components/category/CategoryWorkbench";
 import CategoryEmpty from "@/components/category/CategoryEmpty";
 import CategoryExitSigns from "@/components/category/CategoryExitSigns";
 import Stacking3D from "@/components/motion/Stacking3D";
+import ScrollToResults from "@/components/perf/ScrollToResults";
 import { getAllCategories, getPostsPaged } from "@/lib/content";
 import { getCategoryBySlug } from "@/lib/categories/getCategoryBySlug";
 import { getTagsForCategory } from "@/lib/categories/getTagsForCategory";
@@ -111,7 +112,7 @@ export default async function CategoryDetailPage({
     cover: post.cover,
   }));
 
-  const stackCards = paged.items.slice(0, 3).map((post) => ({
+  const stackCards = paged.items.slice(0, 4).map((post) => ({
     id: post.slug,
     title: post.title,
     subtitle: post.excerpt,
@@ -128,9 +129,15 @@ export default async function CategoryDetailPage({
 
   const hasResults = catalogItems.length > 0;
   const emptyVariant = category.count === 0 ? "empty" : "filtered";
+  const isDefaultView =
+    safeState.page === 1 &&
+    safeState.sort === "latest" &&
+    safeState.tags.length === 0 &&
+    !safeState.q;
 
   return (
     <main className="space-y-[var(--section-y)] py-[var(--section-y)]">
+      <ScrollToResults targetId="category-results" />
       <Container variant="wide" className="space-y-6">
         <CategoryTopBar categoryName={category.name} backHref={backHref} />
         <CategoryHero
@@ -142,7 +149,7 @@ export default async function CategoryDetailPage({
         />
       </Container>
 
-      {stackCards.length > 0 ? (
+      {isDefaultView && stackCards.length > 0 ? (
         <Container variant="wide" className="space-y-6">
           <RuleLine />
           <Stacking3D cards={stackCards} />
@@ -154,7 +161,7 @@ export default async function CategoryDetailPage({
         <CategoryWorkbench slug={slug} tags={tagsInCategory} />
       </Container>
 
-      <Container variant="wide" className="space-y-6">
+      <Container variant="wide" className="space-y-6 scroll-mt-[7rem]" id="category-results">
         <RuleLine />
         {hasResults ? (
           <CatalogList

@@ -16,6 +16,7 @@ import type { KintsugNode } from "@/lib/Kintsug-rail/types";
 import { buildPageMetadata } from "@/lib/seo/og";
 import ScrollHorizontalGallery from "@/components/motion/ScrollHorizontalGallery";
 import MotionExitSigns from "@/components/motion/MotionExitSigns";
+import ScrollToResults from "@/components/perf/ScrollToResults";
 
 export const metadata = buildPageMetadata({
   title: "Archive",
@@ -59,6 +60,12 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
     subtitle: post.excerpt,
     image: post.cover,
   }));
+  const isDefaultView =
+    !params.category &&
+    params.tags.length === 0 &&
+    !params.q &&
+    params.sort === "latest" &&
+    params.page === 1;
 
   const buildHref = (page: number) => {
     const query = new URLSearchParams();
@@ -116,6 +123,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
       right={<MuseumGuidePanel categories={categories} tags={tags} />}
       mobileControls={<GuideDrawer categories={categories} tags={tags} />}
     >
+      <ScrollToResults targetId="posts-catalog" />
       <section id="posts-header">
         <PostsPageHeader
           title="归档目录"
@@ -126,9 +134,11 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
         />
       </section>
 
-      <section id="posts-featured">
-        <ScrollHorizontalGallery items={galleryItems} snapOnMobile endCap />
-      </section>
+      {isDefaultView ? (
+        <section id="posts-featured">
+          <ScrollHorizontalGallery items={galleryItems} snapOnMobile endCap />
+        </section>
+      ) : null}
 
       <section id="posts-workbench">
         <EditorialWorkbench tags={tags} />
@@ -136,7 +146,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
 
       <RuleLine className="my-6" />
 
-      <section id="posts-catalog">
+      <section id="posts-catalog" className="scroll-mt-[7rem]">
         {catalogItems.length > 0 ? (
           <CatalogList items={catalogItems} stagger />
         ) : (

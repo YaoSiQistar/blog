@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
-import Container from "@/components/shell/Container";
 import ShareStudio from "@/components/share/ShareStudio";
+import Container from "@/components/shell/Container";
 import { getPosterDataBySlug } from "@/lib/poster/posterData";
 import {
   posterDefaultRatio,
@@ -37,11 +37,16 @@ export async function generateMetadata({ params }: SharePageProps): Promise<Meta
   const data = await getPosterDataBySlug(resolved.slug);
   if (!data) return {};
 
-  return buildPageMetadata({
-    title: `${data.title} · 分享工作台`,
-    description: `为《${data.title}》生成分享海报。`,
-    pathname: `/share/posts/${data.slug}`,
-  });
+  return {
+    ...buildPageMetadata({
+      title: `${data.title} · 分享工作台`,
+      description: `为《${data.title}》生成可分享的海报。`,
+      pathname: `/posts/${data.slug}`,
+      image: `/og/posts/${data.slug}`,
+      type: "article",
+    }),
+    robots: { index: false, follow: false },
+  };
 }
 
 export default async function SharePage({ params, searchParams }: SharePageProps) {
@@ -72,3 +77,4 @@ export default async function SharePage({ params, searchParams }: SharePageProps
     </main>
   );
 }
+

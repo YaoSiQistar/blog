@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion } from "motion/react";
-
+import Link from "next/link";
 import Container from "@/components/shell/Container";
 import RevealTextMask from "@/components/motion/RevealTextMask";
 import ScrollDirector from "@/components/motion/ScrollDirector";
@@ -78,9 +78,13 @@ export default function HomeHeroUltra() {
                   className="flex flex-wrap items-center gap-4"
                 >
                   <Magnetic className="inline-flex">
-                    <Button variant="default">进入归档</Button>
+                    <Button asChild variant="default">
+                      <Link href="/posts">进入归档</Link>
+                    </Button>
                   </Magnetic>
-                  <Button variant="secondary">查看目录</Button>
+                  <Button asChild variant="secondary">
+                    <Link href="/categories">查看目录</Link>
+                  </Button>
                 </motion.div>
               </motion.div>
 

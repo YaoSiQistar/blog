@@ -11,7 +11,6 @@ import { siteConfig } from "@/lib/seo/site";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { label: "首页", href: "/" },
   { label: "文章", href: "/posts" },
   { label: "分类", href: "/categories" },
   { label: "标签", href: "/tags" },

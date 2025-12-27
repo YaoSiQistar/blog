@@ -58,8 +58,8 @@ export default function CategoryWorkbench({ slug, tags }: CategoryWorkbenchProps
     (next: CategoryQueryState, replace = false) => {
       const normalized = normalizeCategoryState(next);
       const href = buildCategoryHref(slug, normalized);
-      if (replace) router.replace(href);
-      else router.push(href);
+      if (replace) router.replace(href, { scroll: false });
+      else router.push(href, { scroll: false });
     },
     [router, slug]
   );

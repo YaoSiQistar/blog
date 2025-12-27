@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import AuthFlipPage from "@/components/auth/AuthFlipPage";
@@ -6,6 +7,11 @@ import { getRedirectTo, resolveRedirect } from "@/lib/auth/redirect";
 
 type RegisterPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export const metadata: Metadata = {
+  title: "注册",
+  robots: { index: false, follow: false },
 };
 
 export default async function RegisterPage({ searchParams }: RegisterPageProps) {

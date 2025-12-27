@@ -12,6 +12,7 @@ const escapeXml = (value: string) =>
 export async function GET() {
   const posts = await getAllPostsIndex();
   const latest = posts.slice(0, 20);
+  const now = new Date();
 
   const items = latest
     .map((post) => {
@@ -20,7 +21,7 @@ export async function GET() {
         "<item>",
         `<title>${escapeXml(post.title)}</title>`,
         `<link>${link}</link>`,
-        `<guid>${link}</guid>`,
+        `<guid isPermaLink="true">${link}</guid>`,
         `<pubDate>${new Date(post.date).toUTCString()}</pubDate>`,
         `<description>${escapeXml(post.excerpt)}</description>`,
         "</item>",
@@ -30,12 +31,14 @@ export async function GET() {
 
   const rss = [
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
-    "<rss version=\"2.0\">",
+    "<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">",
     "<channel>",
     `<title>${escapeXml(siteConfig.siteName)}</title>`,
     `<link>${siteConfig.siteUrl}</link>`,
     `<description>${escapeXml(siteConfig.defaultDescription)}</description>`,
-    `<language>en</language>`,
+    `<language>zh-CN</language>`,
+    `<lastBuildDate>${now.toUTCString()}</lastBuildDate>`,
+    `<atom:link href=\"${siteConfig.siteUrl}/rss.xml\" rel=\"self\" type=\"application/rss+xml\" />`,
     items,
     "</channel>",
     "</rss>",
@@ -44,6 +47,7 @@ export async function GET() {
   return new Response(rss, {
     headers: {
       "Content-Type": "application/xml; charset=utf-8",
+      "Cache-Control": "public, max-age=3600",
     },
   });
 }

@@ -1,112 +1,133 @@
 "use client";
 
 import * as React from "react";
-import { motion, useMotionValueEvent, useScroll, useTransform } from "motion/react";
-
+import { motion, useScroll, useTransform, useSpring } from "motion/react";
 import { cn } from "@/lib/utils";
-import { motionTokens } from "@/lib/motion/tokens";
-import { useReducedMotion } from "@/lib/motion/reduced";
-import { useInViewActive } from "@/lib/perf/useInViewActive";
-import { rafThrottle } from "@/lib/perf/rafThrottle";
 
 export type StackingCard = {
   id: string;
   title: string;
   subtitle?: string;
+  tag?: string;
+  gradient?: string;
 };
 
-type Stacking3DProps = {
+type PremiumStackProps = {
   cards: StackingCard[];
   className?: string;
 };
 
-const useIsMobile = () => {
-  const [isMobile, setIsMobile] = React.useState(false);
-  React.useEffect(() => {
-    if (typeof window === "undefined") return;
-    const query = window.matchMedia("(max-width: 768px)");
-    const update = () => setIsMobile(query.matches);
-    update();
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
-  }, []);
-  return isMobile;
-};
-
-export default function Stacking3D({ cards, className }: Stacking3DProps) {
-  const prefersReduced = useReducedMotion();
-  const isMobile = useIsMobile();
-  const reduced = prefersReduced || isMobile;
-  const { ref, isActive } = useInViewActive<HTMLDivElement>({ rootMargin: "-15% 0px -15% 0px" });
-
+export default function PremiumStack({ cards, className }: PremiumStackProps) {
   const sectionRef = React.useRef<HTMLDivElement | null>(null);
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
   });
-  const [activeIndex, setActiveIndex] = React.useState(0);
 
-  useMotionValueEvent(
-    scrollYProgress,
-    "change",
-    rafThrottle((value) => {
-      if (!isActive) return;
-      const clamped = Math.min(0.999, Math.max(0, value));
-      const nextIndex = Math.floor(clamped * cards.length);
-      setActiveIndex(nextIndex);
-    })
-  );
-
-  if (reduced) {
-    return (
-      <section className={cn("space-y-4", className)}>
-        {cards.map((card) => (
-          <div key={card.id} className="rounded-[var(--radius)] border border-border bg-card/70 p-6">
-            <div className="text-xs uppercase tracking-[0.35em] text-muted-foreground">Stack</div>
-            <h3 className="mt-2 text-xl font-semibold text-foreground">{card.title}</h3>
-            {card.subtitle ? <p className="mt-2 text-sm text-muted-foreground">{card.subtitle}</p> : null}
-          </div>
-        ))}
-      </section>
-    );
-  }
+  // 使用 Spring 平滑滚动数值，减少顿挫感
+  const smoothProgress = useSpring(scrollYProgress, {
+    damping: 20,
+    stiffness: 100,
+  });
 
   return (
-    <section ref={ref} className={cn("relative", className)}>
-      <div ref={sectionRef} style={{ height: `${cards.length * 90}vh` }}>
-        <div className="sticky top-24 flex h-[70vh] items-center justify-center">
-          <div className="relative w-[min(520px,90vw)]">
-            {cards.map((card, index) => {
-              const start = index / cards.length;
-              const end = (index + 1) / cards.length;
-              const rotate = useTransform(scrollYProgress, [start, end], [0, -motionTokens.limits.rotateMax]);
-              const baseOffset = index * 14;
-              const y = useTransform(scrollYProgress, [start, end], [baseOffset, baseOffset - 24]);
-              const scale = useTransform(scrollYProgress, [start, end], [1, 1 + motionTokens.limits.scaleMax]);
-              const isCardActive = index === activeIndex;
-              return (
-                <motion.article
-                  key={card.id}
-                  className="absolute inset-0 rounded-[var(--radius)] border border-border bg-card/70 p-7 shadow-[0_18px_50px_rgba(15,23,42,0.08)]"
-                  style={{
-                    translateY: isActive ? y : 0,
-                    rotateX: isActive ? rotate : 0,
-                    scale: isActive ? scale : 1,
-                    transformOrigin: "center top",
-                    zIndex: cards.length - index,
-                  }}
-                >
-                  <div className="text-xs uppercase tracking-[0.35em] text-muted-foreground">Panel</div>
-                  <div className={isCardActive ? "opacity-100" : "opacity-0"}>
-                    <h3 className="mt-3 text-2xl font-semibold text-foreground">{card.title}</h3>
-                    {card.subtitle ? <p className="mt-2 text-sm text-muted-foreground">{card.subtitle}</p> : null}
-                  </div>
-                </motion.article>
-              );
-            })}
-          </div>
+    <section 
+      ref={sectionRef} 
+      className={cn("relative", className)} 
+      style={{ height: `${cards.length * 120}vh` }}
+    >
+      <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden bg-background">
+        {/* 背景装饰光晕 */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]" />
+
+        <div className="relative h-[450px] w-[min(600px,92vw)] [perspective:2000px]">
+          {cards.map((card, index) => (
+            <PremiumCard 
+              key={card.id} 
+              card={card} 
+              index={index} 
+              total={cards.length} 
+              progress={smoothProgress} 
+            />
+          ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function PremiumCard({ card, index, total, progress }: any) {
+  const start = index / total;
+  const end = (index + 1) / total;
+  const center = (start + end) / 2;
+
+  // 1. 深度与位移
+  // 进入：从下方滑入并伴随旋转
+  // 退出：向上方弹射并缩小
+  const y = useTransform(progress, [start, center, end], [600, 0, -200]);
+  const z = useTransform(progress, [start, center, end], [-400, 0, -100]);
+  const rotateX = useTransform(progress, [start, center, end], [45, 0, -20]);
+  const scale = useTransform(progress, [start, center, end], [0.8, 1, 0.9]);
+
+  // 2. 光影控制
+  const opacity = useTransform(progress, [start - 0.05, start, end, end + 0.05], [0, 1, 1, 0]);
+  const shadowOpacity = useTransform(progress, [start, center, end], [0, 0.2, 0]);
+  
+  // 3. 内容视差效果
+  const contentY = useTransform(progress, [start, center, end], [40, 0, -20]);
+  const contentOpacity = useTransform(progress, [center - 0.1, center, center + 0.1], [0, 1, 0]);
+
+  return (
+    <motion.article
+      style={{
+        y,
+        z,
+        rotateX,
+        scale,
+        opacity,
+        zIndex: total - index,
+        boxShadow: `0 30px 100px rgba(0,0,0,${shadowOpacity})`,
+      }}
+      className={cn(
+        "absolute inset-0 rounded-[2.5rem] border border-white/10 p-12",
+        "bg-gradient-to-br from-card/90 to-card/40 backdrop-blur-2xl",
+        "flex flex-col justify-between overflow-hidden"
+      )}
+    >
+      {/* 顶部装饰线 */}
+      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+      
+      <div className="flex justify-between items-start">
+        <div className="px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-[10px] font-bold uppercase tracking-widest text-primary">
+          {card.tag || "Innovation"}
+        </div>
+        <div className="text-4xl font-black italic opacity-5 leading-none">
+          0{index + 1}
+        </div>
+      </div>
+
+      <motion.div style={{ y: contentY, opacity: contentOpacity }} className="space-y-4">
+        <h3 className="text-4xl md:text-5xl font-bold tracking-tighter text-foreground leading-[1.1]">
+          {card.title}
+        </h3>
+        {card.subtitle && (
+          <p className="text-lg text-muted-foreground max-w-[340px] leading-relaxed">
+            {card.subtitle}
+          </p>
+        )}
+      </motion.div>
+
+      <div className="flex items-center gap-4">
+        <div className="h-px flex-1 bg-gradient-to-r from-border to-transparent" />
+        <div className="w-2 h-2 rounded-full bg-primary" />
+      </div>
+
+      {/* 底部发光背景 */}
+      <div className={cn(
+        "absolute -bottom-24 -right-24 w-64 h-64 rounded-full blur-[80px] opacity-20",
+        card.gradient || "bg-primary"
+      )} />
+    </motion.article>
   );
 }

@@ -11,13 +11,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]);
 
   const now = new Date();
-  const mainPages = ["/", "/posts", "/categories", "/tags", "/about"];
+  const mainPages = ["/", "/posts", "/categories", "/tags", "/about", "/rss.xml"];
 
   const entries: MetadataRoute.Sitemap = [
     ...mainPages.map((path) => ({
       url: `${siteConfig.siteUrl}${path}`,
       lastModified: now,
-      changeFrequency: "weekly" as const,
+      changeFrequency: path === "/rss.xml" ? ("daily" as const) : ("weekly" as const),
       priority: path === "/" ? 1 : 0.7,
     })),
     ...posts.map((post) => ({

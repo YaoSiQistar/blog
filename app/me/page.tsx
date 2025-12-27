@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import Container from "@/components/shell/Container";
@@ -18,6 +19,11 @@ import { getCommentsForUser } from "@/lib/me/comments";
 
 type MePageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export const metadata: Metadata = {
+  title: "我的档案",
+  robots: { index: false, follow: false },
 };
 
 export default async function MePage({ searchParams }: MePageProps) {

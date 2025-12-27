@@ -32,17 +32,19 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const resolved = await searchParams;
   const query = getParam(resolved, "q");
-  const title = query ? `Search: ${query}` : "Search";
+  const title = query ? `搜索：${query}` : "搜索";
   const description = query
-    ? `Results for "${query}" in the archive.`
-    : "Search by title, content, or tags.";
-  const pathname = query ? `/search?q=${encodeURIComponent(query)}` : "/search";
+    ? `在归档中查找“${query}”的相关内容。`
+    : "按标题、正文或标签搜索。";
 
-  return buildPageMetadata({
-    title,
-    description,
-    pathname,
-  });
+  return {
+    ...buildPageMetadata({
+      title,
+      description,
+      pathname: "/search",
+    }),
+    robots: { index: false, follow: true },
+  };
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {

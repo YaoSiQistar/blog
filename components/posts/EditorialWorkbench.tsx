@@ -64,14 +64,14 @@ export default function EditorialWorkbench({ tags }: EditorialWorkbenchProps) {
     event.preventDefault();  // 阻止表单默认提交行为
     const nextValue = searchValue.trim() || undefined;  // 获取搜索值，去除空格，如果为空则设为undefined
     const { href } = updatePostsQuery(searchParams, { next: { q: nextValue } });
-    if (href) router.push(href);
+    if (href) router.push(href, { scroll: false });
   };
 
   // 处理排序方式改变事件
   const handleSortChange = (value: string) => {
     if (!value) return;
     const { href } = updatePostsQuery(searchParams, { next: { sort: value as "latest" | "hot" } });
-    if (href) router.push(href);
+    if (href) router.push(href, { scroll: false });
   };
 
   // 处理标签切换事件
@@ -81,7 +81,7 @@ export default function EditorialWorkbench({ tags }: EditorialWorkbenchProps) {
       ? current.tags.filter((tag) => tag !== slug)
       : [...current.tags, slug];
     const { href } = updatePostsQuery(searchParams, { next: { tags: nextTags } });
-    if (href) router.push(href);
+    if (href) router.push(href, { scroll: false });
   };
 
   // 处理重置按钮点击事件
@@ -91,7 +91,7 @@ export default function EditorialWorkbench({ tags }: EditorialWorkbenchProps) {
       next: { category: undefined, tags: [], q: undefined, sort: "latest", page: 1 },
       resetPage: true,
     });
-    if (href) router.push(href);
+    if (href) router.push(href, { scroll: false });
   };
 
   // 处理复制链接按钮点击事件
@@ -206,7 +206,7 @@ export default function EditorialWorkbench({ tags }: EditorialWorkbenchProps) {
               type="button"
               onClick={() => {
                 const { href } = updatePostsQuery(searchParams, { next: { category: undefined } });
-                if (href) router.push(href);
+                if (href) router.push(href, { scroll: false });
               }}
               className="ml-2"
               aria-label="Remove category filter"  
@@ -244,7 +244,7 @@ export default function EditorialWorkbench({ tags }: EditorialWorkbenchProps) {
               type="button"
               onClick={() => {
                 const { href } = updatePostsQuery(searchParams, { next: { q: undefined } });
-                if (href) router.push(href);
+                if (href) router.push(href, { scroll: false });
               }}
               className="ml-2"
               aria-label="Remove search" 

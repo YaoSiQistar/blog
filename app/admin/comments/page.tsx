@@ -1,10 +1,11 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import type { Metadata } from "next";
 
+import ModerationDesk from "@/components/admin/comments/ModerationDesk";
 import Container from "@/components/shell/Container";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import ModerationDesk from "@/components/admin/comments/ModerationDesk";
 import { ADMIN_COOKIE_NAME, isAdminKeyValid } from "@/lib/admin/gate";
 import { getPostsIndexMap } from "@/lib/content/postsIndex";
 
@@ -12,10 +13,7 @@ interface AdminCommentsPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-const getParam = (
-  params: Record<string, string | string[] | undefined>,
-  key: string
-) => {
+const getParam = (params: Record<string, string | string[] | undefined>, key: string) => {
   const value = params[key];
   return Array.isArray(value) ? value[0] : value;
 };
@@ -28,6 +26,11 @@ const buildRedirect = (params: Record<string, string | string[] | undefined>) =>
   });
   const qs = query.toString();
   return qs ? `/admin/comments?${qs}` : "/admin/comments";
+};
+
+export const metadata: Metadata = {
+  title: "评论审核台",
+  robots: { index: false, follow: false },
 };
 
 export default async function AdminCommentsPage({ searchParams }: AdminCommentsPageProps) {
@@ -62,18 +65,10 @@ export default async function AdminCommentsPage({ searchParams }: AdminCommentsP
           <p className="text-[0.65rem] uppercase tracking-[0.4em] text-muted-foreground/70">
             管理员入口
           </p>
-          <h1 className="mt-3 text-2xl font-semibold text-foreground">
-            审稿台访问
-          </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            输入管理员密钥以继续。
-          </p>
+          <h1 className="mt-3 text-2xl font-semibold text-foreground">审稿台访问</h1>
+          <p className="mt-2 text-sm text-muted-foreground">输入管理员密钥以继续。</p>
           <form method="get" className="mt-6 flex flex-wrap gap-3">
-            <Input
-              name="key"
-              placeholder="ADMIN_SECRET"
-              className="h-10 w-full max-w-sm"
-            />
+            <Input name="key" placeholder="ADMIN_SECRET" className="h-10 w-full max-w-sm" />
             <Button type="submit">解锁</Button>
           </form>
           {error === "unauthorized" ? (
@@ -84,3 +79,4 @@ export default async function AdminCommentsPage({ searchParams }: AdminCommentsP
     </main>
   );
 }
+

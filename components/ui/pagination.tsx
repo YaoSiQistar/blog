@@ -1,4 +1,5 @@
 import * as React from "react"
+import Link from "next/link"
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -40,16 +41,19 @@ function PaginationItem({ ...props }: React.ComponentProps<"li">) {
 type PaginationLinkProps = {
   isActive?: boolean
 } & Pick<React.ComponentProps<typeof Button>, "size"> &
-  React.ComponentProps<"a">
+  React.ComponentProps<typeof Link> & {
+    scroll?: boolean
+  }
 
 function PaginationLink({
   className,
   isActive,
   size = "icon",
+  scroll = false,
   ...props
 }: PaginationLinkProps) {
   return (
-    <a
+    <Link
       aria-current={isActive ? "page" : undefined}
       data-slot="pagination-link"
       data-active={isActive}
@@ -60,6 +64,7 @@ function PaginationLink({
         }),
         className
       )}
+      scroll={scroll}
       {...props}
     />
   )
@@ -77,7 +82,7 @@ function PaginationPrevious({
       {...props}
     >
       <ChevronLeftIcon />
-      <span className="hidden sm:block">Previous</span>
+      <span className="hidden sm:block">上一页</span>
     </PaginationLink>
   )
 }
@@ -93,7 +98,7 @@ function PaginationNext({
       className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
       {...props}
     >
-      <span className="hidden sm:block">Next</span>
+      <span className="hidden sm:block">下一页</span>
       <ChevronRightIcon />
     </PaginationLink>
   )
