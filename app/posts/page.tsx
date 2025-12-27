@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getAllCategories, getAllPostsIndex, getAllTags, getPostsPaged } from "@/lib/content";
 import { normalizeSearchParams } from "@/lib/content/searchParams";
-import { buildGuideModel } from "@/lib/posts/Guide";
+import { buildGuideModel } from "@/lib/posts/guide";
 import type { KintsugNode } from "@/lib/Kintsug-rail/types";
 import { buildPageMetadata } from "@/lib/seo/og";
 import ScrollHorizontalGallery from "@/components/motion/ScrollHorizontalGallery";
