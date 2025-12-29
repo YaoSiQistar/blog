@@ -47,10 +47,10 @@ export default function HomeHeroUltra() {
                 className="space-y-6"
               >
                 <div className="text-xs uppercase tracking-[0.4em] text-muted-foreground">
-                  博物馆式博客归档
+                  博客归档
                 </div>
                 <RevealTextMask
-                  text="一个安静的博客目录"
+                  text="我叫姚思奇，这是我的博客空间，记录着我学习前端的过程。"
                   className="text-4xl font-semibold leading-tight md:text-5xl"
                   delay={motionTokens.ultra.titleRevealDelay * cinemaFactor}
                 />
@@ -65,7 +65,7 @@ export default function HomeHeroUltra() {
                   className="max-w-xl text-base text-muted-foreground"
                 >
                   为前端学习而设的编辑空间。
-                  归档以 Markdown 撰写，并像展墙一样被编排。
+                  归档以 Markdown 撰写，支持代码，图片，mermaid，图表等多种格式。
                 </motion.p>
                 <motion.div
                   initial={reduced ? false : { opacity: 0, y: 8 }}
@@ -107,11 +107,11 @@ export default function HomeHeroUltra() {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span>藏品</span>
-                    <span className="text-foreground">第 01 版</span>
+                    <span className="text-foreground">第x版</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span>地点</span>
-                    <span className="text-foreground">工作室档案馆</span>
+                    <span className="text-foreground">某个独处空间</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span>索引</span>
